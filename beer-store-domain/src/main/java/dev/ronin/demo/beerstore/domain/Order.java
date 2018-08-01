@@ -9,16 +9,17 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "BEER_ORDER")
 public class Order {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Customer customer;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Beer> beers;
 
 

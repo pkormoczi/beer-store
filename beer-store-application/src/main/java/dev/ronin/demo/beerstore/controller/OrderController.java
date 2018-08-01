@@ -5,6 +5,7 @@ import dev.ronin.demo.beerstore.domain.Customer;
 import dev.ronin.demo.beerstore.domain.Order;
 import dev.ronin.demo.beerstore.domain.value.Address;
 import dev.ronin.demo.beerstore.service.OrderService;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,7 +21,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/orders")
+    @GetMapping(value = "/orders",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public List<Order> getOrders(){
         orderService.addOrder(createOrder());
         return orderService.getOrders();
