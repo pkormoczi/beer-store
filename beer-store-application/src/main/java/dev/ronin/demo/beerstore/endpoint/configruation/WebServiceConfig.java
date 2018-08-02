@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.soap.configruation;
+package dev.ronin.demo.beerstore.endpoint.configruation;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;

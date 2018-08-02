@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.configuration;
+package dev.ronin.demo.beerstore.controller.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

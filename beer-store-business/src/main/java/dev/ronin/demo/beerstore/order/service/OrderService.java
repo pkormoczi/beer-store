@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -18,6 +17,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
     }
 
+    @Transactional
     public void addOrder(Order order) {
         orderRepository.saveAndFlush(order);
     }

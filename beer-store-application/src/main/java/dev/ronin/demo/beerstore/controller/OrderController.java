@@ -36,8 +36,8 @@ public class OrderController {
     private Order createTestOrder() {
         Order order = new Order();
         order.setCustomer(Customer.builder()
-                                  .firstName("Teszt")
-                                  .lastName("Jánoska")
+                                  .firstName("János")
+                                  .lastName("Vitéz")
                                   .address(new Address("Magyarország", "Budapest", "Váci út 76.", "1133"))
                                   .build());
         order.setBeers(Collections.singletonList(Beer.builder()
