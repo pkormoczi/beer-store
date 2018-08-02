@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>dev.ronin.demo</groupId>
-            <artifactId>beer-store-service</artifactId>
+            <artifactId>beer-store-business</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
