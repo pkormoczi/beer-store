@@ -7,8 +7,9 @@ import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "BEER_ORDER")
 public class Order {
 
@@ -21,6 +22,8 @@ public class Order {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Beer> beers;
+
+
 
 
 }

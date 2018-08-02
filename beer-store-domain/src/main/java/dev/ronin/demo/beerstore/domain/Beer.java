@@ -1,21 +1,21 @@
 package dev.ronin.demo.beerstore.domain;
 
+import dev.ronin.demo.beerstore.domain.value.BeerStyle;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
+@Builder
 public class Beer {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @NonNull
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    private BeerStyle beerStyle;
 }
