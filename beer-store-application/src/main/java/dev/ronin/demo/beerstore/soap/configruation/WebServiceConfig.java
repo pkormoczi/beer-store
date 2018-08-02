@@ -20,14 +20,14 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
         servlet.setApplicationContext(applicationContext);
         servlet.setTransformWsdlLocations(true);
-        return new ServletRegistrationBean(servlet, "/ws/*");
+        return new ServletRegistrationBean(servlet, "/services/*");
     }
 
     @Bean(name = "customers")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema customersSchema) {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("CustomerPort");
-        wsdl11Definition.setLocationUri("/ws");
+        wsdl11Definition.setLocationUri("/services");
         wsdl11Definition.setTargetNamespace("http://dev.ronin.beerstore/contract/customer");
         wsdl11Definition.setSchema(customersSchema);
         return wsdl11Definition;
