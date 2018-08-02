@@ -5,7 +5,7 @@ import dev.ronin.demo.beerstore.domain.Customer;
 import dev.ronin.demo.beerstore.domain.Order;
 import dev.ronin.demo.beerstore.domain.value.Address;
 import dev.ronin.demo.beerstore.domain.value.BeerStyle;
-import dev.ronin.demo.beerstore.service.OrderService;
+import dev.ronin.demo.beerstore.order.service.OrderService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
