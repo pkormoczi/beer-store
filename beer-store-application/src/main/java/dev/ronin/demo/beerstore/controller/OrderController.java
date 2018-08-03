@@ -6,9 +6,7 @@ import dev.ronin.demo.beerstore.domain.Order;
 import dev.ronin.demo.beerstore.domain.value.Address;
 import dev.ronin.demo.beerstore.domain.value.BeerStyle;
 import dev.ronin.demo.beerstore.order.service.OrderService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,14 +44,14 @@ public class OrderController {
     private Order createTestOrder() {
         Order order = new Order();
         order.setCustomer(Customer.builder()
-                .firstName("János")
-                .lastName("Vitéz")
-                .address(new Address("Magyarország", "Budapest", "Váci út 76.", "1133"))
-                .build());
+                                  .firstName("János")
+                                  .lastName("Vitéz")
+                                  .address(new Address("Magyarország", "1133", "Budapest", "Váci út 76."))
+                                  .build());
         order.setBeers(Collections.singletonList(Beer.builder()
-                .beerStyle(BeerStyle.IPA)
-                .name("Egy IPA")
-                .build()));
+                                                     .beerStyle(BeerStyle.IPA)
+                                                     .name("Egy IPA")
+                                                     .build()));
         return order;
     }
 

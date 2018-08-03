@@ -5,11 +5,14 @@ import lombok.*;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Value
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Address {
 
-    private final String country;
-    private final String city;
-    private final String streetAddress;
-    private final String zip;
+    private String country;
+    private String zip;
+    private String city;
+    private String streetAddress;
+
 }

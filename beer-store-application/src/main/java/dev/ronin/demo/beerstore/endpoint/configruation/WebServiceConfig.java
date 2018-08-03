@@ -35,6 +35,6 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 
     @Bean
     public XsdSchema customersSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("contract/customer.xsd"));
+        return new SimpleXsdSchema(new ClassPathResource("META-INF/dev/ronin/beerstore/contract/Customer.xsd"));
     }
 }

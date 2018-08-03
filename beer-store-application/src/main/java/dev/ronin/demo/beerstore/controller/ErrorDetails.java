@@ -1,23 +1,22 @@
 package dev.ronin.demo.beerstore.controller;
 
+import lombok.Data;
+
+import java.time.LocalDateTime;
+
+@Data
 public class ErrorDetails {
-//    private LocalDateTime timestamp;
+    private LocalDateTime timestamp;
     private String message;
     private String details;
 
-    public String getMessage() {
-        return message;
+    public ErrorDetails() {
+        this.timestamp = LocalDateTime.now();
     }
 
-    public void setMessage(String message) {
+    public ErrorDetails(final String message, final String details) {
+        this.timestamp = LocalDateTime.now();
         this.message = message;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
         this.details = details;
     }
 }

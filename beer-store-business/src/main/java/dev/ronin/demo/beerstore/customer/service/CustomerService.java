@@ -21,11 +21,11 @@ public class CustomerService {
         customerRepository.saveAndFlush(Customer.builder()
                                                 .firstName("Teszt")
                                                 .lastName("Customer")
-                                                .address(new Address("Magyarország", "Budapest", "Lechner Ödön fasor 9.", "1095"))
+                                                .address(new Address("Magyarország", "1095", "Budapest","Lechner Ödön fasor 9."))
                                                 .build());
     }
 
     public Customer findCustomerByName(final String name) {
-        return customerRepository.findByFirstName(name);
+        return customerRepository.findByFirstNameContainingIgnoreCase(name);
     }
 }

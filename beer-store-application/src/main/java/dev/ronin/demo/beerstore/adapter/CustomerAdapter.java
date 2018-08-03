@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.adapter;
 
-import beerstore.ronin.dev.contract.customer.Customer;
+import dev.ronin.beerstore.contract.customer.Customer;
 import dev.ronin.demo.beerstore.customer.service.CustomerService;
 import org.springframework.stereotype.Service;
 

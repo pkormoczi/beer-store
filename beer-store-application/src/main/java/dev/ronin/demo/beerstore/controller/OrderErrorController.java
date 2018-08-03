@@ -1,9 +1,9 @@
 package dev.ronin.demo.beerstore.controller;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.Optional;
@@ -18,9 +18,7 @@ public class OrderErrorController extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<ErrorDetails> error(final Exception exception, final HttpStatus httpStatus, final String logRef) {
         final String message = Optional.of(exception.getMessage()).orElse(exception.getClass().getSimpleName());
-        ErrorDetails errorDetails = new ErrorDetails();
-        errorDetails.setMessage(message);
-        errorDetails.setDetails(logRef);
+        ErrorDetails errorDetails = new ErrorDetails(message, logRef);
         return new ResponseEntity<>(errorDetails, httpStatus);
     }
 //
