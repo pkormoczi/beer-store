@@ -6,8 +6,12 @@ import dev.ronin.demo.beerstore.domain.Order;
 import dev.ronin.demo.beerstore.domain.value.Address;
 import dev.ronin.demo.beerstore.domain.value.BeerStyle;
 import dev.ronin.demo.beerstore.order.service.OrderService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
+@RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class OrderController {
 
     private final OrderService orderService;
@@ -28,7 +33,12 @@ public class OrderController {
         orderService.addOrder(createTestOrder());
     }
 
-    @GetMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/{id}")
+    public Order getOrderById(@PathVariable final Long id) {
+        return orderService.findById(id).orElseThrow(() -> new OrderNotFoundException("Order not found!"));
+    }
+
+    @GetMapping(value = "/all")
     public List<Order> getOrders() {
         return orderService.getOrders();
     }
@@ -36,14 +46,14 @@ public class OrderController {
     private Order createTestOrder() {
         Order order = new Order();
         order.setCustomer(Customer.builder()
-                                  .firstName("János")
-                                  .lastName("Vitéz")
-                                  .address(new Address("Magyarország", "Budapest", "Váci út 76.", "1133"))
-                                  .build());
+                .firstName("János")
+                .lastName("Vitéz")
+                .address(new Address("Magyarország", "Budapest", "Váci út 76.", "1133"))
+                .build());
         order.setBeers(Collections.singletonList(Beer.builder()
-                                                     .beerStyle(BeerStyle.IPA)
-                                                     .name("Egy IPA")
-                                                     .build()));
+                .beerStyle(BeerStyle.IPA)
+                .name("Egy IPA")
+                .build()));
         return order;
     }
 

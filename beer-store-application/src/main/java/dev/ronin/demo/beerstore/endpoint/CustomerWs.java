@@ -13,7 +13,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 @Endpoint
 public class CustomerWs {
 
-    private static final String NAMESPACE_URI = "http://dev.ronin.beerstore/contract/customer";
+    private static final String NAMESPACE_URI = "http://beerstore.ronin.dev/contract/customer";
 
     private final CustomerAdapter customerAdapter;
 

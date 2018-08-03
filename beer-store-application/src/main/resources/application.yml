@@ -1,6 +1,3 @@
-###
-#   Database Settings
-###
 spring:
   datasource:
     url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -17,10 +14,6 @@ spring:
         show_sql: true
         use_sql_comments: true
         format_sql: true
-
-###
-#   H2 Settings
-###
   h2:
     console:
       enabled: true
@@ -28,3 +21,7 @@ spring:
       settings:
         trace: false
         web-allow-others: false
+server:
+  error:
+    whitelabel:
+      enabled: false

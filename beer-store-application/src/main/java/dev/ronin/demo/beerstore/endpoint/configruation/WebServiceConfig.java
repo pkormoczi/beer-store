@@ -28,13 +28,13 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
         wsdl11Definition.setPortTypeName("CustomerPort");
         wsdl11Definition.setLocationUri("/services");
-        wsdl11Definition.setTargetNamespace("http://dev.ronin.beerstore/contract/customer");
+        wsdl11Definition.setTargetNamespace("http://beerstore.ronin.dev/contract/customer");
         wsdl11Definition.setSchema(customersSchema);
         return wsdl11Definition;
     }
 
     @Bean
     public XsdSchema customersSchema() {
-        return new SimpleXsdSchema(new ClassPathResource("contract/customers.xsd"));
+        return new SimpleXsdSchema(new ClassPathResource("contract/customer.xsd"));
     }
 }
