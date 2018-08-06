@@ -28,4 +28,7 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [ ] Database migration tooling? flyway /liquibase
 
 ##DEV notes
-beer-store-contract is a separate artifact. Need to run mvn clean install first for that module.
+- beer-store-contract is a separate artifact. Need to run mvn clean install first for that module.
+- Clover reports: `mvn clean clover:setup test clover:aggregate clover:clover`
+- Swagger UI at: `http://localhost:8080/swagger-ui.html`
+- Swagger JSON: `http://localhost:8080/v2/api-docs`
