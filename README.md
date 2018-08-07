@@ -14,7 +14,7 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [x] MapStruct as adapter
  - [ ] Integration tests
  - [ ] Unit tests
- - [ ] Test coverage tool   
+ - [x] Test coverage tool   
  
 
 ## TODO

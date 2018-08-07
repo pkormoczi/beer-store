@@ -6,6 +6,9 @@ import dev.ronin.demo.beerstore.domain.Order;
 import dev.ronin.demo.beerstore.domain.value.Address;
 import dev.ronin.demo.beerstore.domain.value.BeerStyle;
 import dev.ronin.demo.beerstore.order.service.OrderService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +19,7 @@ import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 
+@Api(value = "OrderAPI",description = "Operations for creating and querying orders")
 @RestController
 @RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class OrderController {
@@ -31,11 +35,13 @@ public class OrderController {
         orderService.addOrder(createTestOrder());
     }
 
+    @ApiOperation(value = "Get an Order with given ID",response = Order.class)
     @GetMapping(value = "/{id}")
-    public Order getOrderById(@PathVariable final Long id) {
+    public Order getOrderById(@ApiParam("Order ID") @PathVariable final Long id) {
         return orderService.findById(id).orElseThrow(() -> new OrderNotFoundException("Order not found!"));
     }
 
+    @ApiOperation(value = "Get all Orders")
     @GetMapping(value = "/all")
     public List<Order> getOrders() {
         return orderService.getOrders();
