@@ -21,7 +21,3 @@ spring:
       settings:
         trace: false
         web-allow-others: false
-server:
-  error:
-    whitelabel:
-      enabled: false
