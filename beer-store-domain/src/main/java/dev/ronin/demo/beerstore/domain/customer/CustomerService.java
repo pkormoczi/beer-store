@@ -1,8 +1,5 @@
-package dev.ronin.demo.beerstore.customer.service;
+package dev.ronin.demo.beerstore.domain.customer;
 
-import dev.ronin.demo.beerstore.customer.repository.CustomerRepository;
-import dev.ronin.demo.beerstore.domain.Customer;
-import dev.ronin.demo.beerstore.domain.value.Address;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;

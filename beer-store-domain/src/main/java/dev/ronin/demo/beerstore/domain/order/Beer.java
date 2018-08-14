@@ -1,7 +1,9 @@
-package dev.ronin.demo.beerstore.domain;
+package dev.ronin.demo.beerstore.domain.order;
 
-import dev.ronin.demo.beerstore.domain.value.BeerStyle;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 

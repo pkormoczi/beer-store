@@ -20,7 +20,6 @@
     <modules>
         <module>beer-store-domain</module>
         <module>beer-store-application</module>
-        <module>beer-store-business</module>
     </modules>
 
     <properties>

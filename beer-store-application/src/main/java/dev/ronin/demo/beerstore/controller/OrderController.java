@@ -1,11 +1,11 @@
 package dev.ronin.demo.beerstore.controller;
 
-import dev.ronin.demo.beerstore.domain.Beer;
-import dev.ronin.demo.beerstore.domain.Customer;
-import dev.ronin.demo.beerstore.domain.Order;
-import dev.ronin.demo.beerstore.domain.value.Address;
-import dev.ronin.demo.beerstore.domain.value.BeerStyle;
-import dev.ronin.demo.beerstore.order.service.OrderService;
+import dev.ronin.demo.beerstore.domain.customer.Address;
+import dev.ronin.demo.beerstore.domain.customer.Customer;
+import dev.ronin.demo.beerstore.domain.order.Beer;
+import dev.ronin.demo.beerstore.domain.order.BeerStyle;
+import dev.ronin.demo.beerstore.domain.order.Order;
+import dev.ronin.demo.beerstore.domain.order.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

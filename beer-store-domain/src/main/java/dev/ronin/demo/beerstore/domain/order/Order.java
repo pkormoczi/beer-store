@@ -1,8 +1,12 @@
-package dev.ronin.demo.beerstore.domain;
+package dev.ronin.demo.beerstore.domain.order;
 
+import dev.ronin.demo.beerstore.domain.customer.Customer;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;

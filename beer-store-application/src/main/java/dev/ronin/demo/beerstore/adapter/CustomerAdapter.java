@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.adapter;
 
 import dev.ronin.beerstore.contract.customer.Customer;
-import dev.ronin.demo.beerstore.customer.service.CustomerService;
+import dev.ronin.demo.beerstore.domain.customer.CustomerService;
 import org.springframework.stereotype.Service;
 
 @Service

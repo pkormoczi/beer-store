@@ -1,6 +1,8 @@
-package dev.ronin.demo.beerstore.domain.value;
+package dev.ronin.demo.beerstore.domain.customer;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Embeddable;
 

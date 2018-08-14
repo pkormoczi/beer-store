@@ -1,7 +1,5 @@
-package dev.ronin.demo.beerstore.order.service;
+package dev.ronin.demo.beerstore.domain.order;
 
-import dev.ronin.demo.beerstore.domain.Order;
-import dev.ronin.demo.beerstore.order.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
