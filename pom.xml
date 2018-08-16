@@ -28,6 +28,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <version.clover>4.3.0</version.clover>
         <version.lombok>1.18.2</version.lombok>
+        <version.archunit>0.8.3</version.archunit>
     </properties>
 
     <dependencyManagement>
@@ -109,6 +110,14 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit</artifactId>
+            <version>${version.archunit}</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>

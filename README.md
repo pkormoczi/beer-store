@@ -26,6 +26,8 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [ ] Transaction management refinement
  - [ ] Weblogic 12c deployment
  - [ ] Database migration tooling? flyway /liquibase
+ - [ ] Async calls via SOAP
+ - [ ] Events, with Spring application events
 
 ##DEV notes
 - beer-store-contract is a separate artifact. Need to run mvn clean install first for that module.
