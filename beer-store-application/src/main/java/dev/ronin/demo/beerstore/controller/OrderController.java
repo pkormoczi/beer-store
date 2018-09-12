@@ -19,7 +19,7 @@ import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.List;
 
-@Api(value = "OrderAPI",description = "Operations for creating and querying orders")
+@Api(value = "OrderAPI")
 @RestController
 @RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class OrderController {
@@ -35,7 +35,7 @@ public class OrderController {
         orderService.addOrder(createTestOrder());
     }
 
-    @ApiOperation(value = "Get an Order with given ID",response = Order.class)
+    @ApiOperation(value = "Get an Order with given ID", response = Order.class)
     @GetMapping(value = "/{id}")
     public Order getOrderById(@ApiParam("Order ID") @PathVariable final Long id) {
         return orderService.findById(id).orElseThrow(() -> new OrderNotFoundException("Order not found!"));
@@ -50,14 +50,14 @@ public class OrderController {
     private Order createTestOrder() {
         Order order = new Order();
         order.setCustomer(Customer.builder()
-                                  .firstName("János")
-                                  .lastName("Vitéz")
-                                  .address(new Address("Magyarország", "1133", "Budapest", "Váci út 76."))
-                                  .build());
+                .firstName("János")
+                .lastName("Vitéz")
+                .address(new Address("Magyarország", "1133", "Budapest", "Váci út 76."))
+                .build());
         order.setBeers(Collections.singletonList(Beer.builder()
-                                                     .beerStyle(BeerStyle.IPA)
-                                                     .name("Egy IPA")
-                                                     .build()));
+                .beerStyle(BeerStyle.IPA)
+                .name("Egy IPA")
+                .build()));
         return order;
     }
 

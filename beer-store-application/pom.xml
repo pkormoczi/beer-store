@@ -18,12 +18,12 @@
     <dependencies>
         <dependency>
             <groupId>dev.ronin.demo</groupId>
-            <artifactId>beer-store-domain</artifactId>
+            <artifactId>beer-store-contract</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>dev.ronin.demo</groupId>
-            <artifactId>beer-store-contract</artifactId>
+            <artifactId>beer-store-domain</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>

@@ -3,8 +3,8 @@ package dev.ronin.demo.beerstore.domain.achitecture;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class ArchitectureTest {
 
     private JavaClasses classes;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         classes = new ClassFileImporter().importPackages("dev.ronin.demo.beerstore.domain");
     }
@@ -23,12 +23,12 @@ public class ArchitectureTest {
     public void repositoryAnnotationAndNamingConvention() {
         ClassesShouldConjunction annotationToNaming =
                 classes().that().areAnnotatedWith(Repository.class)
-                         .should().haveNameMatching(".*Repository");
+                        .should().haveNameMatching(".*Repository");
         annotationToNaming.check(this.classes);
 
         ClassesShouldConjunction namingToAnnotation =
                 classes().that().haveNameMatching(".*Repository")
-                         .should().beAnnotatedWith(Repository.class);
+                        .should().beAnnotatedWith(Repository.class);
 
         namingToAnnotation.check(this.classes);
     }
@@ -37,13 +37,13 @@ public class ArchitectureTest {
     public void serviceAnnotationAndNamingConvention() {
         ClassesShouldConjunction annotationToNaming =
                 classes().that().areAnnotatedWith(Service.class)
-                         .should().haveNameMatching(".*Service");
+                        .should().haveNameMatching(".*Service");
 
         annotationToNaming.check(this.classes);
 
         ClassesShouldConjunction namingToAnnotation =
                 classes().that().haveNameMatching(".*Service")
-                         .should().beAnnotatedWith(Service.class);
+                        .should().beAnnotatedWith(Service.class);
 
         namingToAnnotation.check(this.classes);
 
@@ -55,8 +55,8 @@ public class ArchitectureTest {
 
         ClassesShouldConjunction repositoryAccessRule =
                 classes().that().areAnnotatedWith(Repository.class)
-                         .should().onlyBeAccessed()
-                         .byClassesThat().areAnnotatedWith(Service.class);
+                        .should().onlyBeAccessed()
+                        .byClassesThat().areAnnotatedWith(Service.class);
 
         repositoryAccessRule.check(this.classes);
 
@@ -67,7 +67,7 @@ public class ArchitectureTest {
 
         ClassesShouldConjunction publicVisibilityForServices =
                 classes().that().areAnnotatedWith(Service.class)
-                         .should().bePublic();
+                        .should().bePublic();
 
         publicVisibilityForServices.check(this.classes);
     }

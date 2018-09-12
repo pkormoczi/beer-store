@@ -21,9 +21,4 @@ public class OrderErrorController extends ResponseEntityExceptionHandler {
         ErrorDetails errorDetails = new ErrorDetails(message, logRef);
         return new ResponseEntity<>(errorDetails, httpStatus);
     }
-//
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ResponseEntity<ErrorDetails> assertionException(final IllegalArgumentException e) {
-//        return error(e, HttpStatus.NOT_FOUND, e.getLocalizedMessage());
-//    }
 }

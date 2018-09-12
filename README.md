@@ -34,3 +34,4 @@ Beer Store is a simple proof of concept application focusing on the following fe
 - Clover reports: `mvn clean clover:setup test clover:aggregate clover:clover`
 - Swagger UI at: `http://localhost:8080/swagger-ui.html`
 - Swagger JSON: `http://localhost:8080/v2/api-docs`
+- Sonar on local: `mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=c0bee1da6fc598716e80e82011ff6c25ebb75395`
