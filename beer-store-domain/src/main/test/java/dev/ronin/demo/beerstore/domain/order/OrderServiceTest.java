@@ -20,7 +20,7 @@ public class OrderServiceTest {
     private OrderService orderService;
 
     @Test
-    public void testLogging() {
+    public void whenCallGetOrdersItWorks() {
         when(orderRepository.findAll()).thenReturn(new ArrayList<>());
         orderService.getOrders();
         verify(orderRepository, times(1)).findAll();
