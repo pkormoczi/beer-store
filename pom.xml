@@ -32,6 +32,8 @@
         <version.lombok>1.18.2</version.lombok>
         <version.mockito>2.22.0</version.mockito>
         <version.swagger>2.9.2</version.swagger>
+        <sonar.clover.reportPath>${project.build.directory}/site/clover/clover.xml</sonar.clover.reportPath>
+        <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
     </properties>
 
     <dependencyManagement>
