@@ -3,8 +3,8 @@ package dev.ronin.demo.beerstore.domain.achitecture;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class ArchitectureTest {
 
     private JavaClasses classes;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         classes = new ClassFileImporter().importPackages("dev.ronin.demo.beerstore.domain");
     }
