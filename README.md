@@ -10,19 +10,21 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [x] REST Controllers
  - [x] Spring MVC
  - [x] Swagger
- - [ ] Spring Security
+ - [x] Spring Security
  - [x] MapStruct as adapter
  - [ ] Integration tests
- - [ ] Unit tests
+ - [x] Unit tests
  - [x] Test coverage tool   
  
 
 ## TODO
 
- - [ ] Exception and Error handling and documentation in the REST Controllers
- - [ ] Spring Security for SOAP with roles and basic authentication
+ - [x] Exception and Error handling and documentation in the REST Controllers
+ - [x] Spring Security for SOAP with roles and basic authentication
+ - [ ] Profiling - local, integration test, docker, prod
  - [ ] Unit test for business
  - [ ] Integration tests for REST and SOAP endpoints
+ - [ ] Separate unit and integration tests in jenkins pipeline
  - [ ] Transaction management refinement
  - [ ] Weblogic 12c deployment
  - [ ] Database migration tooling? flyway /liquibase
@@ -34,4 +36,5 @@ Beer Store is a simple proof of concept application focusing on the following fe
 - Clover reports: `mvn clean clover:setup test clover:aggregate clover:clover`
 - Swagger UI at: `http://localhost:8080/swagger-ui.html`
 - Swagger JSON: `http://localhost:8080/v2/api-docs`
+- SOAP Endpoint: `http://localhost:8080/services/customers.wsdl`
 - Sonar on local: `mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=c0bee1da6fc598716e80e82011ff6c25ebb75395`

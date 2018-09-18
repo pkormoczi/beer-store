@@ -10,4 +10,21 @@
 
     <artifactId>beer-store-domain</artifactId>
 
+    <properties>
+        <version.archunit>0.9.1</version.archunit>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit</artifactId>
+            <version>${version.archunit}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 </project>

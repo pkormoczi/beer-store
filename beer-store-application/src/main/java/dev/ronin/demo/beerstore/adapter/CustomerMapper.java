@@ -4,7 +4,7 @@ import dev.ronin.beerstore.contract.customer.Customer;
 import org.mapstruct.Mapper;
 
 @Mapper
-interface CustomerMapper {
+public interface CustomerMapper {
 
     Customer toDto(final dev.ronin.demo.beerstore.domain.customer.Customer entity);
 }

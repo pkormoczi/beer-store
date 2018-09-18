@@ -22,9 +22,6 @@ public class CustomerWs {
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCustomerRequest")
 	@ResponsePayload
 	public GetCustomerResponse getCustomer(@RequestPayload GetCustomerRequest request) {
-		GetCustomerResponse response = new GetCustomerResponse();
-		response.setCustomer(customerAdapter.findCustomer(request.getName()));
-
-		return response;
+        return new GetCustomerResponse(customerAdapter.findCustomer(request.getName()));
 	}
 }
