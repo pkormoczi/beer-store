@@ -105,7 +105,7 @@
                                 <xsdOption>
                                     <!--<bindingFile>${directory.wsdl.root}/bindings.xjb</bindingFile>-->
                                     <!--<catalog>${directory.wsdl.root}/catalog.xml</catalog>-->
-                                    <xsd>${basedir}/src/main/resources/dev/ronin/beerstore/contract/Customer.xsd</xsd>
+                                    <xsd>${basedir}/src/main/resources/dev/ronin/demo/beerstore/contract/Customer.xsd</xsd>
                                     <extension>true</extension>
                                     <extensionArgs>
                                         <extensionArg>-Xts:style:multiline</extensionArg>
