@@ -31,7 +31,7 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [ ] Async calls via SOAP
  - [ ] Events, with Spring application events
 
-##DEV notes
+## DEV notes
 - beer-store-contract is a separate artifact. Need to run mvn clean install first for that module.
 - Clover reports: `mvn clean clover:setup test clover:aggregate clover:clover`
 - Swagger UI at: `http://localhost:8080/swagger-ui.html`

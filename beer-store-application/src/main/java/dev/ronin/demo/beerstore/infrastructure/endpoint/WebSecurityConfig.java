@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.endpoint.configruation;
+package dev.ronin.demo.beerstore.infrastructure.endpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/services/**").hasRole("USER")
+        http.authorizeRequests()
+            .antMatchers("/services/**").hasRole("USER")
             .and().httpBasic()
             .and().csrf().disable();
     }

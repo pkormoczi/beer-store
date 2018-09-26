@@ -1,8 +1,8 @@
-package dev.ronin.demo.beerstore.endpoint;
+package dev.ronin.demo.beerstore.infrastructure.endpoint;
 
 import dev.ronin.demo.beerstore.contract.customer.GetCustomerRequest;
 import dev.ronin.demo.beerstore.contract.customer.GetCustomerResponse;
-import dev.ronin.demo.beerstore.adapter.CustomerAdapter;
+import dev.ronin.demo.beerstore.infrastructure.adapter.CustomerAdapter;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
@@ -11,7 +11,7 @@ import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 @Endpoint
 public class CustomerWs {
 
-    private static final String NAMESPACE_URI = "http://beerstore.ronin.dev/contract/customer";
+    private static final String NAMESPACE_URI = "http://demo.ronin.dev/beerstore/contract/customer";
 
     private final CustomerAdapter customerAdapter;
 

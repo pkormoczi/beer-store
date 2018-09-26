@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.adapter;
+package dev.ronin.demo.beerstore.infrastructure.adapter;
 
 import dev.ronin.demo.beerstore.contract.customer.Customer;
 import org.mapstruct.Mapper;

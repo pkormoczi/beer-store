@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.controller;
+package dev.ronin.demo.beerstore.infrastructure.controller;
 
 import dev.ronin.demo.beerstore.domain.customer.Address;
 import dev.ronin.demo.beerstore.domain.customer.Customer;
