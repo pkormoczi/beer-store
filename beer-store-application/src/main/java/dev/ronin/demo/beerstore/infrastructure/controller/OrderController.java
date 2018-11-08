@@ -42,7 +42,7 @@ public class OrderController {
     }
 
     @ApiOperation(value = "Get all Orders")
-    @GetMapping(value = "/all")
+    @GetMapping(value = "/")
     public List<Order> getOrders() {
         return orderService.getOrders();
     }

@@ -20,7 +20,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("dev.ronin.demo.beerstore.controller"))
+                .apis(RequestHandlerSelectors.basePackage("dev.ronin.demo.beerstore.infrastructure.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(getMetaData());
