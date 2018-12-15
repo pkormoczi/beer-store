@@ -11,40 +11,17 @@
     <packaging>jar</packaging>
 
     <properties>
-        <version.maven.clean.plugin>3.0.0</version.maven.clean.plugin>
-        <version.build.helper.maven.plugin>3.0.0</version.build.helper.maven.plugin>
-        <version.apache.cxf>3.2.2</version.apache.cxf>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <resource.delimiter>@</resource.delimiter>
         <version.apache.cxf.utils>3.2.1</version.apache.cxf.utils>
-        <version.commons.lang3>3.5</version.commons.lang3>
-        <version.jaxb.impl>2.3.0</version.jaxb.impl>
-        <version.jaxb.xjc>2.3.0</version.jaxb.xjc>
-        <version.jaxb2.basics>0.11.1</version.jaxb2.basics>
+        <version.build.helper.maven.plugin>3.0.0</version.build.helper.maven.plugin>
         <version.jaxb2.fluent.api>3.0</version.jaxb2.fluent.api>
         <version.jaxb2.value.constructor>3.0</version.jaxb2.value.constructor>
-        <version.maven.compiler>3.5.1</version.maven.compiler>
     </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${version.commons.lang3}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf.xjc-utils</groupId>
-            <artifactId>cxf-xjc-runtime</artifactId>
-            <version>${version.apache.cxf.utils}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-    </dependencies>
 
     <build>
         <resources>
@@ -82,11 +59,16 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>${version.maven.clean.plugin}</version>
-                <configuration>
-                    <excludeDefaultDirectories>false</excludeDefaultDirectories>
-                </configuration>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.cxf</groupId>
@@ -103,12 +85,10 @@
                             <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
                             <xsdOptions>
                                 <xsdOption>
-                                    <!--<bindingFile>${directory.wsdl.root}/bindings.xjb</bindingFile>-->
-                                    <!--<catalog>${directory.wsdl.root}/catalog.xml</catalog>-->
-                                    <xsd>${basedir}/src/main/resources/dev/ronin/demo/beerstore/contract/Customer.xsd</xsd>
+                                    <xsd>${basedir}/src/main/resources/dev/ronin/demo/beerstore/contract/Customer.xsd
+                                    </xsd>
                                     <extension>true</extension>
                                     <extensionArgs>
-                                        <extensionArg>-Xts:style:multiline</extensionArg>
                                         <extensionArg>-Xvalue-constructor</extensionArg>
                                         <extensionArg>-Xfluent-api</extensionArg>
                                         <extensionArg>-Xbg</extensionArg>
@@ -122,11 +102,6 @@
                     <dependency>
                         <groupId>org.apache.cxf.xjcplugins</groupId>
                         <artifactId>cxf-xjc-boolean</artifactId>
-                        <version>${version.apache.cxf.utils}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.cxf.xjcplugins</groupId>
-                        <artifactId>cxf-xjc-ts</artifactId>
                         <version>${version.apache.cxf.utils}</version>
                     </dependency>
                     <dependency>
@@ -144,6 +119,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
