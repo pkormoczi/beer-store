@@ -19,6 +19,7 @@
     <description>Brew Manager Application with Spring</description>
     <modules>
         <module>beer-store-application</module>
+        <module>jenkins-groovy</module>
     </modules>
 
     <properties>

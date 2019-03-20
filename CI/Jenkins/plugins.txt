@@ -31,7 +31,6 @@ build-timeout
 checkstyle
 cloudbees-bitbucket-branch-source
 cloudbees-folder
-clover
 command-launcher
 credentials
 credentials-binding

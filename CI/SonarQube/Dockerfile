@@ -1,0 +1,4 @@
+FROM sonarqube:7.6-community
+
+COPY --chown=sonarqube:sonarqube config_sonar.sh /opt/sonarqube/
+ENTRYPOINT ["/opt/sonarqube/config_sonar.sh"]

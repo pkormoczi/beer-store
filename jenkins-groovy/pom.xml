@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>beer-store</artifactId>
+        <groupId>dev.ronin.demo</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>jenkins-groovy</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jenkins-ci.main</groupId>
+            <artifactId>jenkins-core</artifactId>
+            <version>2.164.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>sonar</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+    </dependencies>
+    <repositories>
+        <repository>
+            <id>jenkins</id>
+            <url>http://repo.jenkins-ci.org/releases</url>
+        </repository>
+    </repositories>
+
+</project>

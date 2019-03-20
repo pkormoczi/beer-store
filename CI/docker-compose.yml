@@ -1,15 +1,15 @@
 version: '3.1'
 services:
   jenkins:
-    container_name: jenkins-ci
     ports:
       - '8080:8080'
       - '50000:50000'
-    image: jenkins/jenkins:lts
+    build:
+      context: ./Jenkins
+      depends_on:
+        - sonarqube
   sonarqube:
-    container_name: sonar-ci
     ports:
-    - '9000:9000'
-    image: sonarqube:latest
-    depends_on:
-      - jenkins
+      - '9000:9000'
+    build:
+      context: ./SonarQube
