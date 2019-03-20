@@ -16,5 +16,5 @@ do
 done
 
 # Create webhook for jenkins
-curl -v -u admin:admin "$BASE_URL/api/webhooks/create" -X POST -d "name=Jenkins&url=http://172.18.0.3:8080/sonarqube-webhook/"
+curl -v -u admin:admin "$BASE_URL/api/webhooks/create" -X POST -d "name=Jenkins&url=http://172.17.0.3:8080/sonarqube-webhook/"
 wait

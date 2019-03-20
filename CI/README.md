@@ -8,11 +8,8 @@ force recreate and build:
 shutdown:
 `docker-compose down`
 
-In Nexus create webhook:
-
-`http://{JENKINS_HOST}:{JENKINS_PORT}/sonarqube-webhook/`
-
 ## TODO
 - [ ] Add maven programmatically
 - [ ] Add JDK programmatically
-- [ ] Get Jenkins and Sonar IP address from compose ENV
+- [ ] Get Jenkins and Sonar IP address from compose ENV/Networking
+- [ ] Sonar token via groovy instead of sh?
