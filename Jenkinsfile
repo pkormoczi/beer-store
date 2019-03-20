@@ -31,10 +31,15 @@ pipeline {
             }
         }
 
-        stage('Unit Testing with Coverage Report') {
+        stage('Build') {
             steps {
-                sh 'mvn clean clover:setup test clover:aggregate clover:clover'
-                sh 'mvn test'
+                sh 'mvn -Dmaven.test.skip=true clean install'
+            }
+        }
+
+        stage('Unit test') {
+            steps {
+                sh 'mvn org.jacoco:jacoco-maven-plugin:prepare-agent surefire:test'
                 junit '**/target/surefire-reports/*.xml'
             }
         }
@@ -59,9 +64,9 @@ pipeline {
             }
         }
 
-        stage('Build Package') {
+        stage('Package') {
             steps {
-                sh 'mvn -Dmaven.test.skip=true clean package'
+                sh 'mvn -Dmaven.test.skip=true package'
             }
         }
     }
