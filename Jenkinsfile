@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('Checkout from GitHub') {
+        stage('Checkout') {
             steps {
                 git 'https://github.com/pkormoczi/beer-store.git'
             }
