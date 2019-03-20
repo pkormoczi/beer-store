@@ -39,7 +39,7 @@ pipeline {
 
         stage('Unit test') {
             steps {
-                sh 'mvn org.jacoco:jacoco-maven-plugin:prepare-agent surefire:test'
+                sh 'mvn test'
                 junit '**/target/surefire-reports/*.xml'
             }
         }
