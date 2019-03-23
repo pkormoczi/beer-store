@@ -33,14 +33,30 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn -Dmaven.test.skip=true clean install'
+                withMaven() {
+                    sh 'mvn -Dmaven.test.skip=true clean install'
+                }
             }
         }
 
-        stage('Unit test') {
-            steps {
-                sh 'mvn test'
-                junit '**/target/surefire-reports/*.xml'
+        stage("Test") {
+            parallel {
+                stage('Unit test') {
+                    steps {
+                        withMaven() {
+                            sh 'mvn test'
+                            junit '**/target/surefire-reports/*.xml'
+                        }
+                    }
+                }
+                stage('Unit test') {
+                    steps {
+                        withMaven() {
+                            sh 'mvn maven-failsafe-plugin:integration-test'
+                            junit '**/target/surefire-reports/*.xml'
+                        }
+                    }
+                }
             }
         }
 
@@ -66,7 +82,9 @@ pipeline {
 
         stage('Package') {
             steps {
-                sh 'mvn -Dmaven.test.skip=true package'
+                withMaven() {
+                    sh 'mvn -Dmaven.test.skip=true package'
+                }
             }
         }
     }
