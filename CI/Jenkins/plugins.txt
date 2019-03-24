@@ -73,6 +73,7 @@ pipeline-build-step
 pipeline-github-lib
 pipeline-graph-analysis
 pipeline-input-step
+pipeline-maven
 pipeline-milestone-step
 pipeline-model-api
 pipeline-model-declarative-agent

@@ -45,15 +45,13 @@ pipeline {
                     steps {
                         withMaven() {
                             sh 'mvn test'
-                            junit '**/target/surefire-reports/*.xml'
                         }
                     }
                 }
                 stage('Unit test') {
                     steps {
                         withMaven() {
-                            sh 'mvn maven-failsafe-plugin:integration-test'
-                            junit '**/target/surefire-reports/*.xml'
+                            sh 'mvn org.apache.maven.plugins:maven-compiler-plugin:testCompile org.apache.maven.plugins:maven-failsafe-plugin:integration-test'
                         }
                     }
                 }
