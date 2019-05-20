@@ -21,26 +21,28 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
         importOptions = {ImportOption.DoNotIncludeTests.class,ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
 class DomainArchitectureTest {
 
+    public static final String REPOSITORY = ".*Repository";
     @ArchTest
     public static final ArchRule repositoriesShoulBeNamedRepository =
             classes().that().areAnnotatedWith(Repository.class)
-                    .should().haveNameMatching(".*Repository");
+                    .should().haveNameMatching(REPOSITORY);
 
     @ArchTest
     public static final ArchRule repositoriesShoulBeAnnotatedWithRepository =
-            classes().that().haveNameMatching(".*Repository")
+            classes().that().haveNameMatching(REPOSITORY)
                     .should().beAnnotatedWith(Repository.class);
 
 
+    public static final String SERVICE = ".*Service";
     @ArchTest
     public static final ArchRule servicesShoulBeNamedService =
             classes().that().areAnnotatedWith(Service.class)
-                    .should().haveNameMatching(".*Service");
+                    .should().haveNameMatching(SERVICE);
 
 
     @ArchTest
     public static final ArchRule servicesShoulBeAnnotatedWithService =
-            classes().that().haveNameMatching(".*Service")
+            classes().that().haveNameMatching(SERVICE)
                     .should().beAnnotatedWith(Service.class);
 
     @ArchTest

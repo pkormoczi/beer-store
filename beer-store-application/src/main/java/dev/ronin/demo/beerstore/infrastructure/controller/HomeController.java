@@ -14,7 +14,6 @@ import static java.lang.String.format;
 @RequestMapping(value = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class HomeController {
 
-
     @ApiOperation(value = "Simple Hello World message", response = String.class)
     @GetMapping(value = "/")
     public String hello() {
