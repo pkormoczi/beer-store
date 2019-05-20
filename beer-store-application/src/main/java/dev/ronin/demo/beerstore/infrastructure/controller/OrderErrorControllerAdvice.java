@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Optional;
 
 @RestControllerAdvice
-public class OrderErrorController extends ResponseEntityExceptionHandler {
+public class OrderErrorControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<ErrorDetails> notFoundException(final OrderNotFoundException e) {
