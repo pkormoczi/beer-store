@@ -15,14 +15,15 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-            .antMatchers("/services/**").hasRole("USER")
-            .and().httpBasic()
-            .and().csrf().disable();
+                .antMatchers("/services/**").hasRole("USER")
+                .and().httpBasic()
+                .and().csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication().passwordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder())
-            .withUser("user").password("{noop}password").roles("USER");
+                .withUser("user").password("{noop}password").roles("USER");
     }
 }
