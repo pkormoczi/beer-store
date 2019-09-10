@@ -48,7 +48,7 @@ pipeline {
                         }
                     }
                 }
-                stage('Unit test') {
+                stage('Integration test') {
                     steps {
                         withMaven() {
                             sh 'mvn org.apache.maven.plugins:maven-compiler-plugin:testCompile org.apache.maven.plugins:maven-failsafe-plugin:integration-test'
