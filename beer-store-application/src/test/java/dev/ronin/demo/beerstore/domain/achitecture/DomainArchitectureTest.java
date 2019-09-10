@@ -1,19 +1,11 @@
 package dev.ronin.demo.beerstore.domain.achitecture;
 
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import com.tngtech.archunit.lang.syntax.elements.ClassesShouldConjunction;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
@@ -21,7 +13,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
         importOptions = {ImportOption.DoNotIncludeTests.class,ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
 class DomainArchitectureTest {
 
-    public static final String REPOSITORY = ".*Repository";
+    private static final String REPOSITORY = ".*Repository";
     @ArchTest
     public static final ArchRule repositoriesShoulBeNamedRepository =
             classes().that().areAnnotatedWith(Repository.class)
@@ -33,7 +25,7 @@ class DomainArchitectureTest {
                     .should().beAnnotatedWith(Repository.class);
 
 
-    public static final String SERVICE = ".*Service";
+    private static final String SERVICE = ".*Service";
     @ArchTest
     public static final ArchRule servicesShoulBeNamedService =
             classes().that().areAnnotatedWith(Service.class)

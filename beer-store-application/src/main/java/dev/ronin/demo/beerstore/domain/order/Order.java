@@ -24,11 +24,16 @@ public class Order {
     @GeneratedValue
     private Long id;
 
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    @ApiModelProperty("The statis of the order")
+    private OrderStatus orderStatus = OrderStatus.NEW;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @ApiModelProperty("Customer who made the order")
     private Customer customer;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @ApiModelProperty("The ordered beer list")
     private List<Beer> beers;
 
