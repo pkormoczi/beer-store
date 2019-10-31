@@ -4,4 +4,5 @@
 	<logger name="dev.ronin.demo.beerstore" level="INFO"/>
     <logger name="com.tngtech.archunit" level="INFO" />
     <logger name="com.tngtech.archunit.core.importer.JavaClassProcessor" level="WARN" />
+<!--    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" />-->
 </configuration>

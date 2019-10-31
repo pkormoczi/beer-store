@@ -12,8 +12,9 @@
     <packaging>war</packaging>
 
     <properties>
-        <version.mapstruct>1.3.0.Final</version.mapstruct>
+        <version.mapstruct>1.3.1.Final</version.mapstruct>
         <version.swagger>2.9.2</version.swagger>
+        <version.archunit>0.11.0</version.archunit>
     </properties>
 
     <dependencies>
@@ -98,19 +99,19 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit</artifactId>
-            <version>0.10.2</version>
+            <version>${version.archunit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-api</artifactId>
-            <version>0.10.2</version>
+            <version>${version.archunit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit5-engine</artifactId>
-            <version>0.10.2</version>
+            <version>${version.archunit}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -137,6 +138,10 @@
                     <groupId>junit</groupId>
                     <artifactId>junit</artifactId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>junit-vintage-engine</artifactId>
+                    <groupId>org.junit.vintage</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -151,7 +156,7 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>1.0.2</version>
+                <version>1.7.0</version>
                 <configuration>
                     <from>
                         <image>tomcat:8.5-jre8-alpine</image>

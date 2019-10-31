@@ -38,7 +38,6 @@ class CustomerRepositoryTest {
         return Customer.builder()
                 .firstName("Peter")
                 .lastName("Smith")
-                .id(null)
                 .address(Address.builder()
                         .country("Hungary")
                         .city("Budapest")
