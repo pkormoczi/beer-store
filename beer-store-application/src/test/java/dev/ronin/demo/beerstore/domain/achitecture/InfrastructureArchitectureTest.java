@@ -5,6 +5,8 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
@@ -14,20 +16,20 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore.infrastructure",
         importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
-public class InfrastructureArchitectureTest {
+class InfrastructureArchitectureTest {
 
-    public static final String CONFIGURATION = ".*Configuration";
+    private static final String CONFIGURATION = ".*Configuration";
     @ArchTest
-    public static final ArchRule configurationsShoulBeNamedConfiguration =
+    public static final ArchRule configurationsShouldBeNamedConfiguration =
             classes().that().areAnnotatedWith(Configuration.class)
                     .should().haveNameMatching(CONFIGURATION);
 
     @ArchTest
-    public static final ArchRule configurationsShoulBeAnnotatedWithConfiguration =
+    public static final ArchRule configurationsShouldBeAnnotatedWithConfiguration =
             classes().that().haveNameMatching(CONFIGURATION)
                     .should().beAnnotatedWith(Configuration.class);
 
-    public static final String CONTROLLER = ".*Controller";
+    private static final String CONTROLLER = ".*Controller";
     @ArchTest
     public static final ArchRule controllersShouldBeNamedController =
             classes().that().areAnnotatedWith(Controller.class)
@@ -40,7 +42,7 @@ public class InfrastructureArchitectureTest {
                     .should().beAnnotatedWith(Controller.class)
                     .orShould().beAnnotatedWith(RestController.class);
 
-    public static final String CONTROLLER_PACKAGE = "..controller..";
+    private static final String CONTROLLER_PACKAGE = "..controller..";
     @ArchTest
     public static final ArchRule controllersShouldBeInControllerPackage =
             classes().that().haveNameMatching(CONTROLLER)
@@ -49,7 +51,9 @@ public class InfrastructureArchitectureTest {
     @ArchTest
     public static final ArchRule loggersShouldBeConstantAndNamedLog =
             ArchRuleDefinition.fields().that().haveRawType(Logger.class)
-                    .should().beStatic()
+                    .should().bePrivate()
+                    .andShould().beStatic()
                     .andShould().beFinal()
-                    .andShould().haveName("log");
+                    .andShould().haveName("log")
+                    .because("You should use Lombok @Slf4j annotation!");
 }

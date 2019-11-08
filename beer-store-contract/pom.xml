@@ -11,13 +11,10 @@
     <packaging>jar</packaging>
 
     <properties>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <resource.delimiter>@</resource.delimiter>
-        <version.apache.cxf.utils>3.2.1</version.apache.cxf.utils>
+        <version.apache.cxf.utils>3.3.0</version.apache.cxf.utils>
         <version.build.helper.maven.plugin>3.0.0</version.build.helper.maven.plugin>
         <version.jaxb2.fluent.api>3.0</version.jaxb2.fluent.api>
         <version.jaxb2.value.constructor>3.0</version.jaxb2.value.constructor>
@@ -38,6 +35,14 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>11</release>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -60,7 +65,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -119,5 +124,11 @@
             </plugin>
         </plugins>
     </build>
-
+    <dependencies>
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+    </dependencies>
 </project>

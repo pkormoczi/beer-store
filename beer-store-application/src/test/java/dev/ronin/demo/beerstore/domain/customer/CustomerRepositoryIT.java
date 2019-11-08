@@ -8,7 +8,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import static org.assertj.core.api.BDDAssertions.then;
 
 @DataJpaTest
-class CustomerRepositoryTest {
+class CustomerRepositoryIT {
     @Autowired
     private TestEntityManager entityManager;
 

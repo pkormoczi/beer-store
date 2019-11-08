@@ -1,8 +1,6 @@
 package dev.ronin.demo.beerstore.domain.order;
 
 import dev.ronin.demo.beerstore.domain.customer.Customer;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +15,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "BEER_ORDER")
-@ApiModel("Order entity")
 public class Order {
 
     @Id
@@ -26,15 +23,12 @@ public class Order {
 
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    @ApiModelProperty("The statis of the order")
     private OrderStatus orderStatus = OrderStatus.NEW;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @ApiModelProperty("Customer who made the order")
     private Customer customer;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @ApiModelProperty("The ordered beer list")
     private List<Beer> beers;
 
 
