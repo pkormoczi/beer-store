@@ -14,4 +14,8 @@ public class CustomerService {
     public Customer findCustomerByName(final String name) {
         return customerRepository.findByFirstNameContainingIgnoreCase(name);
     }
+
+    public Customer findCustomerById(Long id) {
+        return customerRepository.findById(id).orElseThrow();
+    }
 }

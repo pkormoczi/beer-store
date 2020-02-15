@@ -1,32 +1,36 @@
 package dev.ronin.demo.beerstore.infrastructure.controller;
 
-import dev.ronin.demo.beerstore.domain.order.Order;
-import dev.ronin.demo.beerstore.domain.order.OrderService;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import dev.ronin.demo.beerstore.infrastructure.adapter.OrderAdapter;
+import dev.ronin.demo.beerstore.infrastructure.data.OrderDTO;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
-@RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/orders", produces = APPLICATION_JSON_VALUE)
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderAdapter orderAdapter;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
+    public OrderController(OrderAdapter orderAdapter) {
+        this.orderAdapter = orderAdapter;
     }
 
     @GetMapping(value = "/{id}")
-    public Order getOrderById(@PathVariable final Long id) {
-        return orderService.findById(id).orElseThrow(() -> new OrderNotFoundException("Order not found!"));
+    public OrderDTO getOrderById(@PathVariable final Long id) {
+        return orderAdapter.findById(id);
     }
 
-    @GetMapping(value = "/")
-    public List<Order> getOrders() {
-        return orderService.getOrders();
+    @GetMapping
+    public List<OrderDTO> getOrders() {
+        return orderAdapter.getOrders();
+    }
+
+    @PostMapping(consumes = APPLICATION_JSON_VALUE)
+    public ResponseEntity<Long> createOrder(@RequestBody OrderDTO order) {
+        return ResponseEntity.ok(orderAdapter.addOrder(order));
     }
 }
