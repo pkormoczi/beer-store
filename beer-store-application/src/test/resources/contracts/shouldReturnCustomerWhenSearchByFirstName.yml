@@ -1,0 +1,37 @@
+---
+name: "shouldReturnCustomerWhenSearchByFirstName"
+description: |
+  Represents a successful scenario of findig a customer by first name
+  ```
+  given:
+      customer first name
+  when:
+      search for customer by first name
+  then:
+      return customer data
+  ```
+request:
+  method: "GET"
+  url: "/customers/TestFirst"
+response:
+  status: 200
+  headers:
+    Content-Type: "application/json"
+  body:
+    id: 1
+    firstName: "TestFirst"
+    lastName: "TestLast"
+    address:
+      country: "MockCountry"
+      city: "MockCity"
+      streetAddress: "MockAddress"
+      zip: "1111"
+  matchers:
+    headers:
+    - key: "Content-Type"
+      regex: "application/json.*"
+      regexType: "as_string"
+  async: false
+  fixedDelayMilliseconds: null
+ignored: false
+inProgress: false

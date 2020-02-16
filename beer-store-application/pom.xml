@@ -121,6 +121,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>spring-web-test-client</artifactId>
+            <version>${rest-assured.version}</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.security</groupId>-->
 <!--            <artifactId>spring-security-test</artifactId>-->
@@ -205,7 +212,9 @@
                 <extensions>true</extensions>
                 <configuration>
                     <baseClassForTests>dev.ronin.demo.beerstore.contract.ContractTestBase</baseClassForTests>
+                    <convertToYaml>true</convertToYaml>
                     <testFramework>JUNIT5</testFramework>
+                    <testMode>WEBTESTCLIENT</testMode>
                 </configuration>
             </plugin>
             <plugin>
