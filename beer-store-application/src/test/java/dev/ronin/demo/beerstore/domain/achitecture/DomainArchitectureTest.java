@@ -12,6 +12,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore.domain",
         importOptions = {ImportOption.DoNotIncludeTests.class,ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
+@SuppressWarnings("squid:S2187")
 class DomainArchitectureTest {
 
     private static final String REPOSITORY = ".*Repository";

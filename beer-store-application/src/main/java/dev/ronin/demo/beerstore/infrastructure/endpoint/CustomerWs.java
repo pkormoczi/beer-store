@@ -20,8 +20,8 @@ public class CustomerWs {
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCustomerRequest")
-	@ResponsePayload
-	public GetCustomerResponse getCustomer(@RequestPayload GetCustomerRequest request) {
+    @ResponsePayload
+    public GetCustomerResponse getCustomer(@RequestPayload GetCustomerRequest request) {
         return new GetCustomerResponse(customerAdapter.findCustomer(request.getName()));
-	}
+    }
 }

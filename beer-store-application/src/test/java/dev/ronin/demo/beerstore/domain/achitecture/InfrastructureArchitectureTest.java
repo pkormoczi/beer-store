@@ -16,6 +16,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore.infrastructure",
         importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
+@SuppressWarnings("squid:S2187")
 class InfrastructureArchitectureTest {
 
     private static final String CONFIGURATION = ".*Configuration";
