@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test
+#    url: jdbc:h2:./test;AUTO_SERVER=TRUE
+    platform: h2
+    username: sa
+    password:
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        show_sql: true
+        use_sql_comments: true
+        format_sql: true
+    open-in-view: false
+  h2:
+    console:
+      enabled: true
+      path: /console
