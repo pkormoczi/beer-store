@@ -5,8 +5,6 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;

@@ -2,6 +2,8 @@ package dev.ronin.demo.beerstore.domain.customer;
 
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class CustomerService {
 
@@ -16,6 +18,6 @@ public class CustomerService {
     }
 
     public Customer findCustomerById(Long id) {
-        return customerRepository.findById(id).orElseThrow();
+        return customerRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }

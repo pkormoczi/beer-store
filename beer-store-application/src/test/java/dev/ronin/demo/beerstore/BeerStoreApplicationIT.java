@@ -16,7 +16,7 @@ class BeerStoreApplicationIT {
     @Test
     @DisplayName("Test if Spring context can be initialized properly")
     void contextLoads() {
-        Assertions.assertThat(context.getId()).isEqualTo("application");
+        Assertions.assertThat(context.getId()).isEqualTo("INTEGRATION-TESTS");
     }
 
 }

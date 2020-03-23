@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class OrderService {
@@ -37,6 +38,6 @@ public class OrderService {
     }
 
     public Order findById(Long id) {
-        return orderRepository.findById(id).orElseThrow();
+        return orderRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }
