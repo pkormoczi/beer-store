@@ -7,6 +7,8 @@ import com.tngtech.archunit.lang.ArchRule;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.Entity;
+
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
@@ -26,18 +28,20 @@ class DomainArchitectureTest {
             classes().that().haveNameMatching(REPOSITORY)
                     .should().beAnnotatedWith(Repository.class);
 
-
-    private static final String SERVICE = ".*Service";
     @ArchTest
-    public static final ArchRule servicesShouldBeNamedService =
-            classes().that().areAnnotatedWith(Service.class)
-                    .should().haveNameMatching(SERVICE);
-
+    public static final ArchRule repositoriesShouldBeInPackageNamedRepository =
+            classes().that().areAnnotatedWith(Repository.class)
+                    .should().resideInAPackage("..repository..");
 
     @ArchTest
-    public static final ArchRule servicesShouldBeAnnotatedWithService =
-            classes().that().haveNameMatching(SERVICE)
-                    .should().beAnnotatedWith(Service.class);
+    public static final ArchRule entitiesShouldBeInPackageNamedModel =
+            classes().that().areAnnotatedWith(Entity.class)
+                    .should().resideInAPackage("..model..");
+
+    @ArchTest
+    public static final ArchRule entitiesShouldNotBeNamedEntity =
+            classes().that().areAnnotatedWith(Entity.class)
+                    .should().haveNameNotMatching(".*Entity");
 
     @ArchTest
     public static final ArchRule repositoriesShouldHaveOnlyAccessedByServices =
@@ -49,11 +53,6 @@ class DomainArchitectureTest {
     public static final ArchRule servicesShouldBePublic =
             classes().that().areAnnotatedWith(Service.class)
                     .should().bePublic();
-
-    @ArchTest
-    public static final ArchRule repositoriesShouldBePackagePrivate =
-            classes().that().areAnnotatedWith(Repository.class)
-                    .should().bePackagePrivate();
 
     @ArchTest
     public static final ArchRule domainClassesShouldNotAccessInfrastructureClasses =

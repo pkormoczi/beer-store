@@ -1,23 +1,25 @@
 package dev.ronin.demo.beerstore.domain.customer;
 
+import dev.ronin.demo.beerstore.domain.customer.model.Customer;
+import dev.ronin.demo.beerstore.domain.customer.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
 
 @Service
-public class CustomerService {
+public class Customers {
 
     private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public Customers(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
 
-    public Customer findCustomerByName(final String name) {
+    public Customer customerWithName(final String name) {
         return customerRepository.findByFirstNameContainingIgnoreCase(name);
     }
 
-    public Customer findCustomerById(Long id) {
+    public Customer customer(Long id) {
         return customerRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }

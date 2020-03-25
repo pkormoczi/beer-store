@@ -1,7 +1,12 @@
 package dev.ronin.demo.beerstore.domain.order;
 
-import dev.ronin.demo.beerstore.domain.customer.Customer;
-import dev.ronin.demo.beerstore.domain.customer.CustomerService;
+import dev.ronin.demo.beerstore.domain.customer.Customers;
+import dev.ronin.demo.beerstore.domain.customer.model.Customer;
+import dev.ronin.demo.beerstore.domain.order.model.Beer;
+import dev.ronin.demo.beerstore.domain.order.model.Order;
+import dev.ronin.demo.beerstore.domain.order.repository.BeerRepository;
+import dev.ronin.demo.beerstore.domain.order.repository.OrderRepository;
+import dev.ronin.demo.beerstore.domain.order.value.OrderStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -9,21 +14,21 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
-public class OrderService {
+public class Orders {
 
     private final OrderRepository orderRepository;
     private final BeerRepository beerRepository;
-    private final CustomerService customerService;
+    private final Customers customers;
 
-    public OrderService(OrderRepository orderRepository, BeerRepository beerRepository, CustomerService customerService) {
+    public Orders(OrderRepository orderRepository, BeerRepository beerRepository, Customers customers) {
         this.orderRepository = orderRepository;
         this.beerRepository = beerRepository;
-        this.customerService = customerService;
+        this.customers = customers;
     }
 
     @Transactional
-    public Long addOrder(Long customerId, List<Long> beerIds) {
-        Customer customer = customerService.findCustomerById(customerId);
+    public Long newOrder(Long customerId, List<Long> beerIds) {
+        Customer customer = customers.customer(customerId);
         List<Beer> beers = beerRepository.findAllById(beerIds);
         Order order = Order.builder()
                 .customer(customer)
@@ -33,11 +38,11 @@ public class OrderService {
         return orderRepository.save(order).getId();
     }
 
-    public List<Order> getOrders() {
+    public List<Order> list() {
         return orderRepository.findAll();
     }
 
-    public Order findById(Long id) {
+    public Order order(Long id) {
         return orderRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }

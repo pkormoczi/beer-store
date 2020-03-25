@@ -1,5 +1,8 @@
-package dev.ronin.demo.beerstore.domain.customer;
+package dev.ronin.demo.beerstore;
 
+import dev.ronin.demo.beerstore.domain.customer.model.Customer;
+import dev.ronin.demo.beerstore.domain.customer.repository.CustomerRepository;
+import dev.ronin.demo.beerstore.domain.customer.value.Address;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -1,6 +1,12 @@
 package dev.ronin.demo.beerstore.domain.order;
 
-import dev.ronin.demo.beerstore.domain.customer.CustomerService;
+import dev.ronin.demo.beerstore.domain.customer.Customers;
+import dev.ronin.demo.beerstore.domain.order.model.Beer;
+import dev.ronin.demo.beerstore.domain.order.model.Order;
+import dev.ronin.demo.beerstore.domain.order.repository.BeerRepository;
+import dev.ronin.demo.beerstore.domain.order.repository.OrderRepository;
+import dev.ronin.demo.beerstore.domain.order.value.BeerStyle;
+import dev.ronin.demo.beerstore.domain.order.value.OrderStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,7 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class OrderServiceTest {
+class OrdersTest {
 
     @Mock
     OrderRepository orderRepository;
@@ -28,7 +34,7 @@ class OrderServiceTest {
     BeerRepository beerRepository;
 
     @Mock
-    CustomerService customerService;
+    Customers customers;
 
     @Captor
     ArgumentCaptor<Order> orderArgumentCaptor;
@@ -38,9 +44,9 @@ class OrderServiceTest {
         Order expected = new Order();
         expected.setId(1L);
         given(orderRepository.save(Mockito.any())).willReturn(expected);
-        OrderService orderService = new OrderService(orderRepository, beerRepository, customerService);
+        Orders orders = new Orders(orderRepository, beerRepository, customers);
 
-        Long actual = orderService.addOrder(1L,Collections.singletonList(1L));
+        Long actual = orders.newOrder(1L,Collections.singletonList(1L));
 
         verify(orderRepository).save(orderArgumentCaptor.capture());
         then(orderArgumentCaptor.getValue().getOrderStatus()).isEqualTo(OrderStatus.NEW);

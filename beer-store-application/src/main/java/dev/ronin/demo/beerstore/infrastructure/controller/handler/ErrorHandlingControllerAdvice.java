@@ -1,5 +1,6 @@
-package dev.ronin.demo.beerstore.infrastructure.controller;
+package dev.ronin.demo.beerstore.infrastructure.controller.handler;
 
+import dev.ronin.demo.beerstore.infrastructure.data.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -10,7 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestControllerAdvice
-public class OrderErrorControllerAdvice extends ResponseEntityExceptionHandler {
+public class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorDetails> notFoundException(final NoSuchElementException e) {

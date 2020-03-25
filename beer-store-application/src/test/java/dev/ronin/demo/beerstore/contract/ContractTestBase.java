@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.contract;
 
-import dev.ronin.demo.beerstore.contract.customer.Address;
-import dev.ronin.demo.beerstore.contract.customer.Customer;
-import dev.ronin.demo.beerstore.infrastructure.adapter.CustomerAdapter;
+import dev.ronin.demo.beerstore.contract.customer.AddressModel;
+import dev.ronin.demo.beerstore.contract.customer.CustomerModel;
+import dev.ronin.demo.beerstore.infrastructure.adapter.CustomersAdapter;
 import dev.ronin.demo.beerstore.infrastructure.controller.CustomerController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,13 +16,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ContractTestBase {
 
     @Mock
-    private CustomerAdapter customerAdapter;
+    private CustomersAdapter customersAdapter;
 
     @BeforeEach
     void beforeEach() {
-        final Customer customer = new Customer(1, "TestFirst", "TestLast", new Address("MockCountry", "MockCity", "MockAddress", "1111"));
-        Mockito.when(this.customerAdapter.findCustomer("TestFirst")).thenReturn(customer);
-        RestAssuredMockMvc.standaloneSetup(new CustomerController(this.customerAdapter));
+        final CustomerModel customer = new CustomerModel(1, "TestFirst", "TestLast", new AddressModel("MockCountry", "MockCity", "MockAddress", "1111"));
+        Mockito.when(this.customersAdapter.customerWithName("TestFirst")).thenReturn(customer);
+        RestAssuredMockMvc.standaloneSetup(new CustomerController(this.customersAdapter));
     }
 
 }

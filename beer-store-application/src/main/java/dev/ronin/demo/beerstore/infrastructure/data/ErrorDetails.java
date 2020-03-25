@@ -1,11 +1,11 @@
-package dev.ronin.demo.beerstore.infrastructure.controller;
+package dev.ronin.demo.beerstore.infrastructure.data;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-class ErrorDetails {
+public class ErrorDetails {
     private LocalDateTime timestamp;
     private String message;
     private String details;

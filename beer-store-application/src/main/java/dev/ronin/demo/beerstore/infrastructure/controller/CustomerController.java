@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.infrastructure.controller;
 
-import dev.ronin.demo.beerstore.contract.customer.Customer;
-import dev.ronin.demo.beerstore.infrastructure.adapter.CustomerAdapter;
+import dev.ronin.demo.beerstore.contract.customer.CustomerModel;
+import dev.ronin.demo.beerstore.infrastructure.adapter.CustomersAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,14 +14,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/customers", produces = APPLICATION_JSON_VALUE)
 public class CustomerController {
 
-    final CustomerAdapter customerAdapter;
+    final CustomersAdapter customersAdapter;
 
-    public CustomerController(CustomerAdapter customerAdapter) {
-        this.customerAdapter = customerAdapter;
+    public CustomerController(CustomersAdapter customersAdapter) {
+        this.customersAdapter = customersAdapter;
     }
 
     @GetMapping(value = "/{name}")
-    public ResponseEntity<Customer> getOrderById(@PathVariable final String name) {
-        return ResponseEntity.ok(customerAdapter.findCustomer(name));
+    public ResponseEntity<CustomerModel> getOrderById(@PathVariable final String name) {
+        return ResponseEntity.ok(customersAdapter.customerWithName(name));
     }
 }

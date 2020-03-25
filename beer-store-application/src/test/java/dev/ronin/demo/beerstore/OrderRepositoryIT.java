@@ -1,5 +1,6 @@
-package dev.ronin.demo.beerstore.domain.order;
+package dev.ronin.demo.beerstore;
 
+import dev.ronin.demo.beerstore.domain.order.repository.OrderRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

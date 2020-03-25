@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.infrastructure.adapter;
 
-import dev.ronin.demo.beerstore.domain.order.Beer;
-import dev.ronin.demo.beerstore.domain.order.Order;
-import dev.ronin.demo.beerstore.infrastructure.data.OrderDTO;
+import dev.ronin.demo.beerstore.domain.order.model.Beer;
+import dev.ronin.demo.beerstore.domain.order.model.Order;
+import dev.ronin.demo.beerstore.infrastructure.data.OrderData;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 public interface OrderMapper {
 
     @Mapping(target = "customerId", source = "source.customer.id")
-    @Mapping(target = "beers", expression = "java(extractIds(source.getBeers()))")
-    OrderDTO toDto(Order source);
+    @Mapping(target = "beers", expression = "java(beerIdList(source.getBeers()))")
+    OrderData data(Order source);
 
-    List<OrderDTO> toDtoList(List<Order> orders);
+    List<OrderData> dataList(List<Order> orders);
 
-    default List<Long> extractIds(List<Beer> beers) {
+    default List<Long> beerIdList(List<Beer> beers) {
         return beers.stream().map(Beer::getId).collect(Collectors.toList());
     }
 

@@ -1,17 +1,15 @@
-package dev.ronin.demo.beerstore.domain.customer;
+package dev.ronin.demo.beerstore.domain.customer.value;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
-@Embeddable
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Embeddable
 public class Address {
 
     private String country;

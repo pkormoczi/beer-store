@@ -1,17 +1,16 @@
-package dev.ronin.demo.beerstore.domain.customer;
+package dev.ronin.demo.beerstore.domain.customer.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import dev.ronin.demo.beerstore.domain.customer.value.Address;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Customer {
 
     @Id

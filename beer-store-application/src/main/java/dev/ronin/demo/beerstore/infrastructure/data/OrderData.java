@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTO {
+public class OrderData {
 
     private Long customerId;
     private List<Long> beers;

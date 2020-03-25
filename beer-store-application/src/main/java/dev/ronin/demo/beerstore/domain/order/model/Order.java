@@ -1,16 +1,18 @@
-package dev.ronin.demo.beerstore.domain.order;
+package dev.ronin.demo.beerstore.domain.order.model;
 
-import dev.ronin.demo.beerstore.domain.customer.Customer;
+import dev.ronin.demo.beerstore.domain.customer.model.Customer;
+import dev.ronin.demo.beerstore.domain.order.value.OrderStatus;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 @Table(name = "BEER_ORDER")
 public class Order {
 
