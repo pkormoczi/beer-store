@@ -1,14 +1,14 @@
 package dev.ronin.demo.beerstore;
 
-import org.assertj.core.api.Assertions;
+import dev.ronin.demo.beerstore.base.IntegrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContext;
 
-@SpringBootTest
-class BeerStoreApplicationIT {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class BeerStoreApplicationIT extends IntegrationTest {
 
     @Autowired
     private ApplicationContext context;
@@ -16,7 +16,6 @@ class BeerStoreApplicationIT {
     @Test
     @DisplayName("Test if Spring context can be initialized properly")
     void contextLoads() {
-        Assertions.assertThat(context.getId()).isEqualTo("INTEGRATION-TESTS");
+        assertThat(context).isNotNull();
     }
-
 }

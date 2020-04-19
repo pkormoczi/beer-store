@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.domain.order.model;
+package dev.ronin.demo.beerstore.domain.order.data;
 
 import dev.ronin.demo.beerstore.domain.order.value.BeerStyle;
 import lombok.*;
@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Beer {
+@Entity(name = "BEER")
+public class BeerData {
 
     @Id
     @GeneratedValue

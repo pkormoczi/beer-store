@@ -1,5 +1,5 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://demo.ronin.dev/beerstore/contract/customer"
-           targetNamespace="http://demo.ronin.dev/beerstore/contract/customer" elementFormDefault="qualified">
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://demo.ronin.dev/beerstore/contract/customerData"
+           targetNamespace="http://demo.ronin.dev/beerstore/contract/customerData" elementFormDefault="qualified">
 
     <xs:element name="getCustomerRequest">
         <xs:complexType>
@@ -12,7 +12,7 @@
     <xs:element name="getCustomerResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="customer" type="tns:customerModel"/>
+                <xs:element name="customerData" type="tns:customerModel"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>

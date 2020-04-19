@@ -4,8 +4,6 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
-import org.slf4j.Logger;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,42 +15,35 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 @SuppressWarnings("squid:S2187")
 class InfrastructureArchitectureTest {
 
-    private static final String CONFIGURATION = ".*Configuration";
+    private static final String CONTROLLER_PACKAGE = "..controller..";
+    private static final String CONFIGURATION_POSTFIX = "Configuration";
+    private static final String CONTROLLER_POSTFIX = "Controller";
+
     @ArchTest
     public static final ArchRule configurationsShouldBeNamedConfiguration =
             classes().that().areAnnotatedWith(Configuration.class)
-                    .should().haveNameMatching(CONFIGURATION);
+                    .should().haveSimpleNameEndingWith(CONFIGURATION_POSTFIX);
 
     @ArchTest
     public static final ArchRule configurationsShouldBeAnnotatedWithConfiguration =
-            classes().that().haveNameMatching(CONFIGURATION)
+            classes().that().haveSimpleNameEndingWith(CONFIGURATION_POSTFIX)
                     .should().beAnnotatedWith(Configuration.class);
 
-    private static final String CONTROLLER = ".*Controller";
     @ArchTest
     public static final ArchRule controllersShouldBeNamedController =
             classes().that().areAnnotatedWith(Controller.class)
                     .or().areAnnotatedWith(RestController.class)
-                    .should().haveNameMatching(CONTROLLER);
+                    .should().haveSimpleNameEndingWith(CONTROLLER_POSTFIX);
 
     @ArchTest
     public static final ArchRule controllersShouldBeAnnotatedWithController =
-            classes().that().haveNameMatching(CONTROLLER)
+            classes().that().haveSimpleNameEndingWith(CONTROLLER_POSTFIX)
                     .should().beAnnotatedWith(Controller.class)
                     .orShould().beAnnotatedWith(RestController.class);
 
-    private static final String CONTROLLER_PACKAGE = "..controller..";
     @ArchTest
     public static final ArchRule controllersShouldBeInControllerPackage =
-            classes().that().haveNameMatching(CONTROLLER)
+            classes().that().haveSimpleNameEndingWith(CONTROLLER_POSTFIX)
                     .should().resideInAPackage(CONTROLLER_PACKAGE);
 
-    @ArchTest
-    public static final ArchRule loggersShouldBeConstantAndNamedLog =
-            ArchRuleDefinition.fields().that().haveRawType(Logger.class)
-                    .should().bePrivate()
-                    .andShould().beStatic()
-                    .andShould().beFinal()
-                    .andShould().haveName("log")
-                    .because("You should use Lombok @Slf4j annotation!");
 }

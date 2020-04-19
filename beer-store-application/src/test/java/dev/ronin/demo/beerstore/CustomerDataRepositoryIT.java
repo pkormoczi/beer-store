@@ -1,17 +1,20 @@
 package dev.ronin.demo.beerstore;
 
-import dev.ronin.demo.beerstore.domain.customer.model.Customer;
+import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.domain.customer.repository.CustomerRepository;
 import dev.ronin.demo.beerstore.domain.customer.value.Address;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
 @DataJpaTest
-class CustomerRepositoryIT {
+@ActiveProfiles("test")
+class CustomerDataRepositoryIT {
     @Autowired
     private TestEntityManager entityManager;
 
@@ -19,26 +22,28 @@ class CustomerRepositoryIT {
     private CustomerRepository customerRepository;
 
     @Test
+    @DisplayName("When saving a customer it should get an id")
     void whenSavingACustomerItGetsAnId() {
-        Customer customer = getTestCustomer();
+        CustomerData customerData = getTestCustomer();
 
-        customerRepository.save(customer);
+        customerRepository.save(customerData);
 
-        then(customer.getId()).isNotNull();
+        then(customerData.getId()).isNotNull();
     }
 
     @Test
+    @DisplayName("When searching a customer by it's name we should have a result")
     void whenSearchByName() {
-        final Customer testCustomer = getTestCustomer();
-        entityManager.persist(testCustomer);
+        final CustomerData testCustomerData = getTestCustomer();
+        entityManager.persist(testCustomerData);
 
-        final Customer result = customerRepository.findByFirstNameContainingIgnoreCase("Peter");
+        final CustomerData result = customerRepository.findByFirstNameContainingIgnoreCase("Peter");
 
-        then(result.getLastName()).isEqualTo(testCustomer.getLastName());
+        then(result.getLastName()).isEqualTo(testCustomerData.getLastName());
     }
 
-    private Customer getTestCustomer() {
-        return Customer.builder()
+    private CustomerData getTestCustomer() {
+        return CustomerData.builder()
                 .firstName("Peter")
                 .lastName("Smith")
                 .address(Address.builder()

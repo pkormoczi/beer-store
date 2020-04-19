@@ -1,9 +1,9 @@
 package dev.ronin.demo.beerstore.domain.order;
 
 import dev.ronin.demo.beerstore.domain.customer.Customers;
-import dev.ronin.demo.beerstore.domain.customer.model.Customer;
-import dev.ronin.demo.beerstore.domain.order.model.Beer;
-import dev.ronin.demo.beerstore.domain.order.model.Order;
+import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
+import dev.ronin.demo.beerstore.domain.order.data.BeerData;
+import dev.ronin.demo.beerstore.domain.order.data.OrderData;
 import dev.ronin.demo.beerstore.domain.order.repository.BeerRepository;
 import dev.ronin.demo.beerstore.domain.order.repository.OrderRepository;
 import dev.ronin.demo.beerstore.domain.order.value.OrderStatus;
@@ -28,21 +28,21 @@ public class Orders {
 
     @Transactional
     public Long newOrder(Long customerId, List<Long> beerIds) {
-        Customer customer = customers.customer(customerId);
-        List<Beer> beers = beerRepository.findAllById(beerIds);
-        Order order = Order.builder()
-                .customer(customer)
+        CustomerData customerData = customers.customer(customerId).data();
+        List<BeerData> beers = beerRepository.findAllById(beerIds);
+        OrderData orderData = OrderData.builder()
+                .customer(customerData)
                 .beers(beers)
                 .orderStatus(OrderStatus.NEW)
                 .build();
-        return orderRepository.save(order).getId();
+        return orderRepository.save(orderData).getId();
     }
 
-    public List<Order> list() {
+    public List<OrderData> list() {
         return orderRepository.findAll();
     }
 
-    public Order order(Long id) {
+    public OrderData order(Long id) {
         return orderRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 }

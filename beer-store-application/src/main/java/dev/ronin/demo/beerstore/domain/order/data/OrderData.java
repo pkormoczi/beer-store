@@ -1,6 +1,6 @@
-package dev.ronin.demo.beerstore.domain.order.model;
+package dev.ronin.demo.beerstore.domain.order.data;
 
-import dev.ronin.demo.beerstore.domain.customer.model.Customer;
+import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.domain.order.value.OrderStatus;
 import lombok.*;
 
@@ -12,9 +12,9 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "BEER_ORDER")
 @Table(name = "BEER_ORDER")
-public class Order {
+public class OrderData {
 
     @Id
     @GeneratedValue
@@ -25,13 +25,11 @@ public class Order {
     private OrderStatus orderStatus = OrderStatus.NEW;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    private Customer customer;
+    private CustomerData customer;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "beer_id"))
     @Singular
-    private List<Beer> beers;
-
-
-
+    private List<BeerData> beers;
 
 }

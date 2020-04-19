@@ -10,38 +10,38 @@ import org.springframework.stereotype.Service;
 import javax.persistence.Entity;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore.domain",
-        importOptions = {ImportOption.DoNotIncludeTests.class,ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
+        importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
 @SuppressWarnings("squid:S2187")
 class DomainArchitectureTest {
 
-    private static final String REPOSITORY = ".*Repository";
-    @ArchTest
-    public static final ArchRule repositoriesShouldBeNamedRepository =
-            classes().that().areAnnotatedWith(Repository.class)
-                    .should().haveNameMatching(REPOSITORY);
-
-    @ArchTest
-    public static final ArchRule repositoriesShouldBeAnnotatedWithRepository =
-            classes().that().haveNameMatching(REPOSITORY)
-                    .should().beAnnotatedWith(Repository.class);
+    public static final String ENTITY_POSTFIX = "Entity";
+    private static final String REPOSITORY_POSTFIX = "Repository";
+    public static final String REPOSITORY_PACKAGE = "..repository..";
+    public static final String DATA_PACKAGE = "..data..";
 
     @ArchTest
     public static final ArchRule repositoriesShouldBeInPackageNamedRepository =
             classes().that().areAnnotatedWith(Repository.class)
-                    .should().resideInAPackage("..repository..");
+                    .should().resideInAPackage(REPOSITORY_PACKAGE);
 
     @ArchTest
     public static final ArchRule entitiesShouldBeInPackageNamedModel =
             classes().that().areAnnotatedWith(Entity.class)
-                    .should().resideInAPackage("..model..");
+                    .should().resideInAPackage(DATA_PACKAGE);
 
     @ArchTest
     public static final ArchRule entitiesShouldNotBeNamedEntity =
             classes().that().areAnnotatedWith(Entity.class)
-                    .should().haveNameNotMatching(".*Entity");
+                    .should().haveSimpleNameNotEndingWith(ENTITY_POSTFIX)
+                    .because("JPA Entities are only stupid data bags!");
+
+    @ArchTest
+    public static final ArchRule entitiesShouldBeNamedData =
+            classes().that().areAnnotatedWith(Entity.class)
+                    .should().haveSimpleNameEndingWith("Data")
+                    .because("JPA Entities are only stupid data bags!");
 
     @ArchTest
     public static final ArchRule repositoriesShouldHaveOnlyAccessedByServices =
@@ -55,7 +55,12 @@ class DomainArchitectureTest {
                     .should().bePublic();
 
     @ArchTest
-    public static final ArchRule domainClassesShouldNotAccessInfrastructureClasses =
-            noClasses().that().resideInAPackage("..beerstore.domain..")
-            .should().accessClassesThat().resideInAPackage("..beerstore.infrastructure..");
+    public static final ArchRule repositoriesShouldBeNamedRepository =
+            classes().that().areAnnotatedWith(Repository.class)
+                    .should().haveSimpleNameEndingWith(REPOSITORY_POSTFIX);
+
+    @ArchTest
+    public static final ArchRule repositoriesShouldBeAnnotatedWithRepository =
+            classes().that().haveNameMatching(REPOSITORY_POSTFIX)
+                    .should().beAnnotatedWith(Repository.class);
 }

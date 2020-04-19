@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.infrastructure.controller;
 
-import dev.ronin.demo.beerstore.infrastructure.adapter.OrdersAdapter;
-import dev.ronin.demo.beerstore.infrastructure.data.OrderData;
+import dev.ronin.demo.beerstore.adapter.OrdersAdapter;
+import dev.ronin.demo.beerstore.infrastructure.data.OrderModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,17 +20,17 @@ public class OrderController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<OrderData> getOrderById(@PathVariable final Long id) {
+    public ResponseEntity<OrderModel> getOrderById(@PathVariable final Long id) {
         return ResponseEntity.ok(ordersAdapter.findById(id));
     }
 
     @GetMapping
-    public List<OrderData> getOrders() {
+    public List<OrderModel> getOrders() {
         return ordersAdapter.getOrders();
     }
 
     @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> createOrder(@RequestBody OrderData order) {
+    public ResponseEntity<Long> createOrder(@RequestBody OrderModel order) {
         return ResponseEntity.ok(ordersAdapter.addOrder(order));
     }
 }

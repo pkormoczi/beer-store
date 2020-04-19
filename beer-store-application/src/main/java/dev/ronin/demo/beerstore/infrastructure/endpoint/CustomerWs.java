@@ -2,7 +2,7 @@ package dev.ronin.demo.beerstore.infrastructure.endpoint;
 
 import dev.ronin.demo.beerstore.contract.customer.GetCustomerRequest;
 import dev.ronin.demo.beerstore.contract.customer.GetCustomerResponse;
-import dev.ronin.demo.beerstore.infrastructure.adapter.CustomersAdapter;
+import dev.ronin.demo.beerstore.adapter.CustomersAdapter;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;

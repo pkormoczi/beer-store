@@ -12,7 +12,6 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: true
         use_sql_comments: true
         format_sql: true
     open-in-view: false
@@ -20,3 +19,8 @@ spring:
     console:
       enabled: true
       path: /console
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

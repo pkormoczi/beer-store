@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.domain.customer.model;
+package dev.ronin.demo.beerstore.domain.customer.data;
 
 import dev.ronin.demo.beerstore.domain.customer.value.Address;
 import lombok.*;
@@ -10,8 +10,8 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Customer {
+@Entity(name = "CUSTOMER")
+public class CustomerData {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
