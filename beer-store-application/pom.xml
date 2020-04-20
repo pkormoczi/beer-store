@@ -172,7 +172,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <baseClassForTests>dev.ronin.demo.beerstore.contract.ContractTestBase</baseClassForTests>
-                    <convertToYaml>true</convertToYaml>
+<!--                    <convertToYaml>true</convertToYaml>-->
                     <testFramework>JUNIT5</testFramework>
                     <testMode>MOCKMVC</testMode>
                 </configuration>
