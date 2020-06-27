@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.infrastructure.controller;
 
-import dev.ronin.demo.beerstore.adapter.OrdersAdapter;
+import dev.ronin.demo.beerstore.infrastructure.adapter.OrdersAdapter;
 import dev.ronin.demo.beerstore.infrastructure.data.OrderModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

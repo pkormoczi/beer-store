@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.infrastructure.controller;
 
-import dev.ronin.demo.beerstore.adapter.CustomersAdapter;
 import dev.ronin.demo.beerstore.contract.customerdata.CustomerModel;
+import dev.ronin.demo.beerstore.infrastructure.adapter.CustomersAdapter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

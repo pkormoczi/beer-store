@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.contract;
 
-import dev.ronin.demo.beerstore.adapter.CustomersAdapter;
+import dev.ronin.demo.beerstore.infrastructure.adapter.CustomersAdapter;
 import dev.ronin.demo.beerstore.contract.customerdata.AddressModel;
 import dev.ronin.demo.beerstore.contract.customerdata.CustomerModel;
 import dev.ronin.demo.beerstore.infrastructure.controller.CustomerController;

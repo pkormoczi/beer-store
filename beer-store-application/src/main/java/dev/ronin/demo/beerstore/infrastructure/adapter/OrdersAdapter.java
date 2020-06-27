@@ -1,6 +1,6 @@
-package dev.ronin.demo.beerstore.adapter;
+package dev.ronin.demo.beerstore.infrastructure.adapter;
 
-import dev.ronin.demo.beerstore.adapter.mapper.OrderMapper;
+import dev.ronin.demo.beerstore.infrastructure.adapter.mapper.OrderMapper;
 import dev.ronin.demo.beerstore.domain.order.Orders;
 import dev.ronin.demo.beerstore.infrastructure.data.OrderModel;
 import org.springframework.stereotype.Service;

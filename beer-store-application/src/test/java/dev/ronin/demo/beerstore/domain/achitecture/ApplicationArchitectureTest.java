@@ -19,7 +19,7 @@ public class ApplicationArchitectureTest {
                     .layer("Adapter").definedBy("..adapter..")
                     .layer("Infrastructure").definedBy("..infrastructure..")
                     .whereLayer("Domain").mayOnlyBeAccessedByLayers("Adapter", "Infrastructure")
-                    .whereLayer("Adapter").mayOnlyBeAccessedByLayers("Domain", "Infrastructure")
+                    .whereLayer("Adapter").mayOnlyBeAccessedByLayers("Infrastructure")
                     .whereLayer("Infrastructure").mayOnlyBeAccessedByLayers("Adapter");
 
 }

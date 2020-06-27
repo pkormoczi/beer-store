@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.adapter.mapper;
+package dev.ronin.demo.beerstore.infrastructure.adapter.mapper;
 
 import dev.ronin.demo.beerstore.domain.order.data.BeerData;
 import dev.ronin.demo.beerstore.domain.order.data.OrderData;

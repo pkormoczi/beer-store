@@ -20,6 +20,9 @@ spring:
       enabled: true
       path: /console
 management:
+  endpoint:
+    health:
+      show-details: always
   endpoints:
     web:
       exposure:
