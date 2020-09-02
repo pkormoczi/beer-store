@@ -1,5 +1,6 @@
 package dev.ronin.demo.beerstore.infrastructure.controller.handler;
 
+import dev.ronin.demo.beerstore.infrastructure.security.AuthorizationException;
 import dev.ronin.demo.beerstore.infrastructure.data.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,11 @@ public class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandle
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorDetails> notFoundException(final NoSuchElementException e) {
         return error(e, HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    public ResponseEntity<ErrorDetails> authorizationException(final AuthorizationException e) {
+        return error(e, HttpStatus.FORBIDDEN, "Authorization failed!");
     }
 
     private ResponseEntity<ErrorDetails> error(final Exception exception, final HttpStatus httpStatus, final String logRef) {

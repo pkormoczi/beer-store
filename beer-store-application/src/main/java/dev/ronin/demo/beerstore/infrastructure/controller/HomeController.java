@@ -1,6 +1,7 @@
 package dev.ronin.demo.beerstore.infrastructure.controller;
 
 
+import dev.ronin.demo.beerstore.infrastructure.security.Authorized;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ public class HomeController {
         return "Hello!";
     }
 
+    @Authorized
     @GetMapping(value = "/",params = "name")
     public String hello(@RequestParam final String name) {
         return format("Hello %s!",name);
