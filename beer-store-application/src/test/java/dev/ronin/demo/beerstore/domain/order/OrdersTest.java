@@ -1,7 +1,10 @@
 package dev.ronin.demo.beerstore.domain.order;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.ronin.demo.beerstore.domain.customer.Customers;
 import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
+import dev.ronin.demo.beerstore.domain.customer.value.Address;
 import dev.ronin.demo.beerstore.domain.order.data.BeerData;
 import dev.ronin.demo.beerstore.domain.order.data.OrderData;
 import dev.ronin.demo.beerstore.domain.order.repository.BeerRepository;
@@ -35,6 +38,21 @@ class OrdersTest {
 
     @Captor
     ArgumentCaptor<OrderData> orderArgumentCaptor;
+
+    @Test
+    @DisplayName("test json mapping")
+    void testJsonMapping() throws JsonProcessingException {
+        //Given
+        CustomerData customerData = new CustomerData();
+        customerData.setFirstName("FirstName");
+        customerData.setLastName("LastName");
+        customerData.setAddress(new Address("Hungary","1095","Budapest","Lechner Ödön fasor 9."));
+        //When
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println(mapper.writeValueAsString(customerData));
+        //Then
+
+    }
 
     @Test
     @DisplayName("When creating a new order it should have \"New\" status")

@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore;
 
-import dev.ronin.demo.beerstore.contract.customer.Customer;
+import dev.ronin.demo.beerstore.contract.customerdata.CustomerModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +31,6 @@ public class CustomerControllerTest {
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(Customer.class);
+                .expectBody(CustomerModel.class);
     }
 }

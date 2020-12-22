@@ -12,9 +12,9 @@
     <packaging>war</packaging>
 
     <properties>
-        <version.archunit>0.13.1</version.archunit>
-        <version.mapstruct>1.3.1.Final</version.mapstruct>
-        <version.spring-cloud-contract>2.2.2.RELEASE</version.spring-cloud-contract>
+        <version.archunit>0.15.0</version.archunit>
+        <version.mapstruct>1.4.1.Final</version.mapstruct>
+        <version.spring-cloud-contract>2.2.5.RELEASE</version.spring-cloud-contract>
     </properties>
 
     <dependencies>
@@ -77,6 +77,11 @@
         <dependency>
             <groupId>wsdl4j</groupId>
             <artifactId>wsdl4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.7</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -158,6 +163,7 @@
                         <compilerArg>-Amapstruct.suppressGeneratorTimestamp=true</compilerArg>
                         <compilerArg>-Amapstruct.suppressGeneratorVersionInfoComment=true</compilerArg>
                         <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+                        <compilerArg>-Amapstruct.verbose=true</compilerArg>
                     </compilerArgs>
                 </configuration>
             </plugin>
