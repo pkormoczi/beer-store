@@ -31,7 +31,7 @@ class RequestResponseLoggingFilterTest {
 
     public static final String TEST_JSON = "{\"name\":\"Tester\",\"address\":\"1095 Budapest\"}";
     private ListAppender<ILoggingEvent> appender;
-    private final Logger appLogger = (Logger) LoggerFactory.getLogger("com.khb.bbsh.core.infrastructure.rest.logging");
+    private final Logger appLogger = (Logger) LoggerFactory.getLogger("dev.ronin.demo.beerstore.infrastructure.logging");
 
     @Mock
     private Principal principal;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-<!--    <include resource="org/springframework/boot/logging/logback/base.xml"/>-->
-<!--    <logger name="dev.ronin.demo.beerstore" level="DEBUG"/>-->
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="dev.ronin.demo.beerstore" level="DEBUG"/>
 <!--    <logger name="org.springframework.orm.jpa" level="DEBUG"/>-->
 <!--    <logger name="org.hibernate.SQL" level="DEBUG"/>-->
 <!--    <logger name="org.hibernate.type.descriptor.sql" level="TRACE"/>-->

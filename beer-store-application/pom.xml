@@ -15,6 +15,7 @@
         <version.archunit>0.15.0</version.archunit>
         <version.mapstruct>1.4.1.Final</version.mapstruct>
         <version.spring-cloud-contract>2.2.5.RELEASE</version.spring-cloud-contract>
+        <version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
     </properties>
 
     <dependencies>
@@ -157,6 +158,11 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${version.lombok-mapstruct-binding}</version>
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
