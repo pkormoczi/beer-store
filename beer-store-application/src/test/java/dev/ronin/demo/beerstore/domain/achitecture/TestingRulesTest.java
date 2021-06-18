@@ -25,7 +25,11 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore", locations = TestingRulesTest.MyTestsLocation.class,
-        importOptions = {ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
+        importOptions = {
+                ImportOption.DoNotIncludeArchives.class,
+                ImportOption.DoNotIncludeJars.class,
+                ImportOption.DoNotIncludeTests.class
+        })
 @SuppressWarnings("squid:S2187")
 public class TestingRulesTest {
 

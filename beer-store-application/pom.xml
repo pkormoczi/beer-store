@@ -9,13 +9,15 @@
     </parent>
 
     <artifactId>beer-store-application</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
-        <version.archunit>0.15.0</version.archunit>
-        <version.mapstruct>1.4.1.Final</version.mapstruct>
-        <version.spring-cloud-contract>2.2.5.RELEASE</version.spring-cloud-contract>
+        <version.archunit>0.19.0</version.archunit>
+        <version.mapstruct>1.4.2.Final</version.mapstruct>
+        <version.spring-cloud-contract>3.0.3</version.spring-cloud-contract>
         <version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
+        <version.springdoc-openapi-ui>1.5.9</version.springdoc-openapi-ui>
+        <version.beer-store-contract>1.0.0-SNAPSHOT</version.beer-store-contract>
     </properties>
 
     <dependencies>
@@ -26,7 +28,7 @@
         <dependency>
             <groupId>dev.ronin.demo</groupId>
             <artifactId>beer-store-contract</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>${version.beer-store-contract}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -41,7 +43,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.2.30</version>
+            <version>${version.springdoc-openapi-ui}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -91,7 +93,7 @@
         </dependency>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
-            <artifactId>archunit-junit5-engine</artifactId>
+            <artifactId>archunit-junit5</artifactId>
             <version>${version.archunit}</version>
             <scope>test</scope>
         </dependency>
@@ -123,7 +125,6 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-web-test-client</artifactId>
-            <version>${rest-assured.version}</version>
             <scope>test</scope>
             <optional>true</optional>
         </dependency>
@@ -145,9 +146,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <!--                    <release>11</release>-->
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <release>11</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
@@ -179,6 +178,9 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>dev.ronin.demo.beerstore.BeerStoreApplication</mainClass>
+                    <image>
+                        <name>${project.parent.artifactId}:${project.version}</name>
+                    </image>
                 </configuration>
             </plugin>
             <plugin>
@@ -197,7 +199,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>0.8.6</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -285,7 +287,7 @@
                     <plugin>
                         <groupId>org.springdoc</groupId>
                         <artifactId>springdoc-openapi-maven-plugin</artifactId>
-                        <version>0.2</version>
+                        <version>1.2</version>
                         <executions>
                             <execution>
                                 <goals>
