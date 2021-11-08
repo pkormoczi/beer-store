@@ -3,11 +3,11 @@ services:
   jenkins:
     ports:
       - '8080:8080'
-      - '50000:50000'
+#      - '50000:50000'
     build:
       context: ./Jenkins
-  sonarqube:
-    ports:
-      - '9000:9000'
-    build:
-      context: ./SonarQube
+#  sonarqube:
+#    ports:
+#      - '9000:9000'
+#    build:
+#      context: ./SonarQube

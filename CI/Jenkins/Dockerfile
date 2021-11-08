@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.164.1
+FROM jenkins/jenkins:lts-centos7
 
 # Skip initial setup
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
@@ -9,8 +9,8 @@ ENV SONAR_SERVER_URL http://sonarqube:9000
 #ENV SONAR_ADDITIONAL_PROPS
 #ENV SONAR_RUNNER_VERSION
 # Install plugins
-COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+#COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+#RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
 # Adding scipts
 COPY Scripts/*.groovy /usr/share/jenkins/ref/init.groovy.d/

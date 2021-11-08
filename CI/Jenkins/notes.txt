@@ -1,0 +1,4 @@
+Plugin export:
+curl 'localhost:8080/jnlpJars/jenkins-cli.jar' > jenkins-cli.jar
+After:
+java -jar jenkins-cli.jar -s http://localhost:8080 -auth admin:<adminpass>> groovy = < plugins.groovy > plugins.txt
