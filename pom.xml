@@ -6,8 +6,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.6</version>
-        <relativePath/>
+        <version>2.6.7</version>
+        <relativePath></relativePath>
     </parent>
 
     <groupId>dev.ronin.demo</groupId>
@@ -35,7 +35,7 @@
             <plugin>
                 <groupId>com.github.ekryd.sortpom</groupId>
                 <artifactId>sortpom-maven-plugin</artifactId>
-                <version>2.13.1</version>
+                <version>3.0.1</version>
                 <configuration>
                     <createBackupFile>false</createBackupFile>
                     <predefinedSortOrder>custom_1</predefinedSortOrder>

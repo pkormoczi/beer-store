@@ -12,18 +12,48 @@
     <packaging>jar</packaging>
 
     <properties>
-        <version.archunit>0.22.0</version.archunit>
-        <version.mapstruct>1.4.2.Final</version.mapstruct>
-        <version.spring-cloud-contract>3.0.4</version.spring-cloud-contract>
-        <version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
-        <version.springdoc-openapi-ui>1.5.12</version.springdoc-openapi-ui>
+        <version.archunit>0.23.1</version.archunit>
         <version.beer-store-contract>1.0.0-SNAPSHOT</version.beer-store-contract>
+        <version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
+        <version.mapstruct>1.4.2.Final</version.mapstruct>
+        <version.spring-cloud-contract>3.1.1</version.spring-cloud-contract>
+        <version.springdoc-openapi-ui>1.6.8</version.springdoc-openapi-ui>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.sun.xml.bind</groupId>
+                <artifactId>jaxb-osgi</artifactId>
+                <version>2.3.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
         <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphiql-spring-boot-starter</artifactId>
+            <version>5.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-tools</artifactId>
+            <version>5.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-spring-boot-starter</artifactId>
+            <version>5.0.2</version>
+        </dependency>
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
         </dependency>
         <dependency>
             <groupId>dev.ronin.demo</groupId>
@@ -55,6 +85,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
@@ -64,10 +98,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -82,11 +112,6 @@
             <artifactId>wsdl4j</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.7</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
@@ -96,6 +121,12 @@
             <artifactId>archunit-junit5</artifactId>
             <version>${version.archunit}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>spring-web-test-client</artifactId>
+            <scope>test</scope>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -122,23 +153,7 @@
             <version>${version.spring-cloud-contract}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>spring-web-test-client</artifactId>
-            <scope>test</scope>
-            <optional>true</optional>
-        </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.sun.xml.bind</groupId>
-                <artifactId>jaxb-osgi</artifactId>
-                <version>2.3.2</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -264,6 +279,11 @@
                     <plugin>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <arguments>
+                                <argument>--server.port=${tomcat.http.port}</argument>
+                            </arguments>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>pre-integration-test</id>
@@ -278,16 +298,15 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <configuration>
-                            <arguments>
-                                <argument>--server.port=${tomcat.http.port}</argument>
-                            </arguments>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.springdoc</groupId>
                         <artifactId>springdoc-openapi-maven-plugin</artifactId>
                         <version>1.2</version>
+                        <configuration>
+                            <apiDocsUrl>http://localhost:${tomcat.http.port}/v3/api-docs.yaml</apiDocsUrl>
+                            <outputFileName>api-docs.yaml</outputFileName>
+                        </configuration>
                         <executions>
                             <execution>
                                 <goals>
@@ -296,10 +315,6 @@
                                 <phase>integration-test</phase>
                             </execution>
                         </executions>
-                        <configuration>
-                            <apiDocsUrl>http://localhost:${tomcat.http.port}/v3/api-docs.yaml</apiDocsUrl>
-                            <outputFileName>api-docs.yaml</outputFileName>
-                        </configuration>
                     </plugin>
                 </plugins>
             </build>

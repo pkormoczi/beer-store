@@ -14,3 +14,6 @@ spring:
       hibernate:
         use_sql_comments: true
         format_sql: true
+graphql:
+  servlet:
+    enabled: false

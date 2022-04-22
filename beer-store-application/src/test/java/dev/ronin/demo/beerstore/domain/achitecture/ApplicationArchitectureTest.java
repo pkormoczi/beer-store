@@ -8,7 +8,10 @@ import com.tngtech.archunit.lang.ArchRule;
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore",
-        importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
+        importOptions = {
+                ImportOption.DoNotIncludeTests.class,
+                ImportOption.DoNotIncludeArchives.class,
+                ImportOption.DoNotIncludeJars.class})
 @SuppressWarnings("squid:S2187")
 public class ApplicationArchitectureTest {
 
