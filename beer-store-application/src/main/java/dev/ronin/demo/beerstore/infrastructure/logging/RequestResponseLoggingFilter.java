@@ -42,37 +42,29 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         return "";
     }
 
-    /**
-     * Log each request and response with full Request URI, content payload and duration of the request in ms.
-     *
-     * @param request     the request
-     * @param response    the response
-     * @param filterChain chain of filters
-     * @throws ServletException
-     * @throws IOException
-     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         long startTime = System.currentTimeMillis();
-        StringBuffer reqInfo = readRequestInfo(request, startTime);
+        StringBuilder reqInfo = readRequestInfo(request, startTime);
 
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
         filterChain.doFilter(wrappedRequest, wrappedResponse);     // ======== This performs the actual request!
 
         long duration = System.currentTimeMillis() - startTime;
-
-        log.debug(String.format("%s%s%s",
-                INCOMING_ARROW,
-                reqInfo,
-                bodyAsFormattedJson(wrappedRequest.getContentType(), wrappedRequest.getContentAsByteArray(), REQUEST_BODY_TEXT)));
-        log.debug(String.format("%s%s%s%d in %dms %s",
-                OUTGOING_ARROW,
-                reqInfo,
-                RETURNED_STATUS_TEXT,
-                response.getStatus(),
-                duration,
-                bodyAsFormattedJson(wrappedResponse.getContentType(), wrappedResponse.getContentAsByteArray(), RESPONSE_BODY_TEXT)));
+        if (log.isDebugEnabled()) {
+            log.debug(String.format("%s%s%s",
+                    INCOMING_ARROW,
+                    reqInfo,
+                    bodyAsFormattedJson(wrappedRequest.getContentType(), wrappedRequest.getContentAsByteArray(), REQUEST_BODY_TEXT)));
+            log.debug(String.format("%s%s%s%d in %dms %s",
+                    OUTGOING_ARROW,
+                    reqInfo,
+                    RETURNED_STATUS_TEXT,
+                    response.getStatus(),
+                    duration,
+                    bodyAsFormattedJson(wrappedResponse.getContentType(), wrappedResponse.getContentAsByteArray(), RESPONSE_BODY_TEXT)));
+        }
         wrappedResponse.copyBodyToResponse();
     }
 
@@ -87,8 +79,8 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         return body;
     }
 
-    private StringBuffer readRequestInfo(HttpServletRequest request, long startTime) {
-        StringBuffer reqInfo = new StringBuffer()
+    private StringBuilder readRequestInfo(HttpServletRequest request, long startTime) {
+        StringBuilder reqInfo = new StringBuilder()
                 .append("[")
                 .append(startTime % 10000)  // request ID
                 .append("] ")

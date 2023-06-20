@@ -5,6 +5,8 @@ import dev.ronin.demo.beerstore.contract.customerdata.CustomerModel;
 import dev.ronin.demo.beerstore.domain.customer.Customers;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CustomersAdapter {
 
@@ -20,5 +22,9 @@ public class CustomersAdapter {
 
     public CustomerModel customerWithName(String name) {
         return customerMapper.data(customers.customerWithName(name));
+    }
+
+    public List<CustomerModel> customers() {
+        return customerMapper.data(customers.list());
     }
 }

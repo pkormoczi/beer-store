@@ -18,6 +18,7 @@ public class ApplicationArchitectureTest {
     @ArchTest
     public static final ArchRule layering =
             layeredArchitecture()
+                    .consideringAllDependencies()
                     .layer("Domain").definedBy("..domain..")
                     .layer("Adapter").definedBy("..adapter..")
                     .layer("Infrastructure").definedBy("..infrastructure..")

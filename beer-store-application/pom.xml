@@ -12,12 +12,17 @@
     <packaging>jar</packaging>
 
     <properties>
-        <version.archunit>0.23.1</version.archunit>
+        <version.archunit>1.0.1</version.archunit>
         <version.beer-store-contract>1.0.0-SNAPSHOT</version.beer-store-contract>
+        <version.commons-io>2.13.0</version.commons-io>
+        <version.jacoco-maven-plugin>0.8.10</version.jacoco-maven-plugin>
+        <version.jib-maven-plugin>3.3.2</version.jib-maven-plugin>
         <version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
-        <version.mapstruct>1.4.2.Final</version.mapstruct>
-        <version.spring-cloud-contract>3.1.1</version.spring-cloud-contract>
-        <version.springdoc-openapi-ui>1.6.8</version.springdoc-openapi-ui>
+        <version.mapstruct>1.5.5.Final</version.mapstruct>
+        <version.spring-cloud-contract>4.0.3</version.spring-cloud-contract>
+        <version.springdoc-openapi-maven-plugin>1.4</version.springdoc-openapi-maven-plugin>
+        <version.springdoc-openapi-ui>1.7.0</version.springdoc-openapi-ui>
+        <version.versions-maven-plugin>2.16.0</version.versions-maven-plugin>
     </properties>
 
     <dependencyManagement>
@@ -32,28 +37,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphiql-spring-boot-starter</artifactId>
-            <version>5.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java-tools</artifactId>
-            <version>5.2.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-spring-boot-starter</artifactId>
-            <version>5.0.2</version>
-        </dependency>
-        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <version>${version.commons-io}</version>
         </dependency>
         <dependency>
             <groupId>dev.ronin.demo</groupId>
@@ -69,6 +59,10 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -127,6 +121,20 @@
             <artifactId>spring-web-test-client</artifactId>
             <scope>test</scope>
             <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-json</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.codehaus.groovy</groupId>
+                    <artifactId>groovy-xml</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -161,17 +169,17 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <release>11</release>
+                    <release>17</release>
                     <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${version.mapstruct}</version>
-                        </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${version.mapstruct}</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -214,7 +222,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.6</version>
+                <version>${version.jacoco-maven-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -227,7 +235,7 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>1.7.0</version>
+                <version>${version.jib-maven-plugin}</version>
                 <configuration>
                     <from>
                         <image>tomcat:8.5-jre8-alpine</image>
@@ -243,7 +251,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.7</version>
+                <version>${version.versions-maven-plugin}</version>
                 <configuration>
                     <generateBackupPoms>false</generateBackupPoms>
                 </configuration>
@@ -302,7 +310,7 @@
                     <plugin>
                         <groupId>org.springdoc</groupId>
                         <artifactId>springdoc-openapi-maven-plugin</artifactId>
-                        <version>1.2</version>
+                        <version>${version.springdoc-openapi-maven-plugin}</version>
                         <configuration>
                             <apiDocsUrl>http://localhost:${tomcat.http.port}/v3/api-docs.yaml</apiDocsUrl>
                             <outputFileName>api-docs.yaml</outputFileName>
