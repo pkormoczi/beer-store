@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.endpoint;
+package dev.ronin.demo.beerstore.infrastructure.config;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +14,7 @@ import org.springframework.xml.xsd.XsdSchema;
 
 @EnableWs
 @Configuration
-public class WebServiceConfiguration extends WsConfigurerAdapter {
+public class WebServiceConfig extends WsConfigurerAdapter {
     @Bean
     public ServletRegistrationBean<MessageDispatcherServlet> messageDispatcherServlet(ApplicationContext applicationContext) {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();

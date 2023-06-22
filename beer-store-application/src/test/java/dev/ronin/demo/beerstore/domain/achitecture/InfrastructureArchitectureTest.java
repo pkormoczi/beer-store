@@ -16,7 +16,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 class InfrastructureArchitectureTest {
 
     private static final String CONTROLLER_PACKAGE = "..controller..";
-    private static final String CONFIGURATION_POSTFIX = "Configuration";
+    private static final String CONFIGURATION_POSTFIX = "Config";
     private static final String CONTROLLER_POSTFIX = "Controller";
 
     @ArchTest
