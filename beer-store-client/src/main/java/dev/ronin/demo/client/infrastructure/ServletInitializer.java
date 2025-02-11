@@ -1,6 +1,6 @@
-package dev.ronin.demo.beerstore.infrastructure;
+package dev.ronin.demo.client.infrastructure;
 
-import dev.ronin.demo.beerstore.BeerStoreClientApplication;
+import dev.ronin.demo.client.BeerStoreClientApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 

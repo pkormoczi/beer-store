@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore;
+package dev.ronin.demo.client;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
