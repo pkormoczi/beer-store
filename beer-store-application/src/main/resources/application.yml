@@ -1,27 +1,50 @@
 spring:
+  main:
+    banner-mode: log
   datasource:
 #    url: jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1
     url: jdbc:h2:./test;AUTO_SERVER=TRUE
     username: sa
     password:
     driverClassName: org.h2.Driver
+#    url: jdbc:postgresql://localhost:5432/postgres
+#    driverClassName: org.postgresql.Driver
+#    username: user
+#    password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         use_sql_comments: true
         format_sql: true
+        hql.bulk_id_strategy: org.hibernate.hql.spi.id.inline.InlineIdsOrClauseBulkIdStrategy
     open-in-view: false
   h2:
     console:
       enabled: true
       path: /console
+  liquibase:
+    enabled: false
+#    change-log: classpath:/database/changelog/changelog-master.xml
+#    enabled: true
+#    drop-first: false
+springdoc:
+  swagger-ui:
+    display-operation-id: true
 management:
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
   endpoint:
     health:
       show-details: always
+      probes:
+        enabled: true
   endpoints:
     web:
       exposure:

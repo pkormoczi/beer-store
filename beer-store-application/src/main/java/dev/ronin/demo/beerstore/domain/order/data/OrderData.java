@@ -2,9 +2,9 @@ package dev.ronin.demo.beerstore.domain.order.data;
 
 import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.domain.order.value.OrderStatus;
+import jakarta.persistence.*;
 import lombok.*;
 
-import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -17,7 +17,7 @@ import java.util.List;
 public class OrderData {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)

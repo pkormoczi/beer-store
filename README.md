@@ -8,26 +8,28 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [x] Spring Data with Hibernate
  - [x] SOAP Endpoints
  - [x] REST Controllers
- - [x] Spring MVC
  - [x] Swagger
  - [x] Spring Security
  - [x] MapStruct as adapter
- - [ ] Integration tests
+ - [ ] Integration tests 
  - [x] Unit tests
  - [x] Test coverage tool
- - [ ] Dockerized E2E tests 
+ - [x] Spring Cloud Contracts
+ - [ ] Dockerized E2E tests, Testcontainers? 
  
 
 ## TODO
 
  - [x] Exception and Error handling and documentation in the REST Controllers
  - [x] Spring Security for SOAP with roles and basic authentication
+ - [ ] Liquibase
+ - [ ] DBRider
+ - [ ] Layered OCI image creation
  - [ ] Profiling - local, integration test, docker, prod
  - [ ] Unit test for business
  - [ ] Integration tests for REST and SOAP endpoints
  - [ ] Separate unit and integration tests in jenkins pipeline
- - [ ] Transaction management refinement
- - [ ] Weblogic 12c deployment
+ - [ ] Transaction management refinement 
  - [ ] Database migration tooling? flyway /liquibase
  - [ ] Async calls via SOAP
  - [ ] Events, with Spring application events

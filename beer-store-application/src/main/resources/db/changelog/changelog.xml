@@ -1,0 +1,76 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet author="pkormoczi" id="create_sequence">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807"
+                        minValue="1" sequenceName="hibernate_sequence" startValue="1"/>
+    </changeSet>
+    <changeSet author="pkormoczi" id="create_beer">
+        <createTable tableName="beer">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_beer"/>
+            </column>
+            <column name="beer_style" type="VARCHAR(255)"/>
+            <column name="name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="pkormoczi" id="create_beer_order">
+        <createTable tableName="beer_order">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_beer_order"/>
+            </column>
+            <column name="order_status" type="VARCHAR(255)"/>
+            <column name="customer_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="pkormoczi" id="create_beer_order_beers">
+        <createTable tableName="beer_order_beers">
+            <column name="order_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="beer_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="pkormoczi" id="1687364079821-6">
+        <addUniqueConstraint columnNames="beer_id" constraintName="uk_acc7ks4wqob3xoml78llkw3td"
+                             tableName="beer_order_beers"/>
+    </changeSet>
+
+    <changeSet author="pkormoczi" id="create_customer">
+        <createTable tableName="customer">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_customer"/>
+            </column>
+            <column name="city" type="VARCHAR(255)"/>
+            <column name="country" type="VARCHAR(255)"/>
+            <column name="street_address" type="VARCHAR(255)"/>
+            <column name="zip" type="VARCHAR(255)"/>
+            <column name="first_name" type="VARCHAR(255)"/>
+            <column name="last_name" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="pkormoczi" id="1687364079821-7">
+        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="beer_order"
+                                 constraintName="fk5siih2e7vpx70nx4wexpxpji" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="customer" validate="true"/>
+    </changeSet>
+    <changeSet author="pkormoczi" id="1687364079821-8">
+        <addForeignKeyConstraint baseColumnNames="beer_id" baseTableName="beer_order_beers"
+                                 constraintName="fkjwkcuoqra6mv50e6p6bfw9t3h" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="beer" validate="true"/>
+    </changeSet>
+    <changeSet author="pkormoczi" id="1687364079821-9">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="beer_order_beers"
+                                 constraintName="fkv24t180cnitb7d5gl4d22mk5" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="beer_order" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

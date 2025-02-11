@@ -7,9 +7,9 @@ import dev.ronin.demo.beerstore.domain.order.data.OrderData;
 import dev.ronin.demo.beerstore.domain.order.repository.BeerRepository;
 import dev.ronin.demo.beerstore.domain.order.repository.OrderRepository;
 import dev.ronin.demo.beerstore.domain.order.value.OrderStatus;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
 

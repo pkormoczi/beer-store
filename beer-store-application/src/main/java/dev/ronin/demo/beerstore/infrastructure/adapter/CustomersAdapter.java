@@ -1,8 +1,9 @@
 package dev.ronin.demo.beerstore.infrastructure.adapter;
 
-import dev.ronin.demo.beerstore.infrastructure.adapter.mapper.CustomerMapper;
-import dev.ronin.demo.beerstore.contract.customerdata.CustomerModel;
+import dev.ronin.demo.beerstore.contract.customerdata.Customer;
 import dev.ronin.demo.beerstore.domain.customer.Customers;
+import dev.ronin.demo.beerstore.infrastructure.adapter.mapper.CustomerMapper;
+import dev.ronin.demo.beerstore.infrastructure.api.model.CustomerModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,11 @@ public class CustomersAdapter {
 
 
     public CustomerModel customerWithName(String name) {
-        return customerMapper.data(customers.customerWithName(name));
+        return customerMapper.toModel(customers.customerWithName(name));
+    }
+
+    public Customer customerWithNameForWs(String name) {
+        return customerMapper.toWsModel(customers.customerWithName(name));
     }
 
     public List<CustomerModel> customers() {

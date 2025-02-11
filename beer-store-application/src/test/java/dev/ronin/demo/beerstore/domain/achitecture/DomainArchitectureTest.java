@@ -4,10 +4,9 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import jakarta.persistence.Entity;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.Entity;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 

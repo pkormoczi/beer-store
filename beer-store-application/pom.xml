@@ -5,23 +5,25 @@
     <parent>
         <groupId>dev.ronin.demo</groupId>
         <artifactId>beer-store</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>beer-store-application</artifactId>
     <packaging>jar</packaging>
 
     <properties>
-        <version.archunit>1.0.1</version.archunit>
+        <package.infrastructure>dev.ronin.demo.beerstore.infrastructure</package.infrastructure>
+        <version.apache.cxf.utils>4.1.0</version.apache.cxf.utils>
+        <version.archunit>1.4.0</version.archunit>
         <version.beer-store-contract>1.0.0-SNAPSHOT</version.beer-store-contract>
         <version.commons-io>2.13.0</version.commons-io>
         <version.jacoco-maven-plugin>0.8.10</version.jacoco-maven-plugin>
+        <version.jaxb2.fluent.api>3.0</version.jaxb2.fluent.api>
+        <version.jaxb2.value.constructor>3.0</version.jaxb2.value.constructor>
         <version.jib-maven-plugin>3.3.2</version.jib-maven-plugin>
         <version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
-        <version.mapstruct>1.5.5.Final</version.mapstruct>
-        <version.spring-cloud-contract>4.0.3</version.spring-cloud-contract>
+        <version.springdoc-openapi>2.8.4</version.springdoc-openapi>
         <version.springdoc-openapi-maven-plugin>1.4</version.springdoc-openapi-maven-plugin>
-        <version.springdoc-openapi-ui>1.7.0</version.springdoc-openapi-ui>
         <version.versions-maven-plugin>2.16.0</version.versions-maven-plugin>
     </properties>
 
@@ -51,9 +53,29 @@
             <version>${version.beer-store-contract}</version>
         </dependency>
         <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${version.mapstruct}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${version.jackson-databind-nullable}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>openapi-generator</artifactId>
+            <version>${version.openapi-generator}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -66,8 +88,8 @@
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>${version.springdoc-openapi-ui}</version>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${version.springdoc-openapi}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -91,6 +113,10 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
@@ -109,6 +135,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
@@ -167,9 +198,82 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-schema</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>dev.ronin.demo</groupId>
+                                    <artifactId>beer-store-contract</artifactId>
+                                    <version>${version.beer-store-contract}</version>
+                                    <type>jar</type>
+                                    <includes>**/*.xsd</includes>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/schemas</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-xjc-plugin</artifactId>
+                <version>${version.apache.cxf.utils}</version>
+                <configuration></configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.cxf.xjcplugins</groupId>
+                        <artifactId>cxf-xjc-boolean</artifactId>
+                        <version>${version.apache.cxf.utils}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-fluent-api</artifactId>
+                        <version>${version.jaxb2.fluent.api}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jvnet.jaxb2_commons</groupId>
+                        <artifactId>jaxb2-value-constructor</artifactId>
+                        <version>${version.jaxb2.value.constructor}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <goals>
+                            <goal>xsdtojava</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <sourceRoot>${project.build.directory}/generated-sources/schemas</sourceRoot>
+                            <xsdOptions>
+                                <xsdOption>
+                                    <xsd>
+                                        ${project.build.directory}/schemas/dev/ronin/demo/beerstore/contract/Customer.xsd
+                                    </xsd>
+                                    <extension>true</extension>
+                                    <extensionArgs>
+                                        <extensionArg>-Xvalue-constructor</extensionArg>
+                                        <extensionArg>-Xfluent-api</extensionArg>
+                                        <extensionArg>-Xbg</extensionArg>
+                                    </extensionArgs>
+                                </xsdOption>
+                            </xsdOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <release>17</release>
+                    <release>${version.java}</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -192,18 +296,89 @@
                         <compilerArg>-Amapstruct.suppressGeneratorVersionInfoComment=true</compilerArg>
                         <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
                         <compilerArg>-Amapstruct.verbose=true</compilerArg>
+                        <compilerArg>-Amapstruct.defaultInjectionStrategy=constructor</compilerArg>
                     </compilerArgs>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>dev.ronin.demo.beerstore.BeerStoreApplication</mainClass>
-                    <image>
-                        <name>${project.parent.artifactId}:${project.version}</name>
-                    </image>
+                    <layers>
+                        <enabled>true</enabled>
+                    </layers>
+                    <additionalProperties>
+                        <contracts.beer-store.version>${version.beer-store-contract}</contracts.beer-store.version>
+                    </additionalProperties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${version.openapi-generator}</version>
+                <configuration>
+                    <skipIfSpecIsUnchanged>true</skipIfSpecIsUnchanged>
+                    <generateModels>true</generateModels>
+                    <generateApiTests>false</generateApiTests>
+                    <generateSupportingFiles>false</generateSupportingFiles>
+                    <!--                    <supportingFilesToGenerate>${supportingFilesToGenerate}</supportingFilesToGenerate>-->
+                    <generateModelTests>false</generateModelTests>
+                    <generateModelDocumentation>false</generateModelDocumentation>
+                    <generateApiDocumentation>false</generateApiDocumentation>
+                    <generateApis>true</generateApis>
+                    <ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
+                    <configOptions>
+                        <useSpringBoot3>true</useSpringBoot3>
+                        <useJakartaEe>true</useJakartaEe>
+                        <useTags>true</useTags>
+                        <serializableModels>true</serializableModels>
+                        <skipDefaultInterface>true</skipDefaultInterface>
+                        <performBeanValidation>true</performBeanValidation>
+                        <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                        <interfaceOnly>true</interfaceOnly>
+                    </configOptions>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>dev.ronin.demo</groupId>
+                        <artifactId>beer-store-contract</artifactId>
+                        <version>${version.beer-store-contract}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>generate-producer</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>dev/ronin/demo/beerstore/contract/beer-store-contract.yaml</inputSpec>
+                            <apiPackage>${package.infrastructure}.api</apiPackage>
+                            <modelPackage>${package.infrastructure}.api.model</modelPackage>
+                            <generatorName>spring</generatorName>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <modelNameSuffix>Model</modelNameSuffix>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <changeLogFile>src/main/resources/db/changelog/changelog.xml</changeLogFile>
+                    <propertyFile>liquibase.properties</propertyFile>
+                    <outputChangeLogFile>src/main/resources/liquibase-outputChangeLog.xml</outputChangeLogFile>
                 </configuration>
             </plugin>
             <plugin>
@@ -212,13 +387,25 @@
                 <version>${version.spring-cloud-contract}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <baseClassForTests>dev.ronin.demo.beerstore.contract.ContractTestBase</baseClassForTests>
-                    <!--                    <convertToYaml>true</convertToYaml>-->
-                    <testFramework>JUNIT5</testFramework>
+                    <contractDependency>
+                        <groupId>dev.ronin.demo</groupId>
+                        <artifactId>beer-store-contract</artifactId>
+                    </contractDependency>
+                    <contractsPath>contracts</contractsPath>
+                    <incrementalContractTests>false</incrementalContractTests>
                     <testMode>MOCKMVC</testMode>
+                    <testFramework>JUNIT5</testFramework>
+                    <baseClassForTests>dev.ronin.demo.beerstore.contract.ContractTestBase</baseClassForTests>
                 </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>dev.ronin.demo</groupId>
+                        <artifactId>beer-store-contract</artifactId>
+                        <version>${version.beer-store-contract}</version>
+                        <classifier>stubs</classifier>
+                    </dependency>
+                </dependencies>
             </plugin>
-
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -231,22 +418,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.google.cloud.tools</groupId>
-                <artifactId>jib-maven-plugin</artifactId>
-                <version>${version.jib-maven-plugin}</version>
-                <configuration>
-                    <from>
-                        <image>tomcat:8.5-jre8-alpine</image>
-                    </from>
-                    <to>
-                        <image>registry.hub.docker.com/theronin86/beer-store</image>
-                    </to>
-                    <container>
-                        <appRoot>/usr/local/tomcat/webapps/ROOT</appRoot>
-                    </container>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

@@ -1,8 +1,7 @@
 package dev.ronin.demo.beerstore.domain.customer.value;
 
+import jakarta.persistence.Embeddable;
 import lombok.*;
-
-import javax.persistence.Embeddable;
 
 @Getter
 @Setter

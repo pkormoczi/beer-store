@@ -1,9 +1,8 @@
 package dev.ronin.demo.beerstore.domain.order.data;
 
 import dev.ronin.demo.beerstore.domain.order.value.BeerStyle;
+import jakarta.persistence.*;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
@@ -14,7 +13,7 @@ import javax.persistence.*;
 public class BeerData {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
