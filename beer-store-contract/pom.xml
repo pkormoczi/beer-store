@@ -14,10 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <resource.delimiter>@</resource.delimiter>
-        <version.apache.cxf.utils>3.3.0</version.apache.cxf.utils>
-        <version.build.helper.maven.plugin>3.0.0</version.build.helper.maven.plugin>
-        <version.jaxb2.fluent.api>3.0</version.jaxb2.fluent.api>
-        <version.jaxb2.value.constructor>3.0</version.jaxb2.value.constructor>
+        <version.spring-cloud-contract>4.2.0</version.spring-cloud-contract>
     </properties>
 
     <build>
@@ -27,6 +24,7 @@
                 <filtering>false</filtering>
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
+                    <include>**/*.yaml</include>
                     <include>**/*.wsdl</include>
                     <include>**/*.xsd</include>
                     <include>**/catalog.xml</include>
@@ -36,99 +34,15 @@
         </resources>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+                <version>${version.spring-cloud-contract}</version>
+                <extensions>true</extensions>
                 <configuration>
-                    <release>11</release>
+                    <skipTestOnly>true</skipTestOnly>
+                    <mavenTestSkip>true</mavenTestSkip>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${version.build.helper.maven.plugin}</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-xjc-plugin</artifactId>
-                <version>${version.apache.cxf.utils}</version>
-                <executions>
-                    <execution>
-                        <id>generate-sources</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>xsdtojava</goal>
-                        </goals>
-                        <configuration>
-                            <sourceRoot>${project.build.directory}/generated-sources</sourceRoot>
-                            <xsdOptions>
-                                <xsdOption>
-                                    <xsd>${basedir}/src/main/resources/dev/ronin/demo/beerstore/contract/Customer.xsd
-                                    </xsd>
-                                    <extension>true</extension>
-                                    <extensionArgs>
-                                        <extensionArg>-Xvalue-constructor</extensionArg>
-                                        <extensionArg>-Xfluent-api</extensionArg>
-                                        <extensionArg>-Xbg</extensionArg>
-                                    </extensionArgs>
-                                </xsdOption>
-                            </xsdOptions>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.cxf.xjcplugins</groupId>
-                        <artifactId>cxf-xjc-boolean</artifactId>
-                        <version>${version.apache.cxf.utils}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jvnet.jaxb2_commons</groupId>
-                        <artifactId>jaxb2-fluent-api</artifactId>
-                        <version>${version.jaxb2.fluent.api}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jvnet.jaxb2_commons</groupId>
-                        <artifactId>jaxb2-value-constructor</artifactId>
-                        <version>${version.jaxb2.value.constructor}</version>
-                    </dependency>
-                </dependencies>
-                <configuration/>
             </plugin>
         </plugins>
     </build>
-    <dependencies>
-        <dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
-        </dependency>
-    </dependencies>
 </project>

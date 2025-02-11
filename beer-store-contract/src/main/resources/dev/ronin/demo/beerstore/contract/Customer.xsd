@@ -12,21 +12,21 @@
     <xs:element name="getCustomerResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="customerData" type="tns:customerModel"/>
+                <xs:element name="customerData" type="tns:customer"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:complexType name="customerModel">
+    <xs:complexType name="customer">
         <xs:sequence>
             <xs:element name="id" type="xs:int"/>
             <xs:element name="firstName" type="xs:string"/>
             <xs:element name="lastName" type="xs:string"/>
-            <xs:element name="address" type="tns:addressModel"/>
+            <xs:element name="address" type="tns:address"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="addressModel">
+    <xs:complexType name="address">
         <xs:sequence>
             <xs:element name="country" type="xs:string"/>
             <xs:element name="city" type="xs:string"/>
