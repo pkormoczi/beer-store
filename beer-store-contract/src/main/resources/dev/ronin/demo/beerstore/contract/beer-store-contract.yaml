@@ -75,8 +75,7 @@ paths:
           content:
             application/json:
               schema:
-                type: integer
-                format: int64
+                $ref: '#/components/schemas/Customer'
   /customers/search:
     get:
       tags:

@@ -50,7 +50,7 @@ description: |
   when:
       create new customer
   then:
-      return customer id
+      return customer with id
   ```
 request:
   method: POST
@@ -62,13 +62,12 @@ request:
     body:
       - path: $.id
         type: by_regex
-        predefined: number
+        value: '.*'
 response:
   status: 201
   headers:
     Content-Type: "application/json"
-  body:
-    id: 1
+  bodyFromFile: customer.json
   matchers:
     body:
       - path: $.id
