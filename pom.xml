@@ -34,7 +34,7 @@
     <version.flatten.maven.plugin>1.2.4</version.flatten.maven.plugin>
     <version.jackson-databind-nullable>0.2.6</version.jackson-databind-nullable>
     <version.java>21</version.java>
-    <version.spring-cloud-contract>4.2.0</version.spring-cloud-contract>
+    <version.spring-cloud-contract>4.2.1</version.spring-cloud-contract>
     <version.mapstruct>1.5.5.Final</version.mapstruct>
     <version.openapi-generator>7.6.0</version.openapi-generator>
   </properties>

@@ -1,0 +1,11 @@
+{
+  "id": 1,
+  "firstName": "TestFirst",
+  "lastName": "TestLast",
+  "address": {
+    "country": "MockCountry",
+    "city": "MockCity",
+    "streetAddress": "MockAddress",
+    "zip": "1111"
+  }
+}

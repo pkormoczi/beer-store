@@ -19,7 +19,7 @@
         <supportingFilesToGenerate>
             ApiClient.java,Authentication.java,HttpBasicAuth.java,HttpBearerAuth.java,ApiKeyAuth.java,JavaTimeFormatter.java,RFC3339DateFormat.java
         </supportingFilesToGenerate>
-        <version.beer-store-contract>1.0.0-SNAPSHOT</version.beer-store-contract>
+        <version.beer-store-contract>${revision}</version.beer-store-contract>
     </properties>
 
     <dependencies>
@@ -33,6 +33,7 @@
             <artifactId>beer-store-contract</artifactId>
             <version>${version.beer-store-contract}</version>
             <classifier>stubs</classifier>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -170,6 +171,34 @@
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
                             </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+<!--                    Workaround for IntelliJ for running stubrunner tests-->
+                    <execution>
+                        <id>unpack-stubs</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>dev.ronin.demo</groupId>
+                                    <artifactId>beer-store-contract</artifactId>
+                                    <version>${version.beer-store-contract}</version>
+                                    <classifier>stubs</classifier>
+                                    <type>jar</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
                         </configuration>
                     </execution>
                 </executions>

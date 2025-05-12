@@ -1,7 +1,7 @@
 ---
-name: "shouldReturnCustomerWhenSearchByFirstName"
+name: shouldReturnCustomerWhenSearchByFirstName
 description: |
-  Represents a successful scenario of findig a customer by first name
+  Represents a successful scenario of finding a customer by first name
   ```
   given:
       customer first name
@@ -11,27 +11,67 @@ description: |
       return customer data
   ```
 request:
-  method: "GET"
-  url: "/customers/TestFirst"
+  method: GET
+  url: /customers/search
+  queryParameters:
+    "name": "TestFirst"
 response:
   status: 200
   headers:
     Content-Type: "application/json"
+  bodyFromFile: customer.json
+---
+name: shouldReturnCustomerWhenSearchById
+description: |
+  Represents a successful scenario of finding a customer by id
+  ```
+  given:
+      customer id
+  when:
+      search for customer by id
+  then:
+      return customer data
+  ```
+request:
+  method: GET
+  url: /customers/1
+response:
+  status: 200
+  headers:
+    Content-Type: "application/json"
+  bodyFromFile: customer.json
+---
+name: shouldReturnIdWhenCreateNewCustomer
+description: |
+  Represents a successful scenario of creating a new customer
+  ```
+  given:
+      customer data
+  when:
+      create new customer
+  then:
+      return customer id
+  ```
+request:
+  method: POST
+  url: /customers
+  headers:
+    "Content-Type": "application/json"
+  bodyFromFile: customer.json
+  matchers:
+    body:
+      - path: $.id
+        type: by_regex
+        predefined: number
+response:
+  status: 201
+  headers:
+    Content-Type: "application/json"
   body:
     id: 1
-    firstName: "TestFirst"
-    lastName: "TestLast"
-    address:
-      country: "MockCountry"
-      city: "MockCity"
-      streetAddress: "MockAddress"
-      zip: "1111"
   matchers:
-    headers:
-    - key: "Content-Type"
-      regex: "application/json.*"
-      regexType: "as_string"
-  async: false
-  fixedDelayMilliseconds: null
-ignored: false
-inProgress: false
+    body:
+      - path: $.id
+        type: by_regex
+        regexType: as_integer
+        predefined: number

@@ -7,12 +7,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.stubrunner.spring.AutoConfigureStubRunner;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerPort;
 import org.springframework.cloud.contract.stubrunner.spring.StubRunnerProperties;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureStubRunner(
         stubsMode = StubRunnerProperties.StubsMode.CLASSPATH,
-        ids = "dev.ronin.demo:beer-store-contract:+:stubs")
+        ids = "dev.ronin.demo:beer-store-contract:+:stubs",
+        mappingsOutputFolder = "target/stubs")
 class CustomerControllerTest {
 
     @StubRunnerPort("beer-store-contract")
@@ -20,13 +22,14 @@ class CustomerControllerTest {
 
 
     @Test
-    public void testCustomerContract() {
+    void testCustomerContract() {
 
         WebTestClient testClient = WebTestClient
                 .bindToServer()
                 .baseUrl("http://localhost:" + this.port)
                 .build();
-        final CustomerModel responseBody = testClient.get().uri("customers/TestFirst")
+        final CustomerModel responseBody = testClient.get().uri("/customers/search?name=TestFirst")
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
                 .isOk()

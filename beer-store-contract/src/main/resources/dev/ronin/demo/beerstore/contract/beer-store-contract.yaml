@@ -4,16 +4,16 @@ info:
   description: OpenAPI definition
   version: 1.0.0
 servers:
-- url: http://localhost:8080
-  description: Generated server url
+  - url: 'http://localhost:8080'
+    description: Generated server url
 paths:
   /orders:
     get:
       tags:
-      - order
+        - order
       operationId: getOrders
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -23,7 +23,7 @@ paths:
                   $ref: '#/components/schemas/Order'
     post:
       tags:
-      - order
+        - order
       operationId: createOrder
       requestBody:
         content:
@@ -32,7 +32,7 @@ paths:
               $ref: '#/components/schemas/Order'
         required: true
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -42,35 +42,72 @@ paths:
   /orders/{id}:
     get:
       tags:
-      - order
+        - order
       operationId: getOrderById
       parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Order'
-  /customers/{name}:
+  /customers:
+    post:
+      tags:
+        - customer
+      operationId: createCustomer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+        required: true
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int64
+  /customers/search:
     get:
       tags:
-      - customer
+        - customer
       operationId: getCustomerByName
       parameters:
-      - name: name
-        in: path
-        required: true
-        schema:
-          type: string
+        - schema:
+            type: string
+          in: query
+          name: name
       responses:
-        "200":
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+    parameters: []
+  '/customers/{id}':
+    get:
+      tags:
+        - customer
+      operationId: getCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
           description: OK
           content:
             application/json:
@@ -79,17 +116,17 @@ paths:
   /:
     get:
       tags:
-      - home
+        - home
       description: Returns a simple "Hello!"
-      operationId: hello_1
+      operationId: hello
       parameters:
-      - name: name
-        in: query
-        required: true
-        schema:
-          type: string
+        - name: name
+          in: query
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: OK
           content:
             application/json:
@@ -110,10 +147,10 @@ components:
             format: int64
     Address:
       required:
-      - city
-      - country
-      - streetAddress
-      - zip
+        - city
+        - country
+        - streetAddress
+        - zip
       type: object
       properties:
         country:
@@ -126,9 +163,9 @@ components:
           type: string
     Customer:
       required:
-      - address
-      - firstName
-      - lastName
+        - address
+        - firstName
+        - lastName
       type: object
       properties:
         id:
