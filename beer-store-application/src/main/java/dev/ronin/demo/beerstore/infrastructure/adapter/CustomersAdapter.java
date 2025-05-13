@@ -32,4 +32,12 @@ public class CustomersAdapter {
     public List<CustomerModel> customers() {
         return customerMapper.data(customers.list());
     }
+
+    public CustomerModel customerWithId(Long id) {
+        return customerMapper.toModel(customers.customerWithId(id));
+    }
+
+    public CustomerModel newCustomer(CustomerModel customerModel) {
+        return customerMapper.toModel(customers.newCustomer(customerModel.getFirstName(), customerModel.getLastName(), customerMapper.toAddress(customerModel.getAddress())).data());
+    }
 }

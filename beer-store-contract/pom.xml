@@ -1,47 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>dev.ronin.demo</groupId>
-        <artifactId>beer-store</artifactId>
-        <version>${revision}</version>
-    </parent>
+  <parent>
+    <groupId>dev.ronin.demo</groupId>
+    <artifactId>beer-store</artifactId>
+    <version>${revision}</version>
+  </parent>
 
-    <artifactId>beer-store-contract</artifactId>
-    <packaging>jar</packaging>
+  <artifactId>beer-store-contract</artifactId>
+  <packaging>jar</packaging>
 
-    <properties>
-        <resource.delimiter>@</resource.delimiter>
-    </properties>
+  <properties>
+    <resource.delimiter>@</resource.delimiter>
+  </properties>
 
-    <build>
-        <resources>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>false</filtering>
-                <directory>${basedir}/src/main/resources</directory>
-                <includes>
-                    <include>**/*.yaml</include>
-                    <include>**/*.wsdl</include>
-                    <include>**/*.xsd</include>
-                    <include>**/catalog.xml</include>
-                    <include>**/bindings.xjb</include>
-                </includes>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-contract-maven-plugin</artifactId>
-                <version>${version.spring-cloud-contract}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <skipTestOnly>true</skipTestOnly>
-                    <mavenTestSkip>true</mavenTestSkip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+  <build>
+    <resources>
+      <resource>
+        <targetPath>.</targetPath>
+        <filtering>false</filtering>
+        <directory>${basedir}/src/main/resources</directory>
+        <includes>
+          <include>**/*.yaml</include>
+          <include>**/*.wsdl</include>
+          <include>**/*.xsd</include>
+          <include>**/catalog.xml</include>
+          <include>**/bindings.xjb</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.cloud</groupId>
+        <artifactId>spring-cloud-contract-maven-plugin</artifactId>
+        <version>${version.spring-cloud-contract}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <skipTestOnly>true</skipTestOnly>
+          <mavenTestSkip>true</mavenTestSkip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

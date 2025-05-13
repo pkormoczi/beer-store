@@ -1,0 +1,35 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <include file="/database/changelog/1.0.0/create-customer.xml"/>
+    <include file="/database/changelog/1.0.0/create-beer.xml"/>
+    <include file="/database/changelog/1.0.0/create-beer-order.xml"/>
+    <include file="/database/changelog/1.0.0/create-beer-order-beers.xml"/>
+
+    <changeSet author="pkormoczi" id="create_sequence">
+        <createSequence cacheSize="1" cycle="false" dataType="bigint" incrementBy="1" maxValue="9223372036854775807"
+                        minValue="1" sequenceName="hibernate_sequence" startValue="1"/>
+    </changeSet>
+
+    <changeSet author="pkormoczi" id="1687364079821-7">
+        <addForeignKeyConstraint baseColumnNames="customer_id" baseTableName="beer_order"
+                                 constraintName="fk5siih2e7vpx70nx4wexpxpji" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="customer" validate="true"/>
+    </changeSet>
+    <changeSet author="pkormoczi" id="1687364079821-8">
+        <addForeignKeyConstraint baseColumnNames="beer_id" baseTableName="beer_order_beers"
+                                 constraintName="fkjwkcuoqra6mv50e6p6bfw9t3h" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="beer" validate="true"/>
+    </changeSet>
+    <changeSet author="pkormoczi" id="1687364079821-9">
+        <addForeignKeyConstraint baseColumnNames="order_id" baseTableName="beer_order_beers"
+                                 constraintName="fkv24t180cnitb7d5gl4d22mk5" deferrable="false"
+                                 initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
+                                 referencedColumnNames="id" referencedTableName="beer_order" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

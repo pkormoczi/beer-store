@@ -12,10 +12,12 @@
     <packaging>jar</packaging>
 
     <properties>
+        <argLine></argLine>
+        <!-- Fallback when Jacoco isn't active. -->
         <package.infrastructure>dev.ronin.demo.beerstore.infrastructure</package.infrastructure>
         <version.apache.cxf.utils>4.1.0</version.apache.cxf.utils>
         <version.archunit>1.4.0</version.archunit>
-        <version.beer-store-contract>1.0.0-SNAPSHOT</version.beer-store-contract>
+        <version.beer-store-contract>${revision}</version.beer-store-contract>
         <version.commons-io>2.13.0</version.commons-io>
         <version.jacoco-maven-plugin>0.8.10</version.jacoco-maven-plugin>
         <version.jaxb2.fluent.api>3.0</version.jaxb2.fluent.api>
@@ -124,6 +126,10 @@
             <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-core</artifactId>
         </dependency>
@@ -218,6 +224,11 @@
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/schemas</outputDirectory>
                         </configuration>
+                    </execution>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -385,7 +396,6 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-contract-maven-plugin</artifactId>
                 <version>${version.spring-cloud-contract}</version>
-                <extensions>true</extensions>
                 <configuration>
                     <contractDependency>
                         <groupId>dev.ronin.demo</groupId>
@@ -393,9 +403,7 @@
                     </contractDependency>
                     <contractsPath>contracts</contractsPath>
                     <incrementalContractTests>false</incrementalContractTests>
-                    <testMode>MOCKMVC</testMode>
                     <testFramework>JUNIT5</testFramework>
-                    <baseClassForTests>dev.ronin.demo.beerstore.contract.ContractTestBase</baseClassForTests>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -405,6 +413,33 @@
                         <classifier>stubs</classifier>
                     </dependency>
                 </dependencies>
+                <executions>
+                    <execution>
+                        <id>generate-tests-explicit</id>
+                        <goals>
+                            <goal>generateTests</goal>
+                        </goals>
+                        <phase>generate-test-sources</phase>
+                        <configuration>
+                            <basePackageForTests>dev.ronin.demo.beerstore.contract.explicit</basePackageForTests>
+                            <testMode>EXPLICIT</testMode>
+                            <baseClassForTests>dev.ronin.demo.beerstore.contract.ContractTestBase</baseClassForTests>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>generate-tests-mockmvc</id>
+                        <goals>
+                            <goal>generateTests</goal>
+                        </goals>
+                        <phase>generate-test-sources</phase>
+                        <configuration>
+                            <basePackageForTests>dev.ronin.demo.beerstore.contract.mockmvc</basePackageForTests>
+                            <testMode>MOCKMVC</testMode>
+                            <baseClassForTests>dev.ronin.demo.beerstore.contract.ContractTestBaseMockMvc
+                            </baseClassForTests>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
@@ -414,6 +449,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>@{argLine}
+                        -javaagent:${org.mockito:mockito-core:jar}
+                    </argLine>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

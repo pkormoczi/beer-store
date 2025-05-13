@@ -19,7 +19,11 @@ public class Customers {
     }
 
     public CustomerData customerWithName(final String name) {
-        return customerRepository.findByFirstNameContainingIgnoreCase(name);
+        return customerRepository.findFirstByFirstNameContainingIgnoreCase(name);
+    }
+
+    public CustomerData customerWithId(final Long id) {
+        return customerRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
     @Transactional

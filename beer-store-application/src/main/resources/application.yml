@@ -12,8 +12,6 @@ spring:
 #    username: user
 #    password: password
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-#    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: create
     properties:
@@ -28,9 +26,11 @@ spring:
       path: /console
   liquibase:
     enabled: false
-#    change-log: classpath:/database/changelog/changelog-master.xml
-#    enabled: true
+    change-log: classpath:/database/changelog/changelog-master.xml
 #    drop-first: false
+  mustache:
+    check-template-location: false
+#    enabled: true
 springdoc:
   swagger-ui:
     display-operation-id: true

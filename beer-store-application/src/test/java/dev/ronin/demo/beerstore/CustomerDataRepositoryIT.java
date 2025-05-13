@@ -45,7 +45,7 @@ class CustomerDataRepositoryIT extends IntegrationTest {
         final CustomerData testCustomerData = getTestCustomer();
         entityManager.persist(testCustomerData);
 
-        final CustomerData result = customerRepository.findByFirstNameContainingIgnoreCase("Peter");
+        final CustomerData result = customerRepository.findFirstByFirstNameContainingIgnoreCase("Peter");
 
         then(result.getLastName()).isEqualTo(testCustomerData.getLastName());
     }

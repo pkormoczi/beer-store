@@ -4,14 +4,14 @@ import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.domain.customer.repository.CustomerRepository;
 import dev.ronin.demo.beerstore.domain.customer.value.Address;
 import dev.ronin.demo.beerstore.infrastructure.controller.CustomerController;
-import io.restassured.RestAssured;
+import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
@@ -22,10 +22,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ContractTestBase {
-
-    @LocalServerPort
-    int port;
+@AutoConfigureMockMvc
+public class ContractTestBaseMockMvc {
 
     @MockitoSpyBean
     private CustomerController customerController;
@@ -37,7 +35,7 @@ public class ContractTestBase {
     void setup() {
         customerRepository.save(new CustomerData("TestFirst","TestLast",
                 new Address("MockCountry","1111","MockCity","MockAddress")));
-        RestAssured.baseURI = "http://localhost:" + this.port;
+        RestAssuredMockMvc.standaloneSetup(customerController);
     }
 
 }

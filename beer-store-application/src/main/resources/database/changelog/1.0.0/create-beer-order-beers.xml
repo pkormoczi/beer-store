@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+
+    <changeSet author="pkormoczi" id="create_beer_order_beers" logicalFilePath="db/changelog/1.0.0/create-beer-order-beers.xml">
+        <createTable tableName="beer_order_beers">
+            <column name="order_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="beer_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="pkormoczi" id="1687364079821-6">
+        <addUniqueConstraint columnNames="beer_id" constraintName="uk_acc7ks4wqob3xoml78llkw3td"
+                             tableName="beer_order_beers"/>
+    </changeSet>
+</databaseChangeLog>

@@ -7,10 +7,12 @@ spring:
     password:
     driverClassName: org.h2.Driver
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         use_sql_comments: true
         format_sql: true
+        show_sql: true
+  liquibase:
+    enabled: true
