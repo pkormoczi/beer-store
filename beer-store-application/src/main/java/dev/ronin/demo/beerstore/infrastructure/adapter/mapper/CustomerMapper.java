@@ -16,6 +16,8 @@ public interface CustomerMapper {
 
     CustomerModel toModel(final CustomerData entity);
 
+    CustomerData toData(final CustomerModel model);
+
     Customer toWsModel(final CustomerData entity);
 
     List<CustomerModel> data(final List<CustomerData> entities);

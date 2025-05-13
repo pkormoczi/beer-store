@@ -207,7 +207,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>unpack-schema</id>
+                        <id>unpack-contract</id>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
@@ -219,10 +219,30 @@
                                     <artifactId>beer-store-contract</artifactId>
                                     <version>${version.beer-store-contract}</version>
                                     <type>jar</type>
-                                    <includes>**/*.xsd</includes>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/contract</outputDirectory>
                                 </artifactItem>
                             </artifactItems>
-                            <outputDirectory>${project.build.directory}/schemas</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack-stubs</id>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <phase>generate-test-resources</phase>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>dev.ronin.demo</groupId>
+                                    <artifactId>beer-store-contract</artifactId>
+                                    <version>${version.beer-store-contract}</version>
+                                    <classifier>stubs</classifier>
+                                    <type>jar</type>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/test-classes</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
                         </configuration>
                     </execution>
                     <execution>
@@ -266,7 +286,7 @@
                             <xsdOptions>
                                 <xsdOption>
                                     <xsd>
-                                        ${project.build.directory}/schemas/dev/ronin/demo/beerstore/contract/Customer.xsd
+                                        ${project.build.directory}/contract/dev/ronin/demo/beerstore/contract/Customer.xsd
                                     </xsd>
                                     <extension>true</extension>
                                     <extensionArgs>
