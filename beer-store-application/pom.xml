@@ -16,15 +16,16 @@
         <!-- Fallback when Jacoco isn't active. -->
         <package.infrastructure>dev.ronin.demo.beerstore.infrastructure</package.infrastructure>
         <version.apache.cxf.utils>4.1.0</version.apache.cxf.utils>
-        <version.archunit>1.4.0</version.archunit>
+        <version.archunit>1.4.2</version.archunit>
         <version.beer-store-contract>${revision}</version.beer-store-contract>
         <version.commons-io>2.13.0</version.commons-io>
-        <version.jacoco-maven-plugin>0.8.10</version.jacoco-maven-plugin>
+        <version.jacoco-maven-plugin>0.8.14</version.jacoco-maven-plugin>
         <version.jaxb2.fluent.api>3.0</version.jaxb2.fluent.api>
         <version.jaxb2.value.constructor>3.0</version.jaxb2.value.constructor>
         <version.jib-maven-plugin>3.3.2</version.jib-maven-plugin>
         <version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
-        <version.springdoc-openapi>2.8.4</version.springdoc-openapi>
+        <version.rest-assured>6.0.0</version.rest-assured>
+        <version.springdoc-openapi>3.0.3</version.springdoc-openapi>
         <version.springdoc-openapi-maven-plugin>1.4</version.springdoc-openapi-maven-plugin>
         <version.versions-maven-plugin>2.16.0</version.versions-maven-plugin>
     </properties>
@@ -55,8 +56,8 @@
             <version>${version.beer-store-contract}</version>
         </dependency>
         <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-liquibase</artifactId>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -76,6 +77,10 @@
                 <exclusion>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-simple</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.swagger.parser.v3</groupId>
+                    <artifactId>swagger-parser</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -103,7 +108,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -156,6 +161,7 @@
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-web-test-client</artifactId>
+            <version>${version.rest-assured}</version>
             <scope>test</scope>
             <optional>true</optional>
             <exclusions>
@@ -191,6 +197,21 @@
                     <artifactId>asm</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-cache-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -366,7 +387,8 @@
                     <generateApis>true</generateApis>
                     <ignoreFileOverride>${project.basedir}/.openapi-generator-ignore</ignoreFileOverride>
                     <configOptions>
-                        <useSpringBoot3>true</useSpringBoot3>
+                        <useSpringBoot4>true</useSpringBoot4>
+                        <useJackson3>true</useJackson3>
                         <useJakartaEe>true</useJakartaEe>
                         <useTags>true</useTags>
                         <serializableModels>true</serializableModels>
@@ -420,19 +442,14 @@
                     <contractDependency>
                         <groupId>dev.ronin.demo</groupId>
                         <artifactId>beer-store-contract</artifactId>
+                        <version>${version.beer-store-contract}</version>
+                        <classifier>stubs</classifier>
                     </contractDependency>
+                    <contractsMode>LOCAL</contractsMode>
                     <contractsPath>contracts</contractsPath>
                     <incrementalContractTests>false</incrementalContractTests>
                     <testFramework>JUNIT5</testFramework>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>dev.ronin.demo</groupId>
-                        <artifactId>beer-store-contract</artifactId>
-                        <version>${version.beer-store-contract}</version>
-                        <classifier>stubs</classifier>
-                    </dependency>
-                </dependencies>
                 <executions>
                     <execution>
                         <id>generate-tests-explicit</id>

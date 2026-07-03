@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.2</version>
+        <version>4.1.0</version>
         <relativePath></relativePath>
     </parent>
 
@@ -24,8 +24,8 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <revision>DEVELOP-SNAPSHOT</revision>
@@ -33,11 +33,11 @@
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
         <version.flatten.maven.plugin>1.2.4</version.flatten.maven.plugin>
-        <version.jackson-databind-nullable>0.2.6</version.jackson-databind-nullable>
-        <version.java>21</version.java>
-        <version.mapstruct>1.5.5.Final</version.mapstruct>
-        <version.openapi-generator>7.6.0</version.openapi-generator>
-        <version.spring-cloud-contract>4.2.1</version.spring-cloud-contract>
+        <version.jackson-databind-nullable>0.2.10</version.jackson-databind-nullable>
+        <version.java>25</version.java>
+        <version.mapstruct>1.6.3</version.mapstruct>
+        <version.openapi-generator>7.23.0</version.openapi-generator>
+        <version.spring-cloud-contract>5.0.3</version.spring-cloud-contract>
     </properties>
 
     <build>

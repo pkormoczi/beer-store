@@ -6,34 +6,33 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [x] Domain Driven Design considerations
  - [x] Spring Framework with full java config
  - [x] Spring Data with Hibernate
+ - [x] Database migrations with Liquibase
  - [x] SOAP Endpoints
  - [x] REST Controllers
- - [x] Swagger
- - [x] Spring Security
+ - [x] Swagger / OpenAPI, contract-first code generation
+ - [x] Spring Security (REST + SOAP, basic authentication with roles)
  - [x] MapStruct as adapter
- - [ ] Integration tests 
+ - [x] Spring Boot Actuator
+ - [x] Exception and error handling and documentation in the REST Controllers
  - [x] Unit tests
+ - [x] Integration tests
+ - [x] Architecture tests (ArchUnit) enforcing DDD layering and naming conventions
  - [x] Test coverage tool
+ - [ ] Allure reports
  - [x] Spring Cloud Contracts
- - [ ] Dockerized E2E tests, Testcontainers? 
- 
-
-## TODO
-
- - [x] Exception and Error handling and documentation in the REST Controllers
- - [x] Spring Security for SOAP with roles and basic authentication
- - [ ] Liquibase
+ - [x] Local CI pipeline (Jenkins + SonarQube via Docker Compose)
+ - [ ] Dockerized E2E tests, Testcontainers?
+ - [ ] GitHub Actions CI pipeline (build/test/coverage badge)
+ - [ ] Static code analysis (Checkstyle/PMD/SpotBugs)
+ - [ ] Dependency vulnerability scanning (OWASP dependency-check / Dependabot)
+ - [ ] Observability - metrics/tracing (Micrometer, OpenTelemetry)
  - [ ] DBRider
- - [ ] Layered OCI image creation
+ - [ ] Layered OCI image creation for the application itself
  - [ ] Profiling - local, integration test, docker, prod
- - [ ] Unit test for business
- - [ ] Integration tests for REST and SOAP endpoints
- - [ ] Separate unit and integration tests in jenkins pipeline
  - [ ] Transaction management refinement 
- - [ ] Database migration tooling? flyway /liquibase
  - [ ] Async calls via SOAP
  - [ ] Events, with Spring application events
- - [ ] Docker compose for Jenkins+Sonar CI pipeline
+ - [ ] License
 
 ## DEV notes
 - Run with command: `mvnw spring-boot:run`
@@ -42,4 +41,4 @@ Beer Store is a simple proof of concept application focusing on the following fe
 - Swagger UI at: `http://localhost:8080/swagger-ui.html`
 - Swagger JSON: `http://localhost:8080/v2/api-docs`
 - SOAP Endpoint: `http://localhost:8080/services/customerService.wsdl` with user `user` and password `password`
-- Sonar on local: `mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=c0bee1da6fc598716e80e82011ff6c25ebb75395`
+- Sonar on local: `mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=<your-sonar-token>`

@@ -6,7 +6,7 @@
 
     <changeSet author="pkormoczi" id="create_beer_order" logicalFilePath="db/changelog/1.0.0/create-beer-order.xml">
         <createTable tableName="beer_order">
-            <column name="id" type="BIGINT">
+            <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_beer_order"/>
             </column>
             <column name="order_status" type="VARCHAR(255)"/>

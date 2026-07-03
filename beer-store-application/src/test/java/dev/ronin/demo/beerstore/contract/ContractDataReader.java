@@ -1,8 +1,7 @@
 package dev.ronin.demo.beerstore.contract;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ObjectMapper;
 import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.infrastructure.adapter.mapper.CustomerMapper;
 import dev.ronin.demo.beerstore.infrastructure.adapter.mapper.CustomerMapperImpl;
@@ -67,7 +66,6 @@ class ContractDataReader {
 
         public T get() {
             ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
 
             String realFileName = Optional.ofNullable(this.jsonFileName).orElse(this.outMainType.fileName(this.outClass));
 

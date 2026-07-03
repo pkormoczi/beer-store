@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.infrastructure.logging;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,7 +47,7 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         long startTime = System.currentTimeMillis();
         StringBuilder reqInfo = readRequestInfo(request, startTime);
 
-        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
+        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request, MAX_PAYLOAD_LENGTH);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
         filterChain.doFilter(wrappedRequest, wrappedResponse);     // ======== This performs the actual request!
 

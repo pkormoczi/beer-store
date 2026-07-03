@@ -13,8 +13,8 @@ import com.tngtech.archunit.lang.ArchRule;
 import dev.ronin.demo.beerstore.BeerStoreApplicationIT;
 import dev.ronin.demo.beerstore.base.IntegrationTest;
 import org.junit.jupiter.api.Assertions;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Set;

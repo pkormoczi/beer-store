@@ -13,11 +13,10 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher;
 
 import static dev.ronin.demo.beerstore.BeerStoreApplication.PROFILE_TEST;
 import static org.springframework.security.config.Customizer.withDefaults;
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -28,7 +27,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers(antMatcher("/services/**")).hasRole("USER"))
+                                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/services/**")).hasRole("USER"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(withDefaults())
                 .build();
@@ -37,7 +36,7 @@ public class WebSecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers(new AntPathRequestMatcher("/**"));
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/**"));
     }
 
     @Bean

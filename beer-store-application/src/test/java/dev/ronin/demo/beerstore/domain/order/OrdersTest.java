@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.domain.order;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import dev.ronin.demo.beerstore.domain.customer.Customers;
 import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.domain.customer.value.Address;
@@ -41,7 +41,7 @@ class OrdersTest {
 
     @Test
     @DisplayName("test json mapping")
-    void testJsonMapping() throws JsonProcessingException {
+    void testJsonMapping() throws JacksonException {
         //Given
         CustomerData customerData = new CustomerData();
         customerData.setFirstName("FirstName");
