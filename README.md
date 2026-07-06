@@ -35,7 +35,7 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [x] Test coverage tool
  - [x] Allure reports
  - [x] Spring Cloud Contracts
- - [ ] Testcontainers: integration tests against a real Postgres (`@ServiceConnection`) instead of H2, exercising the Liquibase migrations
+ - [x] Testcontainers: integration tests against a real Postgres (`@ServiceConnection`) instead of H2, exercising the Liquibase migrations
  - [ ] Dockerized E2E tests
  - [ ] DBRider
 
