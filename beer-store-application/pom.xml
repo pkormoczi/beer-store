@@ -15,8 +15,10 @@
         <argLine></argLine>
         <!-- Fallback when Jacoco isn't active. -->
         <package.infrastructure>dev.ronin.demo.beerstore.infrastructure</package.infrastructure>
+        <version.allure>2.35.3</version.allure>
         <version.apache.cxf.utils>4.1.0</version.apache.cxf.utils>
         <version.archunit>1.4.2</version.archunit>
+        <version.aspectj>1.9.25.1</version.aspectj>
         <version.beer-store-contract>${revision}</version.beer-store-contract>
         <version.commons-io>2.14.0</version.commons-io>
         <version.jacoco-maven-plugin>0.8.14</version.jacoco-maven-plugin>
@@ -178,6 +180,24 @@
                     <artifactId>groovy-xml</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-junit5</artifactId>
+            <version>${version.allure}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>${version.allure}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${version.aspectj}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -489,6 +509,7 @@
                 <configuration>
                     <argLine>@{argLine}
                         -javaagent:${org.mockito:mockito-core:jar}
+                        -javaagent:${org.aspectj:aspectjweaver:jar}
                     </argLine>
                 </configuration>
             </plugin>
@@ -496,7 +517,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <argLine>@{argLine}</argLine>
+                    <argLine>@{argLine}
+                        -javaagent:${org.aspectj:aspectjweaver:jar}
+                    </argLine>
                 </configuration>
             </plugin>
             <plugin>

@@ -3,6 +3,7 @@ package dev.ronin.demo.beerstore.contract;
 import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.domain.customer.repository.CustomerRepository;
 import dev.ronin.demo.beerstore.infrastructure.controller.CustomerController;
+import io.qameta.allure.Step;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -33,6 +34,7 @@ public class ContractTestBaseMockMvc {
 
     @BeforeAll
     @Transactional
+    @Step("Seed customer test data and configure RestAssuredMockMvc")
     void setup() {
         final CustomerData customerData = new ContractDataReader().readCustomerData();
         customerData.setId(null);
