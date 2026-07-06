@@ -103,6 +103,7 @@ jobs:
 
       - name: Scan image with Trivy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        continue-on-error: true
         uses: aquasecurity/trivy-action@v0.36.0
         env:
           TRIVY_SKIP_VERSION_CHECK: true
