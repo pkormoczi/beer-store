@@ -32,8 +32,34 @@ jobs:
       - name: Build full reactor (skip tests)
         run: ./mvnw -Dmaven.test.skip=true clean install
 
-      - name: Test with coverage (unit + integration, jacoco)
-        run: ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report
+      - name: Unit tests (Surefire) with coverage
+        run: ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent test
+
+      - name: Integration tests (Failsafe) with coverage
+        run: ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent verify -Dsurefire.skip=true
+
+      - name: Upload test result reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: |
+            **/target/surefire-reports/**
+            **/target/failsafe-reports/**
+          retention-days: 14
+          if-no-files-found: ignore
+
+      - name: Jacoco coverage report
+        run: ./mvnw org.jacoco:jacoco-maven-plugin:report
+
+      - name: Upload jacoco coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-report
+          path: beer-store-application/target/site/jacoco/**
+          retention-days: 14
+          if-no-files-found: ignore
 
       - name: SonarCloud analysis
         if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
