@@ -119,4 +119,7 @@ buildNumber.properties
 .mvn/timing.properties
 !.mvn/wrapper/maven-wrapper.jar
 *.db
+
+### AspectJ ###
+ajcore.*.txt
 .flattened-pom.xml
