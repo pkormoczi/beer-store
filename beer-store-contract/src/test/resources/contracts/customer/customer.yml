@@ -20,6 +20,12 @@ response:
   headers:
     Content-Type: "application/json"
   bodyFromFile: customer.json
+  matchers:
+    body:
+      - path: $.id
+        type: by_regex
+        regexType: as_integer
+        predefined: number
 ---
 name: shouldReturnCustomerWhenSearchById
 description: |
