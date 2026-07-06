@@ -40,7 +40,6 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [ ] DBRider
 
 ### CI/CD & DevOps
- - [x] Local CI pipeline (Jenkins + SonarQube via Docker Compose)
  - [x] GitHub Actions CI pipeline (build/test/coverage, SonarCloud, Allure + Trivy reports on GitHub Pages, Docker Hub publish)
  - [x] Static code analysis (SonarCloud)
  - [x] Container image vulnerability scanning (Trivy, report published to GitHub Pages)
@@ -78,4 +77,3 @@ Live reports (updated on every `master` push): **https://pkormoczi.github.io/bee
 - Swagger UI at: `http://localhost:8080/swagger-ui.html`
 - Swagger JSON: `http://localhost:8080/v2/api-docs`
 - SOAP Endpoint: `http://localhost:8080/services/customerService.wsdl` with user `user` and password `password`
-- Sonar on local: `mvn sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=<your-sonar-token>`
