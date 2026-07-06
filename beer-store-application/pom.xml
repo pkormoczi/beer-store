@@ -18,7 +18,7 @@
         <version.apache.cxf.utils>4.1.0</version.apache.cxf.utils>
         <version.archunit>1.4.2</version.archunit>
         <version.beer-store-contract>${revision}</version.beer-store-contract>
-        <version.commons-io>2.13.0</version.commons-io>
+        <version.commons-io>2.14.0</version.commons-io>
         <version.jacoco-maven-plugin>0.8.14</version.jacoco-maven-plugin>
         <version.jaxb2.fluent.api>3.0</version.jaxb2.fluent.api>
         <version.jaxb2.value.constructor>3.0</version.jaxb2.value.constructor>
