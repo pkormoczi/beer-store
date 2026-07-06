@@ -1,17 +1,15 @@
 package dev.ronin.demo.beerstore.infrastructure.controller;
 
 import dev.ronin.demo.beerstore.infrastructure.adapter.OrdersAdapter;
-import dev.ronin.demo.beerstore.infrastructure.data.OrderModel;
+import dev.ronin.demo.beerstore.infrastructure.api.OrderApi;
+import dev.ronin.demo.beerstore.infrastructure.api.model.OrderModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 @RestController
-@RequestMapping(value = "/orders", produces = APPLICATION_JSON_VALUE)
-public class OrderController {
+public class OrderController implements OrderApi {
 
     private final OrdersAdapter ordersAdapter;
 
@@ -19,18 +17,18 @@ public class OrderController {
         this.ordersAdapter = ordersAdapter;
     }
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<OrderModel> getOrderById(@PathVariable final Long id) {
+    @Override
+    public ResponseEntity<OrderModel> getOrderById(final Long id) {
         return ResponseEntity.ok(ordersAdapter.findById(id));
     }
 
-    @GetMapping
-    public List<OrderModel> getOrders() {
-        return ordersAdapter.getOrders();
+    @Override
+    public ResponseEntity<List<OrderModel>> getOrders() {
+        return ResponseEntity.ok(ordersAdapter.getOrders());
     }
 
-    @PostMapping(consumes = APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> createOrder(@RequestBody OrderModel order) {
-        return ResponseEntity.ok(ordersAdapter.addOrder(order));
+    @Override
+    public ResponseEntity<Long> createOrder(OrderModel orderModel) {
+        return ResponseEntity.ok(ordersAdapter.addOrder(orderModel));
     }
 }

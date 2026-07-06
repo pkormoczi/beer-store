@@ -2,7 +2,7 @@ package dev.ronin.demo.beerstore.infrastructure.adapter.mapper;
 
 import dev.ronin.demo.beerstore.domain.order.data.BeerData;
 import dev.ronin.demo.beerstore.domain.order.data.OrderData;
-import dev.ronin.demo.beerstore.infrastructure.data.OrderModel;
+import dev.ronin.demo.beerstore.infrastructure.api.model.OrderModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
