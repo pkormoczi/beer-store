@@ -104,12 +104,14 @@ jobs:
       - name: Scan image with Trivy
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: aquasecurity/trivy-action@v0.36.0
+        env:
+          TRIVY_SKIP_VERSION_CHECK: true
         with:
           image-ref: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
           severity: CRITICAL,HIGH
           exit-code: '0'
           format: template
-          template: "@$HOME/.local/bin/trivy-bin/contrib/html.tpl"
+          template: "@${{ env.HOME }}/.local/bin/trivy-bin/contrib/html.tpl"
           output: trivy-report.html
 
       - name: Upload Trivy report artifact
