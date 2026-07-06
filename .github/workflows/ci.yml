@@ -60,11 +60,11 @@ jobs:
           DOCKER_PUBLISH_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
         run: >
           ./mvnw -pl beer-store-application spring-boot:build-image
-          -Dspring-boot.build-image.imageName=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store-application:${{ github.sha }}
+          -Dspring-boot.build-image.imageName=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
           -Dspring-boot.build-image.publish=true
 
       - name: Tag and push latest
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
-          docker tag docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store-application:${{ github.sha }} docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store-application:latest
-          docker push docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store-application:latest
+          docker tag docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }} docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:latest
+          docker push docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:latest
