@@ -120,6 +120,16 @@ jobs:
           severity: CRITICAL,HIGH
           exit-code: '0'
           format: table
+          output: trivy-report.txt
+
+      - name: Upload Trivy report artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-report
+          path: trivy-report.txt
+          retention-days: 14
+          if-no-files-found: ignore
 
       - name: Push container image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
