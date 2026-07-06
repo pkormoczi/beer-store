@@ -35,10 +35,10 @@ jobs:
         run: ./mvnw -Dmaven.test.skip=true clean install
 
       - name: Unit tests (Surefire) with coverage
-        run: ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent test
+        run: ./mvnw -pl beer-store-application org.jacoco:jacoco-maven-plugin:prepare-agent test
 
       - name: Integration tests (Failsafe) with coverage
-        run: ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent verify -Dsurefire.skip=true
+        run: ./mvnw -pl beer-store-application org.jacoco:jacoco-maven-plugin:prepare-agent verify -Dsurefire.skip=true
 
       - name: Upload test result reports
         if: always()
@@ -52,7 +52,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Jacoco coverage report
-        run: ./mvnw org.jacoco:jacoco-maven-plugin:report
+        run: ./mvnw -pl beer-store-application org.jacoco:jacoco-maven-plugin:report
 
       - name: Upload jacoco coverage report
         if: always()
@@ -115,6 +115,7 @@ jobs:
           DOCKER_PUBLISH_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
         run: >
           ./mvnw -pl beer-store-application spring-boot:build-image
+          -Dmaven.test.skip=true
           -Dspring-boot.build-image.imageName=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
           -Dspring-boot.build-image.publish=true
 
