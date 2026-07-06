@@ -132,7 +132,7 @@ jobs:
               echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Trivy scan report</title></head><body><pre>'
               sed -e 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' trivy-report.txt
               echo '</pre></body></html>'
-            } > allure-report/trivy-report.html
+            } | sudo tee allure-report/trivy-report.html > /dev/null
           fi
 
       - name: Package Allure + Trivy reports for GitHub Pages
