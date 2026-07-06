@@ -7,25 +7,12 @@ import dev.ronin.demo.beerstore.domain.customer.value.Address;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.cache.test.autoconfigure.AutoConfigureCache;
-import org.springframework.boot.data.jpa.test.autoconfigure.AutoConfigureDataJpa;
-import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
-import org.springframework.boot.jpa.test.autoconfigure.AutoConfigureTestEntityManager;
-import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.BDDAssertions.then;
 
-//@DataJpaTest
 @Transactional
-@AutoConfigureCache
-@AutoConfigureDataJpa
-@AutoConfigureTestDatabase
-@AutoConfigureTestEntityManager
 class CustomerDataRepositoryIT extends IntegrationTest {
-    @Autowired
-    private TestEntityManager entityManager;
-
     @Autowired
     private CustomerRepository customerRepository;
 
@@ -43,7 +30,7 @@ class CustomerDataRepositoryIT extends IntegrationTest {
     @DisplayName("When searching a customer by it's name we should have a result")
     void whenSearchByName() {
         final CustomerData testCustomerData = getTestCustomer();
-        entityManager.persist(testCustomerData);
+        customerRepository.saveAndFlush(testCustomerData);
 
         final CustomerData result = customerRepository.findFirstByFirstNameContainingIgnoreCase("Peter");
 
