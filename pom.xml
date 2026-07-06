@@ -29,8 +29,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <revision>DEVELOP-SNAPSHOT</revision>
-        <sonar.jacoco.reportPath>${project.build.directory}/target/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
         <sonar.surefire.reportsPath>${project.build.directory}/surefire-reports</sonar.surefire.reportsPath>
         <version.flatten.maven.plugin>1.2.4</version.flatten.maven.plugin>
         <version.jackson-databind-nullable>0.2.10</version.jackson-databind-nullable>
