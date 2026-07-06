@@ -1,0 +1,5 @@
+<aspectj>
+    <weaver>
+        <exclude within="org.springframework.boot.jdbc..*"/>
+    </weaver>
+</aspectj>
