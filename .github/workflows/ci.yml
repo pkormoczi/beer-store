@@ -111,23 +111,29 @@ jobs:
           image-ref: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
           severity: CRITICAL,HIGH
           exit-code: '0'
-          format: template
-          template: "@${{ env.HOME }}/.local/bin/trivy-bin/contrib/html.tpl"
-          output: trivy-report.html
+          format: table
+          output: trivy-report.txt
 
       - name: Upload Trivy report artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: trivy-report
-          path: trivy-report.html
+          path: trivy-report.txt
           retention-days: 14
           if-no-files-found: ignore
 
       - name: Add Trivy report to the Pages site
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         continue-on-error: true
-        run: cp trivy-report.html allure-report/trivy-report.html
+        run: |
+          if [ -f trivy-report.txt ]; then
+            {
+              echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Trivy scan report</title></head><body><pre>'
+              sed -e 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' trivy-report.txt
+              echo '</pre></body></html>'
+            } > allure-report/trivy-report.html
+          fi
 
       - name: Package Allure + Trivy reports for GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
