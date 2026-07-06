@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore;
 
+import dev.ronin.demo.beerstore.adapter.out.persistence.CustomerJpaRepository;
 import dev.ronin.demo.beerstore.base.IntegrationTest;
 import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
-import dev.ronin.demo.beerstore.domain.customer.repository.CustomerRepository;
 import dev.ronin.demo.beerstore.domain.customer.value.Address;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 @Transactional
 class CustomerDataRepositoryIT extends IntegrationTest {
     @Autowired
-    private CustomerRepository customerRepository;
+    private CustomerJpaRepository customerRepository;
 
     @Test
     @DisplayName("When saving a customer it should get an id")

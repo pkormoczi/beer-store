@@ -1,5 +1,7 @@
 package dev.ronin.demo.beerstore.domain.achitecture;
 
+import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore.domain",
         importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
@@ -42,11 +45,16 @@ class DomainArchitectureTest {
                     .should().haveSimpleNameEndingWith("Data")
                     .because("JPA Entities are only stupid data bags!");
 
+    private static final DescribedPredicate<JavaClass> ANNOTATED_WITH_SERVICE_OR_NESTED_IN_ONE =
+            DescribedPredicate.describe("annotated with @Service, or a nested class of one",
+                    javaClass -> javaClass.isAnnotatedWith(Service.class)
+                            || javaClass.getEnclosingClass().map(enclosing -> enclosing.isAnnotatedWith(Service.class)).orElse(false));
+
     @ArchTest
     public static final ArchRule repositoriesShouldHaveOnlyAccessedByServices =
             classes().that().areAnnotatedWith(Repository.class)
                     .should().onlyBeAccessed()
-                    .byClassesThat().areAnnotatedWith(Service.class);
+                    .byClassesThat(ANNOTATED_WITH_SERVICE_OR_NESTED_IN_ONE);
 
     @ArchTest
     public static final ArchRule servicesShouldBePublic =
@@ -62,4 +70,10 @@ class DomainArchitectureTest {
     public static final ArchRule repositoriesShouldBeAnnotatedWithRepository =
             classes().that().haveNameMatching(REPOSITORY_POSTFIX)
                     .should().beAnnotatedWith(Repository.class);
+
+    @ArchTest
+    public static final ArchRule domainShouldNotDependOnSpringData =
+            noClasses().that().resideInAPackage("..domain..")
+                    .should().dependOnClassesThat().resideInAPackage("org.springframework.data..")
+                    .because("the domain should only know its own repository ports, not the persistence technology");
 }

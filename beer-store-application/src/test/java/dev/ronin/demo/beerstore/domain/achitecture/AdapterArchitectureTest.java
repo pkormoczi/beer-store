@@ -5,6 +5,7 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +19,10 @@ class AdapterArchitectureTest {
     private static final String REST_PACKAGE = "..adapter.in.rest..";
     private static final String MAPPER_PACKAGE = "..adapter.in.mapper..";
     private static final String ADAPTER_IN_PACKAGE = "..adapter.in..";
+    private static final String PERSISTENCE_PACKAGE = "..adapter.out.persistence..";
     private static final String CONTROLLER_POSTFIX = "Controller";
     private static final String ADAPTER_POSTFIX = "Adapter";
+    private static final String PERSISTENCE_ADAPTER_POSTFIX = "PersistenceAdapter";
     private static final String MAPPER_POSTFIX = "Mapper";
 
     @ArchTest
@@ -47,16 +50,28 @@ class AdapterArchitectureTest {
     @ArchTest
     public static final ArchRule adaptersShouldBeAnnotatedWithService =
             classes().that().haveSimpleNameEndingWith(ADAPTER_POSTFIX)
+                    .and().haveSimpleNameNotEndingWith(PERSISTENCE_ADAPTER_POSTFIX)
                     .should().beAnnotatedWith(Service.class);
 
     @ArchTest
     public static final ArchRule adaptersShouldBeInAdapterInPackage =
             classes().that().haveSimpleNameEndingWith(ADAPTER_POSTFIX)
+                    .and().haveSimpleNameNotEndingWith(PERSISTENCE_ADAPTER_POSTFIX)
                     .should().resideInAPackage(ADAPTER_IN_PACKAGE);
 
     @ArchTest
     public static final ArchRule mappersShouldBeInMapperPackage =
             classes().that().haveSimpleNameEndingWith(MAPPER_POSTFIX)
                     .should().resideInAPackage(MAPPER_PACKAGE);
+
+    @ArchTest
+    public static final ArchRule persistenceAdaptersShouldBeAnnotatedWithRepository =
+            classes().that().haveSimpleNameEndingWith(PERSISTENCE_ADAPTER_POSTFIX)
+                    .should().beAnnotatedWith(Repository.class);
+
+    @ArchTest
+    public static final ArchRule persistenceAdaptersShouldBeInPersistencePackage =
+            classes().that().haveSimpleNameEndingWith(PERSISTENCE_ADAPTER_POSTFIX)
+                    .should().resideInAPackage(PERSISTENCE_PACKAGE);
 
 }
