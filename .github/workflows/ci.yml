@@ -111,36 +111,43 @@ jobs:
           image-ref: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
           severity: CRITICAL,HIGH
           exit-code: '0'
-          format: table
-          output: trivy-report.txt
+          format: json
+          output: trivy-report.json
+
+      - name: Render Trivy HTML report
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        continue-on-error: true
+        run: |
+          if [ -f trivy-report.json ]; then
+            python3 .github/scripts/render_trivy_report.py trivy-report.json trivy-report.html
+          fi
 
       - name: Upload Trivy report artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: trivy-report
-          path: trivy-report.txt
+          path: trivy-report.html
           retention-days: 14
           if-no-files-found: ignore
 
-      - name: Add Trivy report to the Pages site
+      - name: Assemble GitHub Pages site
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         continue-on-error: true
         run: |
-          if [ -f trivy-report.txt ]; then
-            {
-              echo '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Trivy scan report</title></head><body><pre>'
-              sed -e 's/&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' trivy-report.txt
-              echo '</pre></body></html>'
-            } | sudo tee allure-report/trivy-report.html > /dev/null
+          mkdir -p pages-site/allure pages-site/trivy
+          cp -r allure-report/. pages-site/allure/
+          if [ -f trivy-report.html ]; then
+            cp trivy-report.html pages-site/trivy/index.html
           fi
+          cp .github/pages/index.html pages-site/index.html
 
-      - name: Package Allure + Trivy reports for GitHub Pages
+      - name: Package reports for GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         continue-on-error: true
         uses: actions/upload-pages-artifact@v5
         with:
-          path: allure-report
+          path: pages-site
 
       - name: Deploy reports to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'

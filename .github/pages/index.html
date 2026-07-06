@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>beer-store CI reports</title>
+<style>
+  body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 3rem 2rem; background: #f8fafc; color: #1e293b; }
+  h1 { font-size: 1.75rem; margin: 0 0 0.5rem; }
+  .subtitle { color: #64748b; margin: 0 0 2rem; }
+  .cards { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+  .card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; width: 260px; text-decoration: none; color: inherit; transition: transform 0.15s, box-shadow 0.15s; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .card h2 { margin: 0 0 0.5rem; font-size: 1.2rem; }
+  .card p { margin: 0; color: #64748b; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+  <h1>beer-store CI reports</h1>
+  <p class="subtitle">Generated from the latest master build</p>
+  <div class="cards">
+    <a class="card" href="allure/">
+      <h2>Allure test report</h2>
+      <p>Unit, integration and contract test results with coverage.</p>
+    </a>
+    <a class="card" href="trivy/">
+      <h2>Trivy scan report</h2>
+      <p>Container image vulnerability scan (CRITICAL/HIGH).</p>
+    </a>
+  </div>
+</body>
+</html>
