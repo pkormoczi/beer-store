@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Build & install beer-store-contract
+        run: ./mvnw -pl beer-store-contract clean install
+
+      - name: Build full reactor (skip tests)
+        run: ./mvnw -Dmaven.test.skip=true clean install
+
+      - name: Test with coverage (unit + integration, jacoco)
+        run: ./mvnw org.jacoco:jacoco-maven-plugin:prepare-agent verify org.jacoco:jacoco-maven-plugin:report
+
+      - name: SonarCloud analysis
+        if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: >
+          ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+          -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+
+      - name: Log in to Docker Hub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build (and publish on master) container image
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          DOCKER_PUBLISH_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PUBLISH_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: >
+          ./mvnw -pl beer-store-application spring-boot:build-image
+          -Dspring-boot.build-image.imageName=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store-application:${{ github.sha }}
+          -Dspring-boot.build-image.publish=true
+
+      - name: Tag and push latest
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          docker tag docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store-application:${{ github.sha }} docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store-application:latest
+          docker push docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store-application:latest
