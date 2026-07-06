@@ -105,19 +105,25 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build (and publish on master) container image
+      - name: Build container image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        env:
-          DOCKER_PUBLISH_REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKER_PUBLISH_REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
         run: >
           ./mvnw -pl beer-store-application spring-boot:build-image
           -Dmaven.test.skip=true
           -Dspring-boot.build-image.imageName=docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
-          -Dspring-boot.build-image.publish=true
 
-      - name: Tag and push latest
+      - name: Scan image with Trivy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
+          severity: CRITICAL,HIGH
+          exit-code: '0'
+          format: table
+
+      - name: Push container image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: |
+          docker push docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
           docker tag docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }} docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:latest
           docker push docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:latest
