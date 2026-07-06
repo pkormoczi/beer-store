@@ -76,17 +76,6 @@ jobs:
           retention-days: 14
           if-no-files-found: ignore
 
-      - name: Package Allure report for GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: allure-report
-
-      - name: Deploy Allure report to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        continue-on-error: true
-        uses: actions/deploy-pages@v5
-
       - name: SonarCloud analysis
         if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
         env:
@@ -119,17 +108,35 @@ jobs:
           image-ref: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/beer-store:${{ github.sha }}
           severity: CRITICAL,HIGH
           exit-code: '0'
-          format: table
-          output: trivy-report.txt
+          format: template
+          template: "@$HOME/.local/bin/trivy-bin/contrib/html.tpl"
+          output: trivy-report.html
 
       - name: Upload Trivy report artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v4
         with:
           name: trivy-report
-          path: trivy-report.txt
+          path: trivy-report.html
           retention-days: 14
           if-no-files-found: ignore
+
+      - name: Add Trivy report to the Pages site
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        continue-on-error: true
+        run: cp trivy-report.html allure-report/trivy-report.html
+
+      - name: Package Allure + Trivy reports for GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        continue-on-error: true
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: allure-report
+
+      - name: Deploy reports to GitHub Pages
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        continue-on-error: true
+        uses: actions/deploy-pages@v5
 
       - name: Push container image
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
