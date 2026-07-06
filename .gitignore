@@ -123,3 +123,6 @@ buildNumber.properties
 ### AspectJ ###
 ajcore.*.txt
 .flattened-pom.xml
+
+### Trivy ###
+trivy-report.*
