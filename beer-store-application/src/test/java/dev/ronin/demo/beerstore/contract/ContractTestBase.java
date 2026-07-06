@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.contract;
 
+import dev.ronin.demo.beerstore.adapter.in.rest.CustomerController;
 import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.domain.customer.repository.CustomerRepository;
-import dev.ronin.demo.beerstore.infrastructure.controller.CustomerController;
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;

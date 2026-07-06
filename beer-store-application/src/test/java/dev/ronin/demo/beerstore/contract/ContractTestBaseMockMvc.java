@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.contract;
 
+import dev.ronin.demo.beerstore.adapter.in.rest.CustomerController;
 import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
 import dev.ronin.demo.beerstore.domain.customer.repository.CustomerRepository;
-import dev.ronin.demo.beerstore.infrastructure.controller.CustomerController;
 import io.qameta.allure.Step;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeAll;
@@ -10,8 +10,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;

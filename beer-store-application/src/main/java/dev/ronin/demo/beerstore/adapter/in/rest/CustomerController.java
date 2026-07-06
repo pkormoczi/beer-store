@@ -1,6 +1,6 @@
-package dev.ronin.demo.beerstore.infrastructure.controller;
+package dev.ronin.demo.beerstore.adapter.in.rest;
 
-import dev.ronin.demo.beerstore.infrastructure.adapter.CustomersAdapter;
+import dev.ronin.demo.beerstore.adapter.in.CustomersAdapter;
 import dev.ronin.demo.beerstore.infrastructure.api.CustomerApi;
 import dev.ronin.demo.beerstore.infrastructure.api.model.CustomerModel;
 import org.springframework.http.ResponseEntity;

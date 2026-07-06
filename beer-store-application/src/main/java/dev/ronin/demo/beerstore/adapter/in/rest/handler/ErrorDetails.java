@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.data;
+package dev.ronin.demo.beerstore.adapter.in.rest.handler;
 
 import lombok.Data;
 

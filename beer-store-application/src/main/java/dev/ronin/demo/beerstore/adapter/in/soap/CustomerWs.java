@@ -1,8 +1,8 @@
-package dev.ronin.demo.beerstore.infrastructure.endpoint;
+package dev.ronin.demo.beerstore.adapter.in.soap;
 
+import dev.ronin.demo.beerstore.adapter.in.CustomersAdapter;
 import dev.ronin.demo.beerstore.contract.customerdata.GetCustomerRequest;
 import dev.ronin.demo.beerstore.contract.customerdata.GetCustomerResponse;
-import dev.ronin.demo.beerstore.infrastructure.adapter.CustomersAdapter;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;

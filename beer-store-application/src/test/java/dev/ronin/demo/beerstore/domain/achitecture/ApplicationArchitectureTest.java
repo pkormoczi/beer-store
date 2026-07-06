@@ -4,6 +4,8 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import dev.ronin.demo.beerstore.BeerStoreApplication;
+import dev.ronin.demo.beerstore.infrastructure.logging.PropertiesLogger;
 
 import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 
@@ -23,7 +25,10 @@ public class ApplicationArchitectureTest {
                     .layer("Adapter").definedBy("..adapter..")
                     .layer("Infrastructure").definedBy("..infrastructure..")
                     .whereLayer("Domain").mayOnlyBeAccessedByLayers("Adapter", "Infrastructure")
-                    .whereLayer("Adapter").mayOnlyBeAccessedByLayers("Infrastructure");
-//                    .whereLayer("Infrastructure").mayOnlyBeAccessedByLayers("Adapter");
+                    .whereLayer("Adapter").mayOnlyBeAccessedByLayers("Infrastructure")
+                    .whereLayer("Infrastructure").mayOnlyBeAccessedByLayers("Adapter")
+                    // The composition root wires a cross-cutting listener directly; it sits
+                    // outside all three layers by design and is not itself a layering concern.
+                    .ignoreDependency(BeerStoreApplication.class, PropertiesLogger.class);
 
 }

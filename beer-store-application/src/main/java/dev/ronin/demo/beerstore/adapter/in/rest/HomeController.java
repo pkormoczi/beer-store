@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.controller;
+package dev.ronin.demo.beerstore.adapter.in.rest;
 
 
 import dev.ronin.demo.beerstore.infrastructure.api.HomeApi;

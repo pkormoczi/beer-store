@@ -1,8 +1,8 @@
-package dev.ronin.demo.beerstore.infrastructure.adapter;
+package dev.ronin.demo.beerstore.adapter.in;
 
+import dev.ronin.demo.beerstore.adapter.in.mapper.CustomerMapper;
 import dev.ronin.demo.beerstore.contract.customerdata.Customer;
 import dev.ronin.demo.beerstore.domain.customer.Customers;
-import dev.ronin.demo.beerstore.infrastructure.adapter.mapper.CustomerMapper;
 import dev.ronin.demo.beerstore.infrastructure.api.model.CustomerModel;
 import org.springframework.stereotype.Service;
 

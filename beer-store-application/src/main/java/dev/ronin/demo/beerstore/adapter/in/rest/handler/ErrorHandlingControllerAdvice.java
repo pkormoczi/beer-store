@@ -1,7 +1,6 @@
-package dev.ronin.demo.beerstore.infrastructure.controller.handler;
+package dev.ronin.demo.beerstore.adapter.in.rest.handler;
 
 import dev.ronin.demo.beerstore.infrastructure.security.AuthorizationException;
-import dev.ronin.demo.beerstore.infrastructure.data.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
