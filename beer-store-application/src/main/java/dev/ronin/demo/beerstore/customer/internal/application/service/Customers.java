@@ -1,5 +1,6 @@
 package dev.ronin.demo.beerstore.customer.internal.application.service;
 
+import dev.ronin.demo.beerstore.customer.api.ActivateCustomerCommand;
 import dev.ronin.demo.beerstore.customer.api.CustomerNotFoundException;
 import dev.ronin.demo.beerstore.customer.api.CustomerView;
 import dev.ronin.demo.beerstore.customer.api.DeleteCustomerCommand;
@@ -7,6 +8,7 @@ import dev.ronin.demo.beerstore.customer.api.FindCustomerByNameQuery;
 import dev.ronin.demo.beerstore.customer.api.GetCustomerQuery;
 import dev.ronin.demo.beerstore.customer.api.ManageCustomersUseCase;
 import dev.ronin.demo.beerstore.customer.api.RegisterCustomerCommand;
+import dev.ronin.demo.beerstore.customer.api.SuspendCustomerCommand;
 import dev.ronin.demo.beerstore.customer.api.UpdateCustomerCommand;
 import dev.ronin.demo.beerstore.customer.internal.application.port.out.CustomerRepository;
 import dev.ronin.demo.beerstore.customer.internal.domain.model.Customer;
@@ -28,7 +30,8 @@ public class Customers implements ManageCustomersUseCase {
     @Override
     @Transactional
     public CustomerView registerCustomer(RegisterCustomerCommand command) {
-        Customer saved = customerRepository.save(new Customer(null, command.firstName(), command.lastName(), command.address()));
+        Customer saved = customerRepository.save(
+                Customer.register(command.firstName(), command.lastName(), command.address()));
         return toView(saved);
     }
 
@@ -53,10 +56,9 @@ public class Customers implements ManageCustomersUseCase {
     @Override
     @Transactional
     public CustomerView updateCustomer(UpdateCustomerCommand command) {
-        findOrThrow(command.id());
-        Customer saved = customerRepository.save(
-                new Customer(command.id(), command.firstName(), command.lastName(), command.address()));
-        return toView(saved);
+        Customer updated = findOrThrow(command.id())
+                .updateProfile(command.firstName(), command.lastName(), command.address());
+        return toView(customerRepository.save(updated));
     }
 
     @Override
@@ -66,11 +68,26 @@ public class Customers implements ManageCustomersUseCase {
         customerRepository.deleteById(command.id());
     }
 
+    @Override
+    @Transactional
+    public CustomerView suspendCustomer(SuspendCustomerCommand command) {
+        Customer suspended = findOrThrow(command.id()).suspend();
+        return toView(customerRepository.save(suspended));
+    }
+
+    @Override
+    @Transactional
+    public CustomerView activateCustomer(ActivateCustomerCommand command) {
+        Customer activated = findOrThrow(command.id()).activate();
+        return toView(customerRepository.save(activated));
+    }
+
     private Customer findOrThrow(Long id) {
         return customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
     }
 
     private static CustomerView toView(Customer customer) {
-        return new CustomerView(customer.id(), customer.firstName(), customer.lastName(), customer.address());
+        return new CustomerView(customer.id(), customer.firstName(), customer.lastName(),
+                customer.address(), customer.status());
     }
 }

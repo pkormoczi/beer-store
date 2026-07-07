@@ -1,4 +1,6 @@
 package dev.ronin.demo.beerstore.catalog.api;
 
-public record BeerView(Long id, String name, BeerStyle beerStyle) {
+import dev.ronin.demo.beerstore.shared.kernel.Money;
+
+public record BeerView(Long id, String name, BeerStyle beerStyle, Money price) {
 }

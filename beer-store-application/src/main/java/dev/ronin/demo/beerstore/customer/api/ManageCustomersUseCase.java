@@ -22,4 +22,8 @@ public interface ManageCustomersUseCase {
     CustomerView updateCustomer(UpdateCustomerCommand command);
 
     void deleteCustomer(DeleteCustomerCommand command);
+
+    CustomerView suspendCustomer(SuspendCustomerCommand command);
+
+    CustomerView activateCustomer(ActivateCustomerCommand command);
 }

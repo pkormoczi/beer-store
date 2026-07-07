@@ -5,5 +5,5 @@ package dev.ronin.demo.beerstore.customer.api;
  * from {@code internal.domain.model.Customer} so a refactor of the internal aggregate never
  * ripples into callers of the module's API.
  */
-public record CustomerView(Long id, String firstName, String lastName, Address address) {
+public record CustomerView(Long id, String firstName, String lastName, Address address, CustomerStatus status) {
 }

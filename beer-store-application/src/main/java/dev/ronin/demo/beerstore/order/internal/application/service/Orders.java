@@ -2,24 +2,27 @@ package dev.ronin.demo.beerstore.order.internal.application.service;
 
 import dev.ronin.demo.beerstore.order.api.CancelOrderCommand;
 import dev.ronin.demo.beerstore.order.api.GetOrderQuery;
-import dev.ronin.demo.beerstore.order.api.IllegalOrderStateException;
 import dev.ronin.demo.beerstore.order.api.ManageOrdersUseCase;
 import dev.ronin.demo.beerstore.order.api.OrderNotFoundException;
-import dev.ronin.demo.beerstore.order.api.OrderStatus;
 import dev.ronin.demo.beerstore.order.api.OrderView;
 import dev.ronin.demo.beerstore.order.api.PlaceOrderCommand;
 import dev.ronin.demo.beerstore.order.api.UnknownBeerException;
 import dev.ronin.demo.beerstore.order.api.UpdateOrderStatusCommand;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.BeerLookup;
+import dev.ronin.demo.beerstore.order.internal.application.port.out.BeerSnapshot;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.CustomerLookup;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.OrderRepository;
 import dev.ronin.demo.beerstore.order.internal.domain.event.OrderPlaced;
 import dev.ronin.demo.beerstore.order.internal.domain.model.Order;
+import dev.ronin.demo.beerstore.order.internal.domain.model.OrderLine;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class Orders implements ManageOrdersUseCase {
@@ -40,16 +43,23 @@ public class Orders implements ManageOrdersUseCase {
     @Override
     @Transactional
     public Long placeOrder(PlaceOrderCommand command) {
-        if (command.beerIds() == null || command.beerIds().isEmpty()) {
-            throw new IllegalArgumentException("An order requires at least one beer");
-        }
         customerLookup.assertCustomerExists(command.customerId());
-        List<Long> existingBeerIds = beerLookup.findExistingIds(command.beerIds());
-        if (existingBeerIds.size() != command.beerIds().size()) {
+
+        Map<Long, Long> quantitiesByBeerId = command.beerIds().stream()
+                .collect(Collectors.groupingBy(id -> id, Collectors.counting()));
+
+        List<BeerSnapshot> snapshots = beerLookup.findExisting(List.copyOf(quantitiesByBeerId.keySet()));
+        Set<Long> foundIds = snapshots.stream().map(BeerSnapshot::beerId).collect(Collectors.toSet());
+        if (!foundIds.containsAll(quantitiesByBeerId.keySet())) {
             throw new UnknownBeerException(command.beerIds());
         }
-        Order order = new Order(null, OrderStatus.NEW, command.customerId(), command.beerIds());
-        Order saved = orderRepository.save(order);
+
+        List<OrderLine> lines = snapshots.stream()
+                .map(snapshot -> new OrderLine(snapshot.beerId(), snapshot.name(), snapshot.price(),
+                        quantitiesByBeerId.get(snapshot.beerId()).intValue()))
+                .toList();
+
+        Order saved = orderRepository.save(Order.place(command.customerId(), lines));
         eventPublisher.publishEvent(new OrderPlaced(saved.id(), saved.customerId()));
         return saved.id();
     }
@@ -69,18 +79,15 @@ public class Orders implements ManageOrdersUseCase {
     @Override
     @Transactional
     public OrderView updateOrderStatus(UpdateOrderStatusCommand command) {
-        Order existing = findOrThrow(command.id());
-        if (!existing.orderStatus().canTransitionTo(command.newStatus())) {
-            throw new IllegalOrderStateException(existing.orderStatus(), command.newStatus());
-        }
-        Order updated = new Order(existing.id(), command.newStatus(), existing.customerId(), existing.beers());
+        Order updated = findOrThrow(command.id()).transitionTo(command.newStatus());
         return toView(orderRepository.save(updated));
     }
 
     @Override
     @Transactional
     public void cancelOrder(CancelOrderCommand command) {
-        updateOrderStatus(new UpdateOrderStatusCommand(command.id(), OrderStatus.CANCELLED));
+        Order cancelled = findOrThrow(command.id()).cancel();
+        orderRepository.save(cancelled);
     }
 
     private Order findOrThrow(Long id) {
@@ -88,6 +95,6 @@ public class Orders implements ManageOrdersUseCase {
     }
 
     private static OrderView toView(Order order) {
-        return new OrderView(order.id(), order.orderStatus(), order.customerId(), order.beers());
+        return new OrderView(order.id(), order.orderStatus(), order.customerId(), order.beerIds());
     }
 }

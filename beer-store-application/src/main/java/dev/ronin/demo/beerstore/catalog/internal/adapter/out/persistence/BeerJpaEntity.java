@@ -4,6 +4,8 @@ import dev.ronin.demo.beerstore.catalog.api.BeerStyle;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder
@@ -20,4 +22,6 @@ public class BeerJpaEntity {
 
     @Enumerated(EnumType.STRING)
     private BeerStyle beerStyle;
+
+    private BigDecimal priceAmount;
 }

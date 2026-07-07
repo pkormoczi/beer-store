@@ -29,11 +29,11 @@ public class Beers implements ManageBeersUseCase {
     @Override
     @Transactional
     public BeerView createBeer(CreateBeerCommand command) {
-        Beer saved = beerRepository.save(new Beer(null, command.name(), command.beerStyle()));
+        Beer saved = beerRepository.save(Beer.create(command.name(), command.beerStyle(), command.price()));
         return toView(saved);
     }
 
     private static BeerView toView(Beer beer) {
-        return new BeerView(beer.id(), beer.name(), beer.beerStyle());
+        return new BeerView(beer.id(), beer.name(), beer.beerStyle(), beer.price());
     }
 }

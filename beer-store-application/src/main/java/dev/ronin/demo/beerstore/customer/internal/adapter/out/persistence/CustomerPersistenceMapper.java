@@ -19,6 +19,6 @@ public interface CustomerPersistenceMapper {
             return null;
         }
         Address address = new Address(data.getCountry(), data.getZip(), data.getCity(), data.getStreetAddress());
-        return new Customer(data.getId(), data.getFirstName(), data.getLastName(), address);
+        return new Customer(data.getId(), data.getFirstName(), data.getLastName(), address, data.getStatus());
     }
 }

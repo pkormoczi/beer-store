@@ -1,5 +1,6 @@
 package dev.ronin.demo.beerstore.customer.internal.adapter.out.persistence;
 
+import dev.ronin.demo.beerstore.customer.api.CustomerStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,4 +27,8 @@ public class CustomerJpaEntity {
     private String city;
 
     private String streetAddress;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private CustomerStatus status = CustomerStatus.ACTIVE;
 }

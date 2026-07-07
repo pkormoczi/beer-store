@@ -25,10 +25,8 @@ public class OrderJpaEntity {
 
     private Long customerId;
 
-    @ElementCollection
-    @CollectionTable(name = "beer_order_beers", joinColumns = @JoinColumn(name = "order_id"))
-    @Column(name = "beer_id")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     @Singular
-    private List<Long> beers;
+    private List<OrderLineJpaEntity> lines;
 
 }
