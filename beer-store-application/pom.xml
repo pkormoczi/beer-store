@@ -14,7 +14,7 @@
     <properties>
         <argLine></argLine>
         <!-- Fallback when Jacoco isn't active. -->
-        <package.infrastructure>dev.ronin.demo.beerstore.infrastructure</package.infrastructure>
+        <package.shared>dev.ronin.demo.beerstore.shared</package.shared>
         <version.allure>2.35.3</version.allure>
         <version.apache.cxf.utils>4.1.0</version.apache.cxf.utils>
         <version.archunit>1.4.2</version.archunit>
@@ -242,6 +242,28 @@
             <artifactId>testcontainers-postgresql</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.modulith</groupId>
+            <artifactId>spring-modulith-docs</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -332,6 +354,7 @@
                                     <xsd>
                                         ${project.build.directory}/contract/dev/ronin/demo/beerstore/contract/Customer.xsd
                                     </xsd>
+                                    <packagename>${package.shared}.contract.customerdata</packagename>
                                     <extension>true</extension>
                                     <extensionArgs>
                                         <extensionArg>-Xvalue-constructor</extensionArg>
@@ -436,8 +459,8 @@
                         </goals>
                         <configuration>
                             <inputSpec>dev/ronin/demo/beerstore/contract/beer-store-contract.yaml</inputSpec>
-                            <apiPackage>${package.infrastructure}.api</apiPackage>
-                            <modelPackage>${package.infrastructure}.api.model</modelPackage>
+                            <apiPackage>${package.shared}.api</apiPackage>
+                            <modelPackage>${package.shared}.api.model</modelPackage>
                             <generatorName>spring</generatorName>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <modelNameSuffix>Model</modelNameSuffix>

@@ -1,9 +1,9 @@
 package dev.ronin.demo.beerstore.contract;
 
-import dev.ronin.demo.beerstore.adapter.in.mapper.CustomerMapper;
-import dev.ronin.demo.beerstore.adapter.in.mapper.CustomerMapperImpl;
-import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
-import dev.ronin.demo.beerstore.infrastructure.api.model.CustomerModel;
+import dev.ronin.demo.beerstore.customer.Customer;
+import dev.ronin.demo.beerstore.customer.web.CustomerMapper;
+import dev.ronin.demo.beerstore.customer.web.CustomerMapperImpl;
+import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
 import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -20,8 +20,8 @@ class ContractDataReader {
     private final CustomerMapper customerMapper = new CustomerMapperImpl();
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    public CustomerData readCustomerData() {
-        return customerMapper.toData(read("customer/customer", CustomerModel.class));
+    public Customer readCustomerData() {
+        return customerMapper.toDomain(read("customer/customer", CustomerModel.class));
     }
 
     /**

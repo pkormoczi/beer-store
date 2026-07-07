@@ -1,0 +1,101 @@
+package dev.ronin.demo.beerstore.architecture;
+
+import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchTest;
+import com.tngtech.archunit.lang.ArchRule;
+import jakarta.persistence.Entity;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+
+@AnalyzeClasses(packages = "dev.ronin.demo.beerstore",
+        importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
+@SuppressWarnings("squid:S2187")
+class DomainArchitectureTest {
+
+    public static final String ENTITY_POSTFIX = "Entity";
+    private static final String REPOSITORY_POSTFIX = "Repository";
+    public static final String APPLICATION_PACKAGE = "..application..";
+    public static final String PERSISTENCE_PACKAGE = "..persistence..";
+
+    @ArchTest
+    public static final ArchRule repositoryPortsShouldBeInApplicationPackage =
+            classes().that().areInterfaces().and().areAnnotatedWith(Repository.class)
+                    .should().resideInAPackage(APPLICATION_PACKAGE);
+
+    @ArchTest
+    public static final ArchRule entitiesShouldBeInPersistencePackage =
+            classes().that().areAnnotatedWith(Entity.class)
+                    .should().resideInAPackage(PERSISTENCE_PACKAGE);
+
+    @ArchTest
+    public static final ArchRule entitiesShouldNotBeNamedEntity =
+            classes().that().areAnnotatedWith(Entity.class)
+                    .should().haveSimpleNameNotEndingWith(ENTITY_POSTFIX)
+                    .because("JPA Entities are only stupid data bags!");
+
+    @ArchTest
+    public static final ArchRule entitiesShouldBeNamedData =
+            classes().that().areAnnotatedWith(Entity.class)
+                    .should().haveSimpleNameEndingWith("Data")
+                    .because("JPA Entities are only stupid data bags!");
+
+    private static final DescribedPredicate<JavaClass> ANNOTATED_WITH_SERVICE_OR_NESTED_IN_ONE =
+            DescribedPredicate.describe("annotated with @Service, or a nested class of one",
+                    javaClass -> javaClass.isAnnotatedWith(Service.class)
+                            || javaClass.getEnclosingClass().map(enclosing -> enclosing.isAnnotatedWith(Service.class)).orElse(false));
+
+    @ArchTest
+    public static final ArchRule repositoriesShouldHaveOnlyAccessedByServices =
+            classes().that().areInterfaces().and().areAnnotatedWith(Repository.class)
+                    .should().onlyBeAccessed()
+                    .byClassesThat(ANNOTATED_WITH_SERVICE_OR_NESTED_IN_ONE);
+
+    @ArchTest
+    public static final ArchRule servicesShouldBePublic =
+            classes().that().areAnnotatedWith(Service.class)
+                    .should().bePublic();
+
+    @ArchTest
+    public static final ArchRule repositoriesShouldBeNamedRepository =
+            classes().that().areInterfaces().and().areAnnotatedWith(Repository.class)
+                    .should().haveSimpleNameEndingWith(REPOSITORY_POSTFIX);
+
+    @ArchTest
+    public static final ArchRule repositoriesShouldBeAnnotatedWithRepository =
+            classes().that().haveNameMatching(REPOSITORY_POSTFIX)
+                    .should().beAnnotatedWith(Repository.class);
+
+    @ArchTest
+    public static final ArchRule domainAndApplicationShouldNotDependOnPersistenceTechnology =
+            noClasses().that().resideInAPackage("dev.ronin.demo.beerstore.customer")
+                    .or().resideInAPackage("dev.ronin.demo.beerstore.order")
+                    .or().resideInAPackage(APPLICATION_PACKAGE)
+                    .should().dependOnClassesThat().resideInAnyPackage("org.springframework.data..", "jakarta.persistence..")
+                    .because("the domain model and application services should only know their own repository "
+                            + "ports, not the persistence technology - only the persistence subpackage may depend on JPA/Spring Data");
+
+    private static final String USE_CASE_POSTFIX = "UseCase";
+
+    private static final DescribedPredicate<JavaClass> INBOUND_PORT_INTERFACE =
+            DescribedPredicate.describe("an interface implemented by a @Service aggregate root",
+                    javaClass -> javaClass.isInterface()
+                            && javaClass.getSubclasses().stream().anyMatch(sub -> sub.isAnnotatedWith(Service.class)));
+
+    @ArchTest
+    public static final ArchRule useCasesShouldBeNamedUseCase =
+            classes().that(INBOUND_PORT_INTERFACE)
+                    .should().haveSimpleNameEndingWith(USE_CASE_POSTFIX)
+                    .because("inbound (driving) ports mirror the outbound *Repository ports and should be named consistently");
+
+    @ArchTest
+    public static final ArchRule useCasesShouldBeInterfacesResidingInModuleRoot =
+            classes().that().haveSimpleNameEndingWith(USE_CASE_POSTFIX)
+                    .should().resideInAnyPackage("dev.ronin.demo.beerstore.customer", "dev.ronin.demo.beerstore.order")
+                    .andShould().beInterfaces();
+}

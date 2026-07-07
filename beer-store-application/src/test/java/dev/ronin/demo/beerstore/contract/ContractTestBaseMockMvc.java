@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.contract;
 
-import dev.ronin.demo.beerstore.adapter.in.rest.CustomerController;
-import dev.ronin.demo.beerstore.adapter.out.persistence.CustomerJpaRepository;
-import dev.ronin.demo.beerstore.domain.customer.data.CustomerData;
+import dev.ronin.demo.beerstore.customer.Customer;
+import dev.ronin.demo.beerstore.customer.ManageCustomersUseCase;
+import dev.ronin.demo.beerstore.customer.web.CustomerController;
 import io.qameta.allure.Step;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,7 +31,7 @@ public class ContractTestBaseMockMvc {
     private CustomerController customerController;
 
     @Autowired
-    private CustomerJpaRepository customerRepository;
+    private ManageCustomersUseCase manageCustomersUseCase;
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -40,12 +40,11 @@ public class ContractTestBaseMockMvc {
     @Transactional
     @Step("Seed customer test data and configure RestAssuredMockMvc")
     void setup() {
-        final CustomerData customerData = new ContractDataReader().readCustomerData();
-        customerData.setId(null);
+        final Customer customer = new ContractDataReader().readCustomerData();
         // The GET /customers/1 contract pins the id; reset the table so the seeded row is guaranteed to get id 1.
-        customerRepository.deleteAll();
+        jdbcTemplate.execute("DELETE FROM customer");
         jdbcTemplate.execute("ALTER TABLE customer ALTER COLUMN id RESTART WITH 1");
-        customerRepository.save(customerData);
+        manageCustomersUseCase.createCustomer(customer.firstName(), customer.lastName(), customer.address());
         RestAssuredMockMvc.standaloneSetup(customerController);
     }
 

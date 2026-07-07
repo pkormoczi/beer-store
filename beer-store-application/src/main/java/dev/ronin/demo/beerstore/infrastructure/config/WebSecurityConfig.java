@@ -27,16 +27,30 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                         authorize -> authorize
-                                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/services/**")).hasRole("USER"))
+                                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/services/**")).hasRole("USER")
+                                .anyRequest().hasRole("USER"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // A stateless, HTTP-Basic-only API has no browser session/cookie for CSRF to
+                // protect; leaving CSRF enabled here was never exercised while /** was ignored,
+                // but with the filter chain actually reachable it rejects every non-GET request
+                // as anonymous+401 before Basic auth even runs (CsrfFilter precedes
+                // BasicAuthenticationFilter in the chain).
+                .csrf(csrf -> csrf.disable())
                 .httpBasic(withDefaults())
                 .build();
     }
 
+    /**
+     * Only genuinely public, static documentation resources are exempt from the filter chain.
+     * Previously this ignored {@code /**} - i.e. every request, including the REST/SOAP API
+     * the filter chain above claims to protect - which made {@link #securityFilterChain} a no-op.
+     */
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return web -> web.ignoring()
-                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/**"));
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/swagger-ui/**"))
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/swagger-ui.html"))
+                .requestMatchers(PathPatternRequestMatcher.withDefaults().matcher("/v3/api-docs/**"));
     }
 
     @Bean
@@ -47,11 +61,20 @@ public class WebSecurityConfig {
 
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
+        // {noop} is the demo-appropriate choice here: an in-memory user store with no
+        // PasswordEncoder bean would otherwise fail every login ("no PasswordEncoder mapped
+        // for the id null"), since Spring Security's default DelegatingPasswordEncoder requires
+        // an {id} prefix on stored passwords.
         UserDetails user = User.builder()
                 .username("user")
-                .password("password")
+                .password("{noop}password")
                 .roles("USER")
                 .build();
-        return new InMemoryUserDetailsManager(user);
+        UserDetails admin = User.builder()
+                .username("admin")
+                .password("{noop}admin")
+                .roles("USER", "ADMIN")
+                .build();
+        return new InMemoryUserDetailsManager(user, admin);
     }
 }

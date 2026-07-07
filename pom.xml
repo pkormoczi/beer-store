@@ -37,7 +37,20 @@
         <version.mapstruct>1.6.3</version.mapstruct>
         <version.openapi-generator>7.23.0</version.openapi-generator>
         <version.spring-cloud-contract>5.0.3</version.spring-cloud-contract>
+        <version.spring-modulith>2.1.0</version.spring-modulith>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.modulith</groupId>
+                <artifactId>spring-modulith-bom</artifactId>
+                <version>${version.spring-modulith}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
