@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.contract;
 
-import dev.ronin.demo.beerstore.customer.Customer;
+import dev.ronin.demo.beerstore.customer.api.CustomerView;
 import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ class ContractDataReaderTest {
     @Test
     @DisplayName("Customer entity is seeded from the contract fixture through the production mapper")
     void readCustomerData() {
-        Customer customer = contractDataReader.readCustomerData();
+        CustomerView customer = contractDataReader.readCustomerData();
 
         assertThat(customer.firstName()).isEqualTo("TestFirst");
         assertThat(customer.lastName()).isEqualTo("TestLast");

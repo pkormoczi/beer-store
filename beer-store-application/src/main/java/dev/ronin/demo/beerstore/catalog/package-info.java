@@ -1,8 +1,8 @@
 /**
- * The catalog module. Exposes {@link dev.ronin.demo.beerstore.catalog.Beer},
- * {@link dev.ronin.demo.beerstore.catalog.BeerStyle} and
- * {@link dev.ronin.demo.beerstore.catalog.ManageBeersUseCase} as its public API; the
- * {@code application} and {@code persistence} subpackages are internal implementation details.
+ * The catalog module (the beer domain). Exposes its Command/Query/View DTOs and
+ * {@link dev.ronin.demo.beerstore.catalog.api.ManageBeersUseCase} from the {@code api}
+ * subpackage (a Spring Modulith named interface); everything under {@code internal} is an
+ * implementation detail, including the {@code Beer} aggregate itself.
  * Depends on nothing else besides the always-open {@code shared}/{@code infrastructure} modules.
  */
 @ApplicationModule(allowedDependencies = {"shared", "infrastructure"})

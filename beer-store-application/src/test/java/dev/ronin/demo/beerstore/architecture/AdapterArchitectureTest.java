@@ -18,9 +18,9 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 @SuppressWarnings("squid:S2187")
 class AdapterArchitectureTest {
 
-    private static final String WEB_PACKAGE = "..web..";
+    private static final String REST_PACKAGE = "..rest..";
     private static final String PERSISTENCE_PACKAGE = "..persistence..";
-    private static final String APPLICATION_PACKAGE = "..application..";
+    private static final String ADAPTER_PACKAGE = "..adapter..";
     private static final String CONTROLLER_POSTFIX = "Controller";
     private static final String ADAPTER_POSTFIX = "Adapter";
     private static final String PERSISTENCE_ADAPTER_POSTFIX = "PersistenceAdapter";
@@ -28,7 +28,7 @@ class AdapterArchitectureTest {
      * Cross-module anti-corruption adapters (e.g. order's CustomerLookupAdapter/
      * BeerLookupAdapter), each translating a module-owned outbound *Lookup port to another
      * module's *UseCase - a different kind of adapter than the driving *Adapter classes: plain
-     * @Component, living in application/ next to the port it implements, not web/.
+     * @Component, living in internal.adapter.out.&lt;other module&gt;, not rest/.
      */
     private static final String LOOKUP_ADAPTER_POSTFIX = "LookupAdapter";
     private static final String MAPPER_POSTFIX = "Mapper";
@@ -57,9 +57,9 @@ class AdapterArchitectureTest {
                     .orShould().beAnnotatedWith(RestController.class);
 
     @ArchTest
-    public static final ArchRule controllersShouldBeInWebPackage =
+    public static final ArchRule controllersShouldBeInRestPackage =
             classes().that().haveSimpleNameEndingWith(CONTROLLER_POSTFIX)
-                    .should().resideInAPackage(WEB_PACKAGE);
+                    .should().resideInAPackage(REST_PACKAGE);
 
     @ArchTest
     public static final ArchRule adaptersShouldBeNamedAdapter =
@@ -75,11 +75,11 @@ class AdapterArchitectureTest {
                     .should().beAnnotatedWith(Service.class);
 
     @ArchTest
-    public static final ArchRule adaptersShouldBeInWebPackage =
+    public static final ArchRule adaptersShouldBeInRestPackage =
             classes().that().haveSimpleNameEndingWith(ADAPTER_POSTFIX)
                     .and().haveSimpleNameNotEndingWith(PERSISTENCE_ADAPTER_POSTFIX)
                     .and().haveSimpleNameNotEndingWith(LOOKUP_ADAPTER_POSTFIX)
-                    .should().resideInAPackage(WEB_PACKAGE);
+                    .should().resideInAPackage(REST_PACKAGE);
 
     @ArchTest
     public static final ArchRule lookupAdaptersShouldBeAnnotatedWithComponent =
@@ -87,14 +87,14 @@ class AdapterArchitectureTest {
                     .should().beAnnotatedWith(Component.class);
 
     @ArchTest
-    public static final ArchRule lookupAdaptersShouldBeInApplicationPackage =
+    public static final ArchRule lookupAdaptersShouldBeInAdapterPackage =
             classes().that().haveSimpleNameEndingWith(LOOKUP_ADAPTER_POSTFIX)
-                    .should().resideInAPackage(APPLICATION_PACKAGE);
+                    .should().resideInAPackage(ADAPTER_PACKAGE);
 
     @ArchTest
-    public static final ArchRule mappersShouldBeInWebOrPersistencePackage =
+    public static final ArchRule mappersShouldBeInRestOrPersistencePackage =
             classes().that().haveSimpleNameEndingWith(MAPPER_POSTFIX)
-                    .should().resideInAnyPackage(WEB_PACKAGE, PERSISTENCE_PACKAGE);
+                    .should().resideInAnyPackage(REST_PACKAGE, PERSISTENCE_PACKAGE);
 
     @ArchTest
     public static final ArchRule persistenceAdaptersShouldBeAnnotatedWithRepository =

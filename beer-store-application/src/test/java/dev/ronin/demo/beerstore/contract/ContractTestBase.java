@@ -1,8 +1,9 @@
 package dev.ronin.demo.beerstore.contract;
 
-import dev.ronin.demo.beerstore.customer.Customer;
-import dev.ronin.demo.beerstore.customer.ManageCustomersUseCase;
-import dev.ronin.demo.beerstore.customer.web.CustomerController;
+import dev.ronin.demo.beerstore.customer.api.CustomerView;
+import dev.ronin.demo.beerstore.customer.api.ManageCustomersUseCase;
+import dev.ronin.demo.beerstore.customer.api.RegisterCustomerCommand;
+import dev.ronin.demo.beerstore.customer.internal.adapter.in.rest.CustomerController;
 import io.qameta.allure.Step;
 import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
@@ -43,11 +44,12 @@ public class ContractTestBase {
     @Transactional
     @Step("Seed customer test data and configure RestAssured")
     void setup() {
-        final Customer customer = new ContractDataReader().readCustomerData();
+        final CustomerView customer = new ContractDataReader().readCustomerData();
         // The GET /customers/1 contract pins the id; reset the table so the seeded row is guaranteed to get id 1.
         jdbcTemplate.execute("DELETE FROM customer");
         jdbcTemplate.execute("ALTER TABLE customer ALTER COLUMN id RESTART WITH 1");
-        manageCustomersUseCase.createCustomer(customer.firstName(), customer.lastName(), customer.address());
+        manageCustomersUseCase.registerCustomer(
+                new RegisterCustomerCommand(customer.firstName(), customer.lastName(), customer.address()));
         RestAssured.baseURI = "http://localhost:" + this.port;
         RestAssured.filters(new AllureRestAssured());
     }

@@ -1,9 +1,9 @@
 /**
- * The customer aggregate module. Exposes {@link dev.ronin.demo.beerstore.customer.Customer},
- * {@link dev.ronin.demo.beerstore.customer.Address} and
- * {@link dev.ronin.demo.beerstore.customer.ManageCustomersUseCase} as its public API; the
- * {@code application}, {@code persistence}, {@code web} and {@code soap} subpackages are
- * internal implementation details.
+ * The customer aggregate module. Exposes its Command/Query/View DTOs, the shared
+ * {@link dev.ronin.demo.beerstore.customer.api.Address} value type and
+ * {@link dev.ronin.demo.beerstore.customer.api.ManageCustomersUseCase} from the {@code api}
+ * subpackage (a Spring Modulith named interface); everything under {@code internal} is an
+ * implementation detail, including the {@code Customer} aggregate itself.
  */
 @ApplicationModule(allowedDependencies = {"shared", "infrastructure"})
 package dev.ronin.demo.beerstore.customer;

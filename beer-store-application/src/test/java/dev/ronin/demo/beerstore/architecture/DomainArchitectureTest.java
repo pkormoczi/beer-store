@@ -18,7 +18,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 @SuppressWarnings("squid:S2187")
 class DomainArchitectureTest {
 
-    public static final String ENTITY_POSTFIX = "Entity";
+    private static final String JPA_ENTITY_POSTFIX = "JpaEntity";
     private static final String REPOSITORY_POSTFIX = "Repository";
     public static final String APPLICATION_PACKAGE = "..application..";
     public static final String PERSISTENCE_PACKAGE = "..persistence..";
@@ -34,16 +34,11 @@ class DomainArchitectureTest {
                     .should().resideInAPackage(PERSISTENCE_PACKAGE);
 
     @ArchTest
-    public static final ArchRule entitiesShouldNotBeNamedEntity =
+    public static final ArchRule entitiesShouldBeNamedJpaEntity =
             classes().that().areAnnotatedWith(Entity.class)
-                    .should().haveSimpleNameNotEndingWith(ENTITY_POSTFIX)
-                    .because("JPA Entities are only stupid data bags!");
-
-    @ArchTest
-    public static final ArchRule entitiesShouldBeNamedData =
-            classes().that().areAnnotatedWith(Entity.class)
-                    .should().haveSimpleNameEndingWith("Data")
-                    .because("JPA Entities are only stupid data bags!");
+                    .should().haveSimpleNameEndingWith(JPA_ENTITY_POSTFIX)
+                    .because("the *JpaEntity suffix makes explicit that this is a JPA-technology-specific "
+                            + "persistence model, distinct from the internal.domain.model aggregate");
 
     private static final DescribedPredicate<JavaClass> ANNOTATED_WITH_SERVICE_OR_NESTED_IN_ONE =
             DescribedPredicate.describe("annotated with @Service, or a nested class of one",
@@ -73,10 +68,11 @@ class DomainArchitectureTest {
 
     @ArchTest
     public static final ArchRule domainAndApplicationShouldNotDependOnPersistenceTechnology =
-            noClasses().that().resideInAPackage("dev.ronin.demo.beerstore.customer")
-                    .or().resideInAPackage("dev.ronin.demo.beerstore.order")
-                    .or().resideInAPackage("dev.ronin.demo.beerstore.catalog")
+            noClasses().that().resideInAPackage("dev.ronin.demo.beerstore.customer.api")
+                    .or().resideInAPackage("dev.ronin.demo.beerstore.order.api")
+                    .or().resideInAPackage("dev.ronin.demo.beerstore.catalog.api")
                     .or().resideInAPackage(APPLICATION_PACKAGE)
+                    .or().resideInAPackage("..domain..")
                     .should().dependOnClassesThat().resideInAnyPackage("org.springframework.data..", "jakarta.persistence..")
                     .because("the domain model and application services should only know their own repository "
                             + "ports, not the persistence technology - only the persistence subpackage may depend on JPA/Spring Data");
@@ -95,9 +91,9 @@ class DomainArchitectureTest {
                     .because("inbound (driving) ports mirror the outbound *Repository ports and should be named consistently");
 
     @ArchTest
-    public static final ArchRule useCasesShouldBeInterfacesResidingInModuleRoot =
+    public static final ArchRule useCasesShouldBeInterfacesResidingInApiPackage =
             classes().that().haveSimpleNameEndingWith(USE_CASE_POSTFIX)
-                    .should().resideInAnyPackage("dev.ronin.demo.beerstore.customer", "dev.ronin.demo.beerstore.order",
-                            "dev.ronin.demo.beerstore.catalog")
+                    .should().resideInAnyPackage("dev.ronin.demo.beerstore.customer.api", "dev.ronin.demo.beerstore.order.api",
+                            "dev.ronin.demo.beerstore.catalog.api")
                     .andShould().beInterfaces();
 }
