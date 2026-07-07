@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.logging;
+package dev.ronin.demo.beerstore.platform.observability;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -22,7 +22,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.security.Principal;
 
-import static dev.ronin.demo.beerstore.infrastructure.logging.RequestResponseLoggingFilter.*;
+import static dev.ronin.demo.beerstore.platform.observability.RequestResponseLoggingFilter.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
@@ -31,7 +31,7 @@ class RequestResponseLoggingFilterTest {
 
     public static final String TEST_JSON = "{\"name\":\"Tester\",\"address\":\"1095 Budapest\"}";
     private ListAppender<ILoggingEvent> appender;
-    private final Logger appLogger = (Logger) LoggerFactory.getLogger("dev.ronin.demo.beerstore.infrastructure.logging");
+    private final Logger appLogger = (Logger) LoggerFactory.getLogger("dev.ronin.demo.beerstore.platform.observability");
 
     @Mock
     private Principal principal;

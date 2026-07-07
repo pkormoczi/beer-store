@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.config;
+package dev.ronin.demo.beerstore.platform.openapi;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

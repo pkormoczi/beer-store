@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.security;
+package dev.ronin.demo.beerstore.platform.security;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthorizedAspect {
 
-    @Before("@annotation(dev.ronin.demo.beerstore.infrastructure.security.Authorized)")
+    @Before("@annotation(dev.ronin.demo.beerstore.platform.security.Authorized)")
     public void validate(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Authorized authorized = signature.getMethod().getAnnotation(Authorized.class);

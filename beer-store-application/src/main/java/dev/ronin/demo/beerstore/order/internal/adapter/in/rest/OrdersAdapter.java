@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.order.internal.adapter.in.rest;
 
-import dev.ronin.demo.beerstore.infrastructure.security.Authorized;
+import dev.ronin.demo.beerstore.platform.security.Authorized;
 import dev.ronin.demo.beerstore.order.api.CancelOrderCommand;
 import dev.ronin.demo.beerstore.order.api.GetOrderQuery;
 import dev.ronin.demo.beerstore.order.api.ManageOrdersUseCase;

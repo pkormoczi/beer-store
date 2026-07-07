@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.config;
+package dev.ronin.demo.beerstore.platform.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,5 @@
-package dev.ronin.demo.beerstore.infrastructure.config;
+package dev.ronin.demo.beerstore.platform.observability;
 
-import dev.ronin.demo.beerstore.infrastructure.logging.RequestResponseLoggingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

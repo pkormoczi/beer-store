@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.security;
+package dev.ronin.demo.beerstore.platform.security;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

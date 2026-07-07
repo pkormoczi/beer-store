@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-@AnalyzeClasses(packages = "dev.ronin.demo.beerstore.infrastructure",
+@AnalyzeClasses(packages = "dev.ronin.demo.beerstore.platform",
         importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
 @SuppressWarnings("squid:S2187")
-class InfrastructureArchitectureTest {
+class PlatformArchitectureTest {
 
     private static final String CONFIGURATION_POSTFIX = "Config";
 

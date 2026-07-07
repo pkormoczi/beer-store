@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.logging;
+package dev.ronin.demo.beerstore.platform.observability;
 
 import tools.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -13,7 +13,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
 
-@Slf4j(topic = "dev.ronin.demo.beerstore.infrastructure.logging")
+@Slf4j(topic = "dev.ronin.demo.beerstore.platform.observability")
 public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
     public static final String RESPONSE_BODY_TEXT = "\nResponse body:\n";

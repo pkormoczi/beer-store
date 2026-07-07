@@ -8,9 +8,10 @@ import org.springframework.modulith.docs.Documenter;
 
 /**
  * Verifies the module structure declared via the {@code package-info.java} files under
- * {@code customer}, {@code order}, {@code shared} and {@code infrastructure} - in particular
+ * {@code customer}, {@code order}, {@code shared} and {@code platform} - in particular
  * that {@code customer} depends on nothing else and {@code order} depends only on
- * {@code customer} (plus the always-open {@code shared}/{@code infrastructure} modules).
+ * {@code customer} (plus the always-open {@code shared} module and the {@code platform}
+ * module's {@code rest}/{@code security} named interfaces).
  * Scoped to main classes only (like the rest of this ArchUnit suite) so that test-only packages
  * such as {@code contract} don't get swept in as accidental extra modules.
  */

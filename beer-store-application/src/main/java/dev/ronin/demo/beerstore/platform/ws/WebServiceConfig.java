@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.infrastructure.config;
+package dev.ronin.demo.beerstore.platform.ws;
 
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.ApplicationContext;

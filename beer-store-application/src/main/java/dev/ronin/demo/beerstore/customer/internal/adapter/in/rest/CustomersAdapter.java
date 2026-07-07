@@ -7,7 +7,7 @@ import dev.ronin.demo.beerstore.customer.api.GetCustomerQuery;
 import dev.ronin.demo.beerstore.customer.api.ManageCustomersUseCase;
 import dev.ronin.demo.beerstore.customer.api.RegisterCustomerCommand;
 import dev.ronin.demo.beerstore.customer.api.UpdateCustomerCommand;
-import dev.ronin.demo.beerstore.infrastructure.security.Authorized;
+import dev.ronin.demo.beerstore.platform.security.Authorized;
 import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
 import dev.ronin.demo.beerstore.shared.contract.customerdata.Customer;
 import org.springframework.stereotype.Service;

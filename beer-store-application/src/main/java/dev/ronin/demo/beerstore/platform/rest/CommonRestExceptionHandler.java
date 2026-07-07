@@ -1,10 +1,6 @@
-package dev.ronin.demo.beerstore.infrastructure.rest.handler;
+package dev.ronin.demo.beerstore.platform.rest;
 
-import dev.ronin.demo.beerstore.customer.api.CustomerNotFoundException;
-import dev.ronin.demo.beerstore.infrastructure.security.AuthorizationException;
-import dev.ronin.demo.beerstore.order.api.IllegalOrderStateException;
-import dev.ronin.demo.beerstore.order.api.OrderNotFoundException;
-import dev.ronin.demo.beerstore.order.api.UnknownBeerException;
+import dev.ronin.demo.beerstore.platform.security.AuthorizationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -19,15 +15,25 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Handles the exceptions common to every module: generic "not found"/"bad request" cases,
+ * cross-cutting {@link AuthorizationException} (from {@code platform.security}, an intra-module
+ * reference) and Spring's own validation failures. Deliberately does NOT reference any business
+ * module's domain exception types (e.g. {@code CustomerNotFoundException}, {@code
+ * OrderNotFoundException}) - the platform module must not depend on business modules, so each
+ * module maps its own domain exceptions to HTTP responses in its own {@code
+ * internal.adapter.in.rest} package (see {@code CustomerRestExceptionHandler}/{@code
+ * OrderRestExceptionHandler}).
+ */
 @RestControllerAdvice
-public class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
+public class CommonRestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({NoSuchElementException.class, CustomerNotFoundException.class, OrderNotFoundException.class})
+    @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<ErrorDetails> notFoundException(final RuntimeException e) {
         return error(e, HttpStatus.NOT_FOUND, e.getMessage());
     }
 
-    @ExceptionHandler({IllegalOrderStateException.class, UnknownBeerException.class, IllegalArgumentException.class})
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorDetails> invalidRequestException(final RuntimeException e) {
         return error(e, HttpStatus.BAD_REQUEST, e.getMessage());
     }
