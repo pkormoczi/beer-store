@@ -1,8 +1,6 @@
 package dev.ronin.demo.beerstore.order.application;
 
 import dev.ronin.demo.beerstore.customer.Customer;
-import dev.ronin.demo.beerstore.customer.ManageCustomersUseCase;
-import dev.ronin.demo.beerstore.order.Beer;
 import dev.ronin.demo.beerstore.order.IllegalOrderStateException;
 import dev.ronin.demo.beerstore.order.ManageOrdersUseCase;
 import dev.ronin.demo.beerstore.order.Order;
@@ -20,15 +18,15 @@ import java.util.List;
 public class Orders implements ManageOrdersUseCase {
 
     private final OrderRepository orderRepository;
-    private final BeerRepository beerRepository;
-    private final ManageCustomersUseCase manageCustomersUseCase;
+    private final BeerLookup beerLookup;
+    private final CustomerLookup customerLookup;
     private final ApplicationEventPublisher eventPublisher;
 
-    public Orders(OrderRepository orderRepository, BeerRepository beerRepository,
-                  ManageCustomersUseCase manageCustomersUseCase, ApplicationEventPublisher eventPublisher) {
+    public Orders(OrderRepository orderRepository, BeerLookup beerLookup,
+                  CustomerLookup customerLookup, ApplicationEventPublisher eventPublisher) {
         this.orderRepository = orderRepository;
-        this.beerRepository = beerRepository;
-        this.manageCustomersUseCase = manageCustomersUseCase;
+        this.beerLookup = beerLookup;
+        this.customerLookup = customerLookup;
         this.eventPublisher = eventPublisher;
     }
 
@@ -38,12 +36,12 @@ public class Orders implements ManageOrdersUseCase {
         if (beerIds == null || beerIds.isEmpty()) {
             throw new IllegalArgumentException("An order requires at least one beer");
         }
-        Customer customer = manageCustomersUseCase.getCustomer(customerId);
-        List<Beer> beers = beerRepository.findAllById(beerIds);
-        if (beers.size() != beerIds.size()) {
+        Customer customer = customerLookup.getCustomer(customerId);
+        List<Long> existingBeerIds = beerLookup.findExistingIds(beerIds);
+        if (existingBeerIds.size() != beerIds.size()) {
             throw new UnknownBeerException(beerIds);
         }
-        Order order = new Order(null, OrderStatus.NEW, customer.id(), beers);
+        Order order = new Order(null, OrderStatus.NEW, customer.id(), beerIds);
         Order saved = orderRepository.save(order);
         eventPublisher.publishEvent(new OrderPlaced(saved.id(), saved.customerId()));
         return saved.id();

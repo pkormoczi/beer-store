@@ -25,9 +25,10 @@ public class OrderData {
 
     private Long customerId;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "beer_id"))
+    @ElementCollection
+    @CollectionTable(name = "beer_order_beers", joinColumns = @JoinColumn(name = "order_id"))
+    @Column(name = "beer_id")
     @Singular
-    private List<BeerData> beers;
+    private List<Long> beers;
 
 }

@@ -1,12 +1,12 @@
 package dev.ronin.demo.beerstore.order.web;
 
 import dev.ronin.demo.beerstore.base.IntegrationTest;
+import dev.ronin.demo.beerstore.catalog.Beer;
+import dev.ronin.demo.beerstore.catalog.BeerStyle;
+import dev.ronin.demo.beerstore.catalog.ManageBeersUseCase;
 import dev.ronin.demo.beerstore.customer.Address;
 import dev.ronin.demo.beerstore.customer.Customer;
 import dev.ronin.demo.beerstore.customer.ManageCustomersUseCase;
-import dev.ronin.demo.beerstore.order.BeerStyle;
-import dev.ronin.demo.beerstore.order.persistence.BeerData;
-import dev.ronin.demo.beerstore.order.persistence.BeerJpaRepository;
 import dev.ronin.demo.beerstore.shared.api.model.OrderModel;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +25,7 @@ public class OrdersIT extends IntegrationTest {
     ManageCustomersUseCase manageCustomersUseCase;
 
     @Autowired
-    BeerJpaRepository beerJpaRepository;
+    ManageBeersUseCase manageBeersUseCase;
 
     @Test
     @DisplayName("Create new order")
@@ -33,8 +33,8 @@ public class OrdersIT extends IntegrationTest {
         //Given
         Customer savedCustomer = manageCustomersUseCase.createCustomer("First", "Last",
                 new Address("Hungary", "1095", "Budapest", "Teszt utca 1"));
-        BeerData savedBeer = beerJpaRepository.save(BeerData.builder().name("Csoda IPA").beerStyle(BeerStyle.IPA).build());
-        OrderModel given = givenOrder(savedCustomer.id(), savedBeer.getId());
+        Beer savedBeer = manageBeersUseCase.createBeer("Csoda IPA", BeerStyle.IPA);
+        OrderModel given = givenOrder(savedCustomer.id(), savedBeer.id());
         //When
         ResponseEntity<Long> result = orderController.createOrder(given);
         //Then

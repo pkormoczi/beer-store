@@ -5,6 +5,7 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -19,9 +20,17 @@ class AdapterArchitectureTest {
 
     private static final String WEB_PACKAGE = "..web..";
     private static final String PERSISTENCE_PACKAGE = "..persistence..";
+    private static final String APPLICATION_PACKAGE = "..application..";
     private static final String CONTROLLER_POSTFIX = "Controller";
     private static final String ADAPTER_POSTFIX = "Adapter";
     private static final String PERSISTENCE_ADAPTER_POSTFIX = "PersistenceAdapter";
+    /**
+     * Cross-module anti-corruption adapters (e.g. order's CustomerLookupAdapter/
+     * BeerLookupAdapter), each translating a module-owned outbound *Lookup port to another
+     * module's *UseCase - a different kind of adapter than the driving *Adapter classes: plain
+     * @Component, living in application/ next to the port it implements, not web/.
+     */
+    private static final String LOOKUP_ADAPTER_POSTFIX = "LookupAdapter";
     private static final String MAPPER_POSTFIX = "Mapper";
 
     /**
@@ -62,13 +71,25 @@ class AdapterArchitectureTest {
     public static final ArchRule adaptersShouldBeAnnotatedWithService =
             classes().that().haveSimpleNameEndingWith(ADAPTER_POSTFIX)
                     .and().haveSimpleNameNotEndingWith(PERSISTENCE_ADAPTER_POSTFIX)
+                    .and().haveSimpleNameNotEndingWith(LOOKUP_ADAPTER_POSTFIX)
                     .should().beAnnotatedWith(Service.class);
 
     @ArchTest
     public static final ArchRule adaptersShouldBeInWebPackage =
             classes().that().haveSimpleNameEndingWith(ADAPTER_POSTFIX)
                     .and().haveSimpleNameNotEndingWith(PERSISTENCE_ADAPTER_POSTFIX)
+                    .and().haveSimpleNameNotEndingWith(LOOKUP_ADAPTER_POSTFIX)
                     .should().resideInAPackage(WEB_PACKAGE);
+
+    @ArchTest
+    public static final ArchRule lookupAdaptersShouldBeAnnotatedWithComponent =
+            classes().that().haveSimpleNameEndingWith(LOOKUP_ADAPTER_POSTFIX)
+                    .should().beAnnotatedWith(Component.class);
+
+    @ArchTest
+    public static final ArchRule lookupAdaptersShouldBeInApplicationPackage =
+            classes().that().haveSimpleNameEndingWith(LOOKUP_ADAPTER_POSTFIX)
+                    .should().resideInAPackage(APPLICATION_PACKAGE);
 
     @ArchTest
     public static final ArchRule mappersShouldBeInWebOrPersistencePackage =

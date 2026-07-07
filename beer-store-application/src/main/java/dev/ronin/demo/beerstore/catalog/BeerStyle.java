@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.order;
+package dev.ronin.demo.beerstore.catalog;
 
 public enum BeerStyle {
     IPA,

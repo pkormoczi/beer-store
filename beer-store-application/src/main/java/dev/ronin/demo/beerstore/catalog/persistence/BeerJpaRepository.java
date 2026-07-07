@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.order.persistence;
+package dev.ronin.demo.beerstore.catalog.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

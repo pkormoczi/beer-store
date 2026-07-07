@@ -1,6 +1,6 @@
-package dev.ronin.demo.beerstore.order.persistence;
+package dev.ronin.demo.beerstore.catalog.persistence;
 
-import dev.ronin.demo.beerstore.order.BeerStyle;
+import dev.ronin.demo.beerstore.catalog.BeerStyle;
 import jakarta.persistence.*;
 import lombok.*;
 

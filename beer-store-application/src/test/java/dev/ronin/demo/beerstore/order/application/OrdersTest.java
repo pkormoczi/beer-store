@@ -1,9 +1,6 @@
 package dev.ronin.demo.beerstore.order.application;
 
 import dev.ronin.demo.beerstore.customer.Customer;
-import dev.ronin.demo.beerstore.customer.ManageCustomersUseCase;
-import dev.ronin.demo.beerstore.order.Beer;
-import dev.ronin.demo.beerstore.order.BeerStyle;
 import dev.ronin.demo.beerstore.order.Order;
 import dev.ronin.demo.beerstore.order.OrderStatus;
 import dev.ronin.demo.beerstore.order.UnknownBeerException;
@@ -14,7 +11,6 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,10 +24,10 @@ class OrdersTest {
     OrderRepository orderRepository;
 
     @Mock
-    BeerRepository beerRepository;
+    BeerLookup beerLookup;
 
     @Mock
-    ManageCustomersUseCase manageCustomersUseCase;
+    CustomerLookup customerLookup;
 
     @Mock
     ApplicationEventPublisher eventPublisher;
@@ -42,12 +38,12 @@ class OrdersTest {
     @Test
     @DisplayName("When creating a new order it should have \"New\" status")
     void whenCreatingNewOrderItHasNewStatus() {
-        Order expected = new Order(1L, OrderStatus.NEW, 1L, getBeers().subList(0, 1));
+        Order expected = new Order(1L, OrderStatus.NEW, 1L, List.of(1L));
         Customer customer = new Customer(1L, "First", "Last", null);
-        given(manageCustomersUseCase.getCustomer(1L)).willReturn(customer);
-        given(beerRepository.findAllById(Collections.singletonList(1L))).willReturn(getBeers().subList(0, 1));
+        given(customerLookup.getCustomer(1L)).willReturn(customer);
+        given(beerLookup.findExistingIds(Collections.singletonList(1L))).willReturn(List.of(1L));
         given(orderRepository.save(Mockito.any())).willReturn(expected);
-        Orders orders = new Orders(orderRepository, beerRepository, manageCustomersUseCase, eventPublisher);
+        Orders orders = new Orders(orderRepository, beerLookup, customerLookup, eventPublisher);
 
         Long actual = orders.newOrder(1L, Collections.singletonList(1L));
 
@@ -60,18 +56,11 @@ class OrdersTest {
     @DisplayName("When an order references an unknown beer it should be rejected")
     void whenOrderReferencesUnknownBeerItIsRejected() {
         Customer customer = new Customer(1L, "First", "Last", null);
-        given(manageCustomersUseCase.getCustomer(1L)).willReturn(customer);
-        given(beerRepository.findAllById(Collections.singletonList(99L))).willReturn(Collections.emptyList());
-        Orders orders = new Orders(orderRepository, beerRepository, manageCustomersUseCase, eventPublisher);
+        given(customerLookup.getCustomer(1L)).willReturn(customer);
+        given(beerLookup.findExistingIds(Collections.singletonList(99L))).willReturn(Collections.emptyList());
+        Orders orders = new Orders(orderRepository, beerLookup, customerLookup, eventPublisher);
 
         org.assertj.core.api.Assertions.assertThatThrownBy(() -> orders.newOrder(1L, Collections.singletonList(99L)))
                 .isInstanceOf(UnknownBeerException.class);
-    }
-
-    private List<Beer> getBeers() {
-        final List<Beer> beers = new ArrayList<>();
-        beers.add(new Beer(1L, "Csoda IPA", BeerStyle.IPA));
-        beers.add(new Beer(2L, "Csoda APA", BeerStyle.APA));
-        return beers;
     }
 }
