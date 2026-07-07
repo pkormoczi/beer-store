@@ -31,6 +31,8 @@ spring:
   mustache:
     check-template-location: false
 #    enabled: true
+  modulith:
+    detection-strategy: explicitly-annotated
 springdoc:
   swagger-ui:
     display-operation-id: true
