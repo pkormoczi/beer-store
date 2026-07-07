@@ -8,7 +8,7 @@ import java.util.Objects;
  * (no {@code CurrencyCode} - this is a proportional, single-currency showcase, not a multi-
  * currency system). Immutable and self-validating (never negative), so a {@link Money} is always
  * in a valid state once constructed. Lives in the always-open {@code shared} module - deliberately
- * not in {@code catalog.api} - because both {@code catalog} (a beer's price) and {@code order}
+ * not in {@code product.api} - because both {@code product} (a beer's price) and {@code order}
  * (an order line's unit-price snapshot and total) need it, and {@code order} never imports another
  * module's {@code api} types directly (see its anti-corruption {@code BeerLookup} port).
  */

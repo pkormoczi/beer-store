@@ -70,7 +70,7 @@ class DomainArchitectureTest {
     public static final ArchRule domainAndApplicationShouldNotDependOnPersistenceTechnology =
             noClasses().that().resideInAPackage("dev.ronin.demo.beerstore.customer.api")
                     .or().resideInAPackage("dev.ronin.demo.beerstore.order.api")
-                    .or().resideInAPackage("dev.ronin.demo.beerstore.catalog.api")
+                    .or().resideInAPackage("dev.ronin.demo.beerstore.product.api")
                     .or().resideInAPackage(APPLICATION_PACKAGE)
                     .or().resideInAPackage("..domain..")
                     .should().dependOnClassesThat().resideInAnyPackage("org.springframework.data..", "jakarta.persistence..")
@@ -94,6 +94,6 @@ class DomainArchitectureTest {
     public static final ArchRule useCasesShouldBeInterfacesResidingInApiPackage =
             classes().that().haveSimpleNameEndingWith(USE_CASE_POSTFIX)
                     .should().resideInAnyPackage("dev.ronin.demo.beerstore.customer.api", "dev.ronin.demo.beerstore.order.api",
-                            "dev.ronin.demo.beerstore.catalog.api")
+                            "dev.ronin.demo.beerstore.product.api")
                     .andShould().beInterfaces();
 }

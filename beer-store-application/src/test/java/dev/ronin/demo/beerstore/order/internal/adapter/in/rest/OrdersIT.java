@@ -1,10 +1,10 @@
 package dev.ronin.demo.beerstore.order.internal.adapter.in.rest;
 
 import dev.ronin.demo.beerstore.base.IntegrationTest;
-import dev.ronin.demo.beerstore.catalog.api.BeerStyle;
-import dev.ronin.demo.beerstore.catalog.api.BeerView;
-import dev.ronin.demo.beerstore.catalog.api.CreateBeerCommand;
-import dev.ronin.demo.beerstore.catalog.api.ManageBeersUseCase;
+import dev.ronin.demo.beerstore.product.api.BeerStyle;
+import dev.ronin.demo.beerstore.product.api.BeerView;
+import dev.ronin.demo.beerstore.product.api.CreateBeerCommand;
+import dev.ronin.demo.beerstore.product.api.ManageBeersUseCase;
 import dev.ronin.demo.beerstore.customer.api.Address;
 import dev.ronin.demo.beerstore.customer.api.CustomerView;
 import dev.ronin.demo.beerstore.customer.api.ManageCustomersUseCase;
