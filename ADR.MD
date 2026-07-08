@@ -93,18 +93,24 @@ for cross-reference. Several trace back to a more detailed target design explore
   stable reason enum (not free text), and call it from `Orders.placeOrder` instead of
   `assertCustomerExists`.
 
-**ADR-07 · `product` has no stock/inventory concept** 🔜
+**ADR-07 · `product` has a display-only availability field, not a real stock/inventory concept** 🔜
 - **Problem:** can an order be placed for a beer that's out of stock?
-- **Decision (current):** no — there is no stock/inventory field on `Beer`/`BeerJpaEntity` at all;
-  order placement only checks that the referenced beer IDs exist.
-- **Why (as-is):** keeps the current showcase scope on price/name snapshotting (see plan §11)
-  without also having to solve concurrent stock allocation yet.
-- **Cost:** an order can never fail due to unavailability, which is unrealistic for a webshop.
-- **Evolve later:** add a stock field and a single atomic `allocateForOrder(...)` operation (load →
-  check status → check stock → decrement → return a price/name snapshot, all in one call — never
-  a separate lookup-then-reserve pair, which would race) per plan §10. Immediate allocation first;
-  a true reservation lifecycle (`ProductReservation`, expiry, confirm/release) is a later,
-  optional milestone (plan §10.4), not a prerequisite.
+- **Decision (current):** `Beer`/`BeerJpaEntity` carry a `BeerAvailability` field
+  (`IN_STOCK`/`LOW_STOCK`/`OUT_OF_STOCK`/`DISCONTINUED`/`COMING_SOON`), set at creation and
+  filterable/sortable on `/catalog` — but it's a read-model label only, not enforced anywhere: it
+  has no numeric quantity, no decrement-on-order behavior, and order placement still only checks
+  that the referenced beer IDs exist (`order`'s `BeerLookupAdapter` never reads `availability`).
+- **Why (as-is):** gives the catalog browse feature (FEAT-CAT-1) something real to filter/sort by
+  without yet solving concurrent stock allocation; keeps order placement's scope on price/name
+  snapshotting (see plan §11).
+- **Cost:** an order can still be placed for an `OUT_OF_STOCK`/`DISCONTINUED` beer - the field is
+  advisory, not a guard.
+- **Evolve later:** let the `inventory` module drive `availability` via domain events instead of
+  it being creation-time-only (FEAT-INV-1 in the features backbone); then add a stock quantity and
+  a single atomic `allocateForOrder(...)` operation (load → check availability → check stock →
+  decrement → return a price/name snapshot, all in one call — never a separate lookup-then-reserve
+  pair, which would race) per plan §10. Immediate allocation first; a true reservation lifecycle
+  (`ProductReservation`, expiry, confirm/release) is a later, optional milestone (plan §10.4).
 
 ### C. Persistence & data ownership
 
@@ -221,16 +227,23 @@ for cross-reference. Several trace back to a more detailed target design explore
 - **Evolve later:** adopt RFC 9457 Problem Details responses (already tracked as an unchecked item
   in the feature checklist above) — this would replace `ErrorDetails` but not the split itself.
 
-**ADR-16 · `product` has no inbound REST adapter** 🔜
-- **Problem:** beers can only be created programmatically (e.g. by tests) via
-  `BeerManagement.createBeer(...)` — there's no `/beers` endpoint.
-- **Decision (current):** `product` has no `adapter/in` package at all.
-- **Why (as-is):** no consumer has needed one yet; the same posture applies to `customer`'s already-
-  implemented but unwired `suspendCustomer`/`activateCustomer` methods.
-- **Cost:** the `product` module can't be exercised from outside the JVM at all today.
-- **Evolve later:** add REST endpoints once there's a real need to; remember the contract-first
-  flow — start in `beer-store-contract`, `mvn clean install` there, then implement the generated
-  interface in `product`.
+**ADR-16 · `product`'s inbound REST adapter is read-only (catalog browse), not a full CRUD surface** ✅
+- **Problem:** beers were only creatable programmatically (e.g. by tests) via
+  `BeerManagement.createBeer(...)` — there was no way to read the catalog over HTTP either.
+- **Decision:** `product/adapter/in/rest` exposes `GET /catalog` (filter by name/style/abv range/
+  price range/availability, sort by `BeerSortField`+`SortDirection`) and `GET /catalog/{id}`
+  (`CatalogController`/`CatalogRestAdapter`/`CatalogMapper`/`CatalogRestExceptionHandler`, FEAT-CAT-1)
+  — but still nothing to create/update/deactivate a beer over HTTP; `createBeer` remains
+  programmatic-only, same posture as `customer`'s already-implemented but unwired
+  `suspendCustomer`/`activateCustomer`.
+- **Why:** a webshop's customer-facing surface needs to *browse* the catalog first; write
+  operations (managing the catalog) are a separate, not-yet-needed concern with a different
+  (admin) audience.
+- **Cost:** the module still can't be exercised end-to-end from outside the JVM (no way to create a
+  beer over HTTP) — only queried.
+- **Evolve later:** add write endpoints once there's a real need to (e.g. an admin-facing catalog
+  management UI); remember the contract-first flow — start in `beer-store-contract`,
+  `mvn clean install` there, then implement the generated interface in `product`.
 
 **ADR-17 · `OrderStatus` is fulfillment-oriented, not payment-oriented** ✅
 - **Problem:** what does an order's lifecycle actually track?
@@ -296,6 +309,32 @@ for cross-reference. Several trace back to a more detailed target design explore
   probes, metrics) is reachable independently of application traffic, and point the `Deployment`'s
   `livenessProbe`/`readinessProbe` at `/actuator/health/liveness`/`/actuator/health/readiness` on
   that management port instead of 8080.
+
+### I. Querying & search
+
+**ADR-21 · Catalog filtering/sorting via JPA `Specification`, confined to the persistence adapter** ✅
+- **Problem:** `/catalog` needs to filter (name/style/abv range/price range/availability) and sort
+  the beer list by a caller-chosen field+direction — how should that criteria travel from the REST
+  layer down to a query, without leaking a persistence technology into `api`/`application`/`domain`?
+- **Decision:** the criteria is carried end-to-end as a plain DTO,
+  `product.api.query.BrowseCatalog` (own `api.type` enums, primitives, `BigDecimal` only — no
+  Spring Data/JPA types); `BeerRepository.findMatching(BrowseCatalog)` (the outbound port) takes
+  that same DTO. Only inside `product.adapter.out.persistence.jpa` does a package-private helper,
+  `BeerSpecifications`, translate it into a `org.springframework.data.jpa.domain.Specification`
+  (per-field `Predicate`s, `cb.and(...)`) and a `org.springframework.data.domain.Sort`, which
+  `BeerJpaRepository` (now also `JpaSpecificationExecutor<BeerJpaEntity>`) executes.
+- **Why:** `DomainArchitectureTest.domainAndApplicationShouldNotDependOnPersistenceTechnology`
+  already forbids `org.springframework.data../jakarta.persistence..` imports outside
+  `adapter.out.persistence..` — `Specification`/`Sort`/`Pageable` are exactly that kind of type, so
+  this is the only placement the existing ArchUnit suite (and the layering it encodes) allows.
+  `BeerSpecifications` is deliberately unnamed like an `*Adapter`/`*Mapper`/`*Repository` so it
+  doesn't trip the adapter-naming rules that would otherwise force it into `@Service`+`..rest..`
+  or `@Repository`.
+- **Cost:** one extra translation hop (DTO → `Specification`/`Sort`) versus, say, a derived Spring
+  Data query method or handing `Pageable`/`Sort` straight through from the controller.
+- **Evolve later:** if filtering grows past a handful of fields, consider Querydsl or a small
+  criteria-builder DSL over raw `Predicate` composition — the placement constraint (persistence
+  adapter only) stays the same either way.
 
 ### Suggested sequencing
 

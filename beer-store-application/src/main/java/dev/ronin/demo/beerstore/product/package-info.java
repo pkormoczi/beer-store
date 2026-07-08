@@ -10,6 +10,12 @@
  * package's {@code rest} type ({@code ErrorDetails}) besides the always-open {@code shared}
  * module - the browse endpoints are not yet public, so {@code platform :: security} is not needed
  * (unlike customer/order, which use {@code Authorized} for admin-only operations).
+ * {@code Beer} carries a warehouse {@code availability} read-model field (set at creation, never
+ * changed by a management operation yet - a future round lets the {@code inventory} module drive
+ * it via domain events, see FEAT-INV-1); browsing the catalog supports filtering
+ * (name/style/abv/price/availability) and sorting, translated to a JPA {@code Specification}/
+ * {@code Sort} entirely inside {@code adapter.out.persistence.jpa} so {@code api}/
+ * {@code application}/{@code domain} stay free of persistence-technology types.
  */
 @ApplicationModule(allowedDependencies = {"shared"})
 package dev.ronin.demo.beerstore.product;
