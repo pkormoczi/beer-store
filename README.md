@@ -150,7 +150,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 - **Problem:** `order` depends on both `customer` and `product`. How should it call them?
 - **Decision:** `order` calls the other modules' public facades (`CustomerManagement`,
   `BeerManagement`) synchronously, in-process — but never directly: it goes through outbound
-  ports it owns itself (`CustomerLookup`, `BeerLookup` in `order/internal/application/port/out/`),
+  ports it owns itself (`CustomerLookup`, `BeerLookup` in `order/application/port/out/`),
   each implemented by a package-private adapter (`CustomerLookupAdapter`, `BeerLookupAdapter`)
   that calls the facade and translates the result into `order`'s own types (`BeerView` →
   `BeerSnapshot`).
@@ -183,8 +183,8 @@ for cross-reference. Several trace back to a more detailed target design explore
 - **Cost:** weaker type safety (a `Long` can be silently passed as the wrong kind of ID); doesn't
   demonstrate bounded-context ID isolation, which the target design considers a deliberately
   verbose but valuable teaching point.
-- **Evolve later:** introduce per-context ID value objects (`order.internal.domain.model.CustomerId`
-  distinct from `customer.internal.domain.model.CustomerId`, etc.) per plan §12.2.
+- **Evolve later:** introduce per-context ID value objects (`order.domain.model.CustomerId`
+  distinct from `customer.domain.model.CustomerId`, etc.) per plan §12.2.
 
 **ADR-04 · `platform` is intentionally not a Spring Modulith module** ✅
 - **Problem:** `platform` (security, REST, observability, OpenAPI/SOAP wiring) sits as a top-level
@@ -246,7 +246,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 
 **ADR-08 · Separate domain model and JPA entity in every module** ✅
 - **Problem:** should the domain aggregate double as the `@Entity`?
-- **Decision:** no — every module has both an `internal.domain.model` record and a distinct
+- **Decision:** no — every module has both a `domain.model` record and a distinct
   `*JpaEntity`, mapped by a dedicated `*PersistenceMapper`.
 - **Why:** keeps the domain free of JPA/Hibernate concerns (no lazy-loading proxies, no
   annotation coupling) and makes the persistence technology swappable in principle.
@@ -299,7 +299,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 **ADR-12 · A single internal event, consumed only within its own module** 🔜
 - **Problem:** what happens after an order is successfully placed?
 - **Decision (current):** `order` publishes one event, `OrderPlaced`
-  (`order/internal/domain/event/`), consumed only by `OrderPlacedEventListener` inside `order`
+  (`order/domain/event/`), consumed only by `OrderPlacedEventListener` inside `order`
   itself (via `@ApplicationModuleListener`), which just logs. `spring-modulith-starter-jdbc` is
   wired in and the `EVENT_PUBLICATION` registry table exists, but nothing exercises it in a way
   that demonstrates its reliability guarantees.
@@ -349,7 +349,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 - **Problem:** where do exceptions get mapped to HTTP responses?
 - **Decision:** `platform.rest.CommonRestExceptionHandler` handles only generic/cross-cutting cases
   (`IllegalArgumentException`, validation errors, `AuthorizationException`); each business module
-  maps its own domain exceptions in its own `internal.adapter.in.rest.*RestExceptionHandler`.
+  maps its own domain exceptions in its own `adapter.in.rest.*RestExceptionHandler`.
   `platform` never imports a business module's exception types.
 - **Why:** keeps `platform` genuinely generic — it can't couple to business-specific exception
   types even if someone tried, since it doesn't depend on any business module.
@@ -360,7 +360,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 **ADR-16 · `product` has no inbound REST adapter** 🔜
 - **Problem:** beers can only be created programmatically (e.g. by tests) via
   `BeerManagement.createBeer(...)` — there's no `/beers` endpoint.
-- **Decision (current):** `product` has no `internal/adapter/in` package at all.
+- **Decision (current):** `product` has no `adapter/in` package at all.
 - **Why (as-is):** no consumer has needed one yet; the same posture applies to `customer`'s already-
   implemented but unwired `suspendCustomer`/`activateCustomer` methods.
 - **Cost:** the `product` module can't be exercised from outside the JVM at all today.

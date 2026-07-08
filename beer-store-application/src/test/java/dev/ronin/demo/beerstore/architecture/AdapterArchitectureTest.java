@@ -28,7 +28,7 @@ class AdapterArchitectureTest {
      * Cross-module anti-corruption adapters (e.g. order's CustomerLookupAdapter/
      * BeerLookupAdapter), each translating a module-owned outbound *Lookup port to another
      * module's *Management port - a different kind of adapter than the driving *Adapter classes:
-     * plain @Component, living in internal.adapter.out.&lt;other module&gt;, not rest/.
+     * plain @Component, living in adapter.out.&lt;other module&gt;, not rest/.
      */
     private static final String LOOKUP_ADAPTER_POSTFIX = "LookupAdapter";
     private static final String MAPPER_POSTFIX = "Mapper";

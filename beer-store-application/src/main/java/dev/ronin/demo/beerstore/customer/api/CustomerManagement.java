@@ -16,7 +16,7 @@ import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
  * Inbound (driving) port for the customer aggregate, and the customer module's exposed API.
  * Works exclusively with command/query/view DTOs, never with the internal domain model - the
  * translation happens inside
- * {@link dev.ronin.demo.beerstore.customer.internal.application.service.Customers}.
+ * {@link dev.ronin.demo.beerstore.customer.application.service.Customers}.
  */
 public interface CustomerManagement {
 

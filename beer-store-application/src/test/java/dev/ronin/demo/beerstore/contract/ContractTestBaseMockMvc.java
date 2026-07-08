@@ -3,7 +3,7 @@ package dev.ronin.demo.beerstore.contract;
 import dev.ronin.demo.beerstore.customer.api.CustomerManagement;
 import dev.ronin.demo.beerstore.customer.api.command.RegisterCustomer;
 import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
-import dev.ronin.demo.beerstore.customer.internal.adapter.in.rest.CustomerController;
+import dev.ronin.demo.beerstore.customer.adapter.in.rest.CustomerController;
 import io.qameta.allure.Step;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.jupiter.api.BeforeAll;

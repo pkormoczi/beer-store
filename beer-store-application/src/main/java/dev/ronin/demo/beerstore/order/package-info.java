@@ -4,7 +4,9 @@
  * dev.ronin.demo.beerstore.order.api.type.OrderStatus} and
  * {@link dev.ronin.demo.beerstore.order.api.OrderManagement} from the {@code api}
  * package (a Spring Modulith named interface, contributed to by every {@code api.*} subpackage);
- * everything under {@code internal} is an implementation detail, including the {@code Order}
+ * every other subpackage ({@code domain}, {@code application}, {@code adapter}) is an
+ * implementation detail hidden by Spring Modulith's default rule (module subpackages are
+ * internal unless annotated {@code @NamedInterface}), including the {@code Order}
  * aggregate and the {@code OrderPlaced} domain event (nothing outside this module ever needs it,
  * unlike a "public application event"). Only allowed to depend on the {@code customer}/
  * {@code product} modules' {@code api} named interfaces (via its own {@code CustomerLookup}/

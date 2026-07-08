@@ -11,8 +11,8 @@ import dev.ronin.demo.beerstore.order.api.view.OrderView;
 /**
  * Inbound (driving) port for the order aggregate, and the order module's exposed API. Works
  * exclusively with command/query/view DTOs; the translation to/from the internal
- * {@link dev.ronin.demo.beerstore.order.internal.domain.model.Order} happens inside
- * {@link dev.ronin.demo.beerstore.order.internal.application.service.Orders}.
+ * {@link dev.ronin.demo.beerstore.order.domain.model.Order} happens inside
+ * {@link dev.ronin.demo.beerstore.order.application.service.Orders}.
  */
 public interface OrderManagement {
 

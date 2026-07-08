@@ -38,7 +38,7 @@ class DomainArchitectureTest {
             classes().that().areAnnotatedWith(Entity.class)
                     .should().haveSimpleNameEndingWith(JPA_ENTITY_POSTFIX)
                     .because("the *JpaEntity suffix makes explicit that this is a JPA-technology-specific "
-                            + "persistence model, distinct from the internal.domain.model aggregate");
+                            + "persistence model, distinct from the domain.model aggregate");
 
     private static final DescribedPredicate<JavaClass> ANNOTATED_WITH_SERVICE_OR_NESTED_IN_ONE =
             DescribedPredicate.describe("annotated with @Service, or a nested class of one",
