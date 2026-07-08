@@ -4,6 +4,7 @@ import java.util.List;
 
 import dev.ronin.demo.beerstore.product.api.command.CreateBeer;
 import dev.ronin.demo.beerstore.product.api.query.FindBeers;
+import dev.ronin.demo.beerstore.product.api.query.GetBeer;
 import dev.ronin.demo.beerstore.product.api.view.BeerView;
 
 /**
@@ -15,6 +16,10 @@ import dev.ronin.demo.beerstore.product.api.view.BeerView;
 public interface BeerManagement {
 
     List<BeerView> findAllById(FindBeers query);
+
+    List<BeerView> listBeers();
+
+    BeerView getBeer(GetBeer query);
 
     BeerView createBeer(CreateBeer command);
 }

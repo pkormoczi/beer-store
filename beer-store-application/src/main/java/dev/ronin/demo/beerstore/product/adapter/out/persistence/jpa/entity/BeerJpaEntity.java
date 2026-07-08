@@ -23,5 +23,7 @@ public class BeerJpaEntity {
     @Enumerated(EnumType.STRING)
     private BeerStyle beerStyle;
 
+    private double abv;
+
     private BigDecimal priceAmount;
 }
