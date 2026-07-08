@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static dev.ronin.demo.beerstore.architecture.ArchitectureSupport.APPLICATION_PACKAGE;
+import static dev.ronin.demo.beerstore.architecture.ArchitectureSupport.DOMAIN_PACKAGE;
+import static dev.ronin.demo.beerstore.architecture.ArchitectureSupport.MANAGEMENT_POSTFIX;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore",
         importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
@@ -20,8 +23,8 @@ class DomainArchitectureTest {
 
     private static final String JPA_ENTITY_POSTFIX = "JpaEntity";
     private static final String REPOSITORY_POSTFIX = "Repository";
-    public static final String APPLICATION_PACKAGE = "..application..";
-    public static final String PERSISTENCE_PACKAGE = "..persistence..";
+    private static final String JPA_REPOSITORY_POSTFIX = "JpaRepository";
+    private static final String ENTITY_PACKAGE = "..persistence.jpa.entity..";
 
     @ArchTest
     public static final ArchRule repositoryPortsShouldBeInApplicationPackage =
@@ -31,7 +34,9 @@ class DomainArchitectureTest {
     @ArchTest
     public static final ArchRule entitiesShouldBeInPersistencePackage =
             classes().that().areAnnotatedWith(Entity.class)
-                    .should().resideInAPackage(PERSISTENCE_PACKAGE);
+                    .should().resideInAPackage(ENTITY_PACKAGE)
+                    .because("*JpaEntity classes live one level deeper than the persistence adapter "
+                            + "itself, in the dedicated jpa.entity subpackage");
 
     @ArchTest
     public static final ArchRule entitiesShouldBeNamedJpaEntity =
@@ -63,8 +68,12 @@ class DomainArchitectureTest {
 
     @ArchTest
     public static final ArchRule repositoriesShouldBeAnnotatedWithRepository =
-            classes().that().haveNameMatching(REPOSITORY_POSTFIX)
-                    .should().beAnnotatedWith(Repository.class);
+            classes().that().haveSimpleNameEndingWith(REPOSITORY_POSTFIX)
+                    .and().haveSimpleNameNotEndingWith(JPA_REPOSITORY_POSTFIX)
+                    .should().beAnnotatedWith(Repository.class)
+                    .because("the Spring Data *JpaRepository interfaces are intentionally not "
+                            + "@Repository-annotated themselves - only the application-owned "
+                            + "*Repository ports they back are");
 
     @ArchTest
     public static final ArchRule domainAndApplicationShouldNotDependOnPersistenceTechnology =
@@ -72,12 +81,10 @@ class DomainArchitectureTest {
                     .or().resideInAPackage("dev.ronin.demo.beerstore.order.api..")
                     .or().resideInAPackage("dev.ronin.demo.beerstore.product.api..")
                     .or().resideInAPackage(APPLICATION_PACKAGE)
-                    .or().resideInAPackage("..domain..")
+                    .or().resideInAPackage(DOMAIN_PACKAGE)
                     .should().dependOnClassesThat().resideInAnyPackage("org.springframework.data..", "jakarta.persistence..")
                     .because("the domain model and application services should only know their own repository "
                             + "ports, not the persistence technology - only the persistence subpackage may depend on JPA/Spring Data");
-
-    private static final String MANAGEMENT_POSTFIX = "Management";
 
     private static final DescribedPredicate<JavaClass> INBOUND_PORT_INTERFACE =
             DescribedPredicate.describe("an interface implemented by a @Service aggregate root",

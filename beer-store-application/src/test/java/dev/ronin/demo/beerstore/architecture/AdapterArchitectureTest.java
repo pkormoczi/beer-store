@@ -1,6 +1,5 @@
 package dev.ronin.demo.beerstore.architecture;
 
-import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
@@ -11,7 +10,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static dev.ronin.demo.beerstore.architecture.ArchitectureSupport.AGGREGATE_ROOT_SERVICE;
 
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore",
         importOptions = {ImportOption.DoNotIncludeTests.class, ImportOption.DoNotIncludeArchives.class, ImportOption.DoNotIncludeJars.class})
@@ -20,7 +21,7 @@ class AdapterArchitectureTest {
 
     private static final String REST_PACKAGE = "..rest..";
     private static final String PERSISTENCE_PACKAGE = "..persistence..";
-    private static final String ADAPTER_PACKAGE = "..adapter..";
+    private static final String ADAPTER_OUT_PACKAGE = "..adapter.out..";
     private static final String CONTROLLER_POSTFIX = "Controller";
     private static final String ADAPTER_POSTFIX = "Adapter";
     private static final String PERSISTENCE_ADAPTER_POSTFIX = "PersistenceAdapter";
@@ -32,17 +33,6 @@ class AdapterArchitectureTest {
      */
     private static final String LOOKUP_ADAPTER_POSTFIX = "LookupAdapter";
     private static final String MAPPER_POSTFIX = "Mapper";
-
-    /**
-     * The concrete aggregate-root @Service classes (e.g. Customers/Orders) are a different kind
-     * of @Service than the driving *Adapter classes: they implement a *Management port instead of
-     * being named *Adapter, so they're excluded from the naming rule below.
-     */
-    private static final DescribedPredicate<com.tngtech.archunit.core.domain.JavaClass> AGGREGATE_ROOT_SERVICE =
-            DescribedPredicate.describe("a concrete @Service implementing a *Management port",
-                    javaClass -> !javaClass.isInterface()
-                            && javaClass.isAnnotatedWith(Service.class)
-                            && javaClass.getAllRawInterfaces().stream().anyMatch(i -> i.getSimpleName().endsWith("Management")));
 
     @ArchTest
     public static final ArchRule controllersShouldBeNamedController =
@@ -59,12 +49,16 @@ class AdapterArchitectureTest {
     @ArchTest
     public static final ArchRule controllersShouldBeInRestPackage =
             classes().that().haveSimpleNameEndingWith(CONTROLLER_POSTFIX)
-                    .should().resideInAPackage(REST_PACKAGE);
+                    .should().resideInAnyPackage("..adapter.in.rest..", "..shared.rest..")
+                    .because("HomeController is shared's one hand-written controller, living outside "
+                            + "any business module's adapter.in.rest - both roots are named explicitly "
+                            + "so a stray future *Controller elsewhere in the codebase doesn't slip in "
+                            + "under the old, wide-open \"..rest..\" match");
 
     @ArchTest
     public static final ArchRule adaptersShouldBeNamedAdapter =
             classes().that().areAnnotatedWith(Service.class)
-                    .and(DescribedPredicate.not(AGGREGATE_ROOT_SERVICE))
+                    .and(not(AGGREGATE_ROOT_SERVICE))
                     .should().haveSimpleNameEndingWith(ADAPTER_POSTFIX);
 
     @ArchTest
@@ -89,7 +83,9 @@ class AdapterArchitectureTest {
     @ArchTest
     public static final ArchRule lookupAdaptersShouldBeInAdapterPackage =
             classes().that().haveSimpleNameEndingWith(LOOKUP_ADAPTER_POSTFIX)
-                    .should().resideInAPackage(ADAPTER_PACKAGE);
+                    .should().resideInAPackage(ADAPTER_OUT_PACKAGE)
+                    .because("lookup adapters are outbound ACL translators (order's own CustomerLookup/"
+                            + "BeerLookup ports), never on the inbound side");
 
     @ArchTest
     public static final ArchRule mappersShouldBeInRestOrPersistencePackage =

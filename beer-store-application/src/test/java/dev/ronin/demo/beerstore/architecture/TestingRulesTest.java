@@ -24,11 +24,25 @@ import static com.tngtech.archunit.lang.conditions.ArchConditions.accessClassesT
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
+/**
+ * The one architecture test that deliberately analyzes the test tree itself - note the absence
+ * of {@code ImportOption.DoNotIncludeTests} below, unlike every other class in this package. Two
+ * self-reference traps this class works around:
+ * <ul>
+ *   <li>{@code contract}'s own {@code ContractTestBase}/{@code ContractTestBaseMockMvc} are
+ *   hand-written, non-abstract {@code @SpringBootTest} base classes for the Spring Cloud
+ *   Contract-generated suites ({@code contract.explicit}/{@code contract.mockmvc}) - never run
+ *   directly, so exempt from the {@code *IT} naming rule.</li>
+ *   <li>every class in this {@code architecture} package (this one included) has a simple name
+ *   ending in "Test", and this class itself has to reference {@code Assertions.class} to define
+ *   {@link #USE_JUNIT_ASSERTIONS} - so the "no JUnit Assertions" rules exempt the whole {@code
+ *   architecture} package, which is meta code, not a test suite for business logic.</li>
+ * </ul>
+ */
 @AnalyzeClasses(packages = "dev.ronin.demo.beerstore", locations = TestingRulesTest.MyTestsLocation.class,
         importOptions = {
                 ImportOption.DoNotIncludeArchives.class,
-                ImportOption.DoNotIncludeJars.class,
-                ImportOption.DoNotIncludeTests.class
+                ImportOption.DoNotIncludeJars.class
         })
 @SuppressWarnings("squid:S2187")
 public class TestingRulesTest {
@@ -44,8 +58,13 @@ public class TestingRulesTest {
                     .areAnnotatedWith(DataJpaTest.class).or()
                     .areAnnotatedWith(WebMvcTest.class).and()
                     .doNotHaveModifier(JavaModifier.ABSTRACT)
+                    .and().resideOutsideOfPackage("..contract..")
                     .should().haveSimpleNameEndingWith("IT")
-                    .because("we should run them with failsafe plugin!");
+                    .because("we should run them with failsafe plugin! (contract's own "
+                            + "@SpringBootTest base classes are exempt - see class javadoc; nothing "
+                            + "else is directly @SpringBootTest-annotated today, so this rule "
+                            + "currently has no matches and is kept alive via allowEmptyShould)")
+                    .allowEmptyShould(true);
 
     @ArchTest
     public static final ArchRule springBootTestShouldExtendBaseClass =
@@ -54,16 +73,20 @@ public class TestingRulesTest {
                     .because("we should optimize IT tests!");
 
     @ArchTest
-    public static final ArchRule testsShouldNotUseJunitAssertions1 =
+    public static final ArchRule testsShouldNotUseJunitAssertionsByDependency =
             noClasses().that().haveSimpleNameEndingWith("Test")
+                    .and().resideOutsideOfPackage("..architecture..")
                     .should().dependOnClassesThat().haveFullyQualifiedName("org.junit.jupiter.api.Assertions")
-                    .because("we should use org.assertj.core.api.Assertions instead!");
+                    .because("we should use org.assertj.core.api.Assertions instead! (architecture "
+                            + "tests are exempt - see class javadoc)");
 
     @ArchTest
-    public static final ArchRule testsShouldNotUseJunitAssertions2 =
+    public static final ArchRule testsShouldNotUseJunitAssertionsByAccess =
             noClasses().that().haveSimpleNameEndingWith("Test")
+                    .and().resideOutsideOfPackage("..architecture..")
                     .should(USE_JUNIT_ASSERTIONS)
-                    .because("we should use org.assertj.core.api.Assertions instead!");
+                    .because("we should use org.assertj.core.api.Assertions instead! (architecture "
+                            + "tests are exempt - see class javadoc)");
 
 
     public static class MyTestsLocation implements LocationProvider {
