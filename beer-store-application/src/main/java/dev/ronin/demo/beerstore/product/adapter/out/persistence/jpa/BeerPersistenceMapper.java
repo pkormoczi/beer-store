@@ -1,5 +1,6 @@
-package dev.ronin.demo.beerstore.product.adapter.out.persistence;
+package dev.ronin.demo.beerstore.product.adapter.out.persistence.jpa;
 
+import dev.ronin.demo.beerstore.product.adapter.out.persistence.jpa.entity.BeerJpaEntity;
 import dev.ronin.demo.beerstore.product.domain.model.Beer;
 import dev.ronin.demo.beerstore.shared.kernel.Money;
 import org.mapstruct.Mapping;

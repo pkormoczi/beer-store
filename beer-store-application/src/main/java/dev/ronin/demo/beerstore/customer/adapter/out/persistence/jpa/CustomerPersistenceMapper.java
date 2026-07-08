@@ -1,5 +1,6 @@
-package dev.ronin.demo.beerstore.customer.adapter.out.persistence;
+package dev.ronin.demo.beerstore.customer.adapter.out.persistence.jpa;
 
+import dev.ronin.demo.beerstore.customer.adapter.out.persistence.jpa.entity.CustomerJpaEntity;
 import dev.ronin.demo.beerstore.customer.api.type.Address;
 import dev.ronin.demo.beerstore.customer.domain.model.Customer;
 import org.mapstruct.Mapper;

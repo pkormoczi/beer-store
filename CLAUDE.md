@@ -70,7 +70,9 @@ Package layout under `dev.ronin.demo.beerstore` is **module-first**, not layer-f
 │   └── port/out/              outbound ports (*Repository, and order's own *Lookup ACL ports)
 └── adapter/
     ├── in/rest/ (and /soap/ for customer)   inbound adapters
-    └── out/persistence/ (and /<other module>/ for order's ACL adapters)   outbound adapters
+    └── out/persistence/jpa/                 outbound adapters (repository, adapter, mapper)
+        └── entity/                            the *JpaEntity classes, one level deeper
+        (and out/<other module>/ for order's ACL adapters)
 ```
 
 `ModularityTests` (`architecture/ModularityTests.java`) calls `ApplicationModules.of(BeerStoreApplication.class).verify()` to enforce this — the primary boundary check now; it also writes PlantUML module diagrams to `target/spring-modulith-docs`. `platform` never becomes a Spring Modulith module in the first place (`spring.modulith.detection-strategy=explicitly-annotated` in `application.yml` means only `@ApplicationModule`-annotated packages count as modules at all, and `platform` deliberately carries none) — see **ADR-04** for the full rationale. The two boundary invariants Modulith would otherwise enforce for `platform` are instead plain ArchUnit rules in `PlatformBoundaryTest` (below).
@@ -95,7 +97,7 @@ Package layout under `dev.ronin.demo.beerstore` is **module-first**, not layer-f
 | `application/service` | Customers | Beers | Orders, OrderPlacedEventListener |
 | `application/port/out` | CustomerRepository | BeerRepository | OrderRepository, CustomerLookup, BeerLookup, BeerSnapshot |
 | `adapter/in` | rest: CustomerController, CustomersAdapter, CustomerMapper, CustomerRestExceptionHandler; soap: CustomerWs | *(none yet — see **ADR-16**)* | rest: OrderController, OrdersAdapter, OrderMapper, OrderRestExceptionHandler |
-| `adapter/out/persistence` | CustomerJpaEntity, CustomerJpaRepository, CustomerPersistenceAdapter, CustomerPersistenceMapper | BeerJpaEntity, BeerJpaRepository, BeerPersistenceAdapter, BeerPersistenceMapper (`priceAmount: BigDecimal` ↔ `Money`) | OrderJpaEntity, OrderLineJpaEntity (`@OneToMany(mappedBy="order", cascade=ALL, orphanRemoval=true)`), OrderJpaRepository, OrderPersistenceAdapter, OrderPersistenceMapper |
+| `adapter/out/persistence/jpa` (entities in `jpa/entity`) | CustomerJpaEntity, CustomerJpaRepository, CustomerPersistenceAdapter, CustomerPersistenceMapper | BeerJpaEntity, BeerJpaRepository, BeerPersistenceAdapter, BeerPersistenceMapper (`priceAmount: BigDecimal` ↔ `Money`) | OrderJpaEntity, OrderLineJpaEntity (`@OneToMany(mappedBy="order", cascade=ALL, orphanRemoval=true)`), OrderJpaRepository, OrderPersistenceAdapter, OrderPersistenceMapper |
 | `adapter/out/<other module>` | — | — | `adapter/out/customer/CustomerLookupAdapter`, `adapter/out/product/BeerLookupAdapter` |
 
 Notes:
@@ -125,9 +127,9 @@ All ArchUnit-enforced (suite lives in `architecture/`) — new code violating th
 | `*Controller` | `adapter.in.rest` | `@RestController`/`@Controller` |
 | `*Adapter` (any non-`*Management` `@Service`) | `adapter.in.rest` | `@Service` |
 | `*LookupAdapter` (ACL) | `adapter.out.<other module>` | `@Component` |
-| `*PersistenceAdapter` | `adapter.out.persistence` | `@Repository` |
-| `*JpaEntity` | `adapter.out.persistence` | `@Entity` |
-| `*Mapper` | `adapter.in.rest` or `adapter.out.persistence` | — |
+| `*PersistenceAdapter` | `adapter.out.persistence.jpa` | `@Repository` |
+| `*JpaEntity` | `adapter.out.persistence.jpa.entity` | `@Entity` |
+| `*Mapper` | `adapter.in.rest` or `adapter.out.persistence.jpa` | — |
 | `*Config` | anywhere | `@Configuration` |
 | logger | anywhere | `private static final log` (Lombok `@Slf4j`) |
 

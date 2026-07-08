@@ -1,6 +1,7 @@
-package dev.ronin.demo.beerstore.customer.adapter.out.persistence;
+package dev.ronin.demo.beerstore.customer.adapter.out.persistence.jpa;
 
 import dev.ronin.demo.beerstore.base.IntegrationTest;
+import dev.ronin.demo.beerstore.customer.adapter.out.persistence.jpa.entity.CustomerJpaEntity;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

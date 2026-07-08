@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.product.adapter.out.persistence;
+package dev.ronin.demo.beerstore.product.adapter.out.persistence.jpa;
 
 import dev.ronin.demo.beerstore.product.application.port.out.BeerRepository;
 import dev.ronin.demo.beerstore.product.domain.model.Beer;

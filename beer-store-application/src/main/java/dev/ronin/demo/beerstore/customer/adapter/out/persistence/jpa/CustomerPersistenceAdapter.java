@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.customer.adapter.out.persistence;
+package dev.ronin.demo.beerstore.customer.adapter.out.persistence.jpa;
 
 import dev.ronin.demo.beerstore.customer.application.port.out.CustomerRepository;
 import dev.ronin.demo.beerstore.customer.domain.model.Customer;

@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.order.adapter.out.persistence;
+package dev.ronin.demo.beerstore.order.adapter.out.persistence.jpa.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,4 +1,4 @@
-package dev.ronin.demo.beerstore.customer.adapter.out.persistence;
+package dev.ronin.demo.beerstore.customer.adapter.out.persistence.jpa.entity;
 
 import dev.ronin.demo.beerstore.customer.api.type.CustomerStatus;
 import jakarta.persistence.*;

@@ -1,5 +1,7 @@
-package dev.ronin.demo.beerstore.order.adapter.out.persistence;
+package dev.ronin.demo.beerstore.order.adapter.out.persistence.jpa;
 
+import dev.ronin.demo.beerstore.order.adapter.out.persistence.jpa.entity.OrderJpaEntity;
+import dev.ronin.demo.beerstore.order.adapter.out.persistence.jpa.entity.OrderLineJpaEntity;
 import dev.ronin.demo.beerstore.order.domain.model.Order;
 import dev.ronin.demo.beerstore.order.domain.model.OrderLine;
 import dev.ronin.demo.beerstore.shared.kernel.Money;
