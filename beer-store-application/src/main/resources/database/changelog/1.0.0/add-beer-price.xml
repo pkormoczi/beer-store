@@ -4,9 +4,9 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet author="pkormoczi" id="add_customer_status" logicalFilePath="db/changelog/1.1.0/add-customer-status.xml">
-        <addColumn tableName="customer">
-            <column defaultValue="ACTIVE" name="status" type="VARCHAR(30)">
+    <changeSet author="pkormoczi" id="add_beer_price" logicalFilePath="db/changelog/1.0.0/add-beer-price.xml">
+        <addColumn tableName="beer">
+            <column defaultValueNumeric="0" name="price_amount" type="NUMERIC(19, 2)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>

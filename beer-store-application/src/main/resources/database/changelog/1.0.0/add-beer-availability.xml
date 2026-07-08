@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet author="pkormoczi" id="add_beer_availability" logicalFilePath="db/changelog/1.2.0/add-beer-availability.xml">
+    <changeSet author="pkormoczi" id="add_beer_availability" logicalFilePath="db/changelog/1.0.0/add-beer-availability.xml">
         <addColumn tableName="beer">
             <column defaultValue="IN_STOCK" name="availability" type="VARCHAR(30)">
                 <constraints nullable="false"/>

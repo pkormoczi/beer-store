@@ -11,11 +11,11 @@
         on beer_id alone, meaning a given beer could only ever appear in one order across the
         entire system.
     -->
-    <changeSet author="pkormoczi" id="drop_beer_order_beers" logicalFilePath="db/changelog/1.1.0/create-beer-order-line.xml">
+    <changeSet author="pkormoczi" id="drop_beer_order_beers" logicalFilePath="db/changelog/1.0.0/create-beer-order-line.xml">
         <dropTable tableName="beer_order_beers"/>
     </changeSet>
 
-    <changeSet author="pkormoczi" id="create_beer_order_line" logicalFilePath="db/changelog/1.1.0/create-beer-order-line.xml">
+    <changeSet author="pkormoczi" id="create_beer_order_line" logicalFilePath="db/changelog/1.0.0/create-beer-order-line.xml">
         <createTable tableName="beer_order_line">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="pk_beer_order_line"/>

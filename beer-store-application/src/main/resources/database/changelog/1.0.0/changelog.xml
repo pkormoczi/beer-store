@@ -32,4 +32,10 @@
                                  initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION"
                                  referencedColumnNames="id" referencedTableName="beer_order" validate="true"/>
     </changeSet>
+
+    <include file="/database/changelog/1.0.0/add-beer-price.xml"/>
+    <include file="/database/changelog/1.0.0/add-customer-status.xml"/>
+    <include file="/database/changelog/1.0.0/create-beer-order-line.xml"/>
+    <include file="/database/changelog/1.0.0/add-beer-abv.xml"/>
+    <include file="/database/changelog/1.0.0/add-beer-availability.xml"/>
 </databaseChangeLog>

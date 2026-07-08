@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
-    <changeSet author="pkormoczi" id="add_beer_abv" logicalFilePath="db/changelog/1.2.0/add-beer-abv.xml">
+    <changeSet author="pkormoczi" id="add_beer_abv" logicalFilePath="db/changelog/1.0.0/add-beer-abv.xml">
         <addColumn tableName="beer">
             <column defaultValueNumeric="0" name="abv" type="DOUBLE">
                 <constraints nullable="false"/>
