@@ -21,7 +21,6 @@
         <version.beer-store-contract>${revision}</version.beer-store-contract>
         <version.commons-io>2.14.0</version.commons-io>
         <version.jacoco-maven-plugin>0.8.14</version.jacoco-maven-plugin>
-        <version.jaxb2.fluent.api>3.0</version.jaxb2.fluent.api>
         <version.jaxb2.value.constructor>3.0</version.jaxb2.value.constructor>
         <version.jib-maven-plugin>3.3.2</version.jib-maven-plugin>
         <version.lombok-mapstruct-binding>0.2.0</version.lombok-mapstruct-binding>
@@ -182,7 +181,7 @@
         </dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-junit5</artifactId>
+            <artifactId>allure-jupiter</artifactId>
             <version>${version.allure}</version>
             <scope>test</scope>
         </dependency>
@@ -331,11 +330,6 @@
                     </dependency>
                     <dependency>
                         <groupId>org.jvnet.jaxb2_commons</groupId>
-                        <artifactId>jaxb2-fluent-api</artifactId>
-                        <version>${version.jaxb2.fluent.api}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.jvnet.jaxb2_commons</groupId>
                         <artifactId>jaxb2-value-constructor</artifactId>
                         <version>${version.jaxb2.value.constructor}</version>
                     </dependency>
@@ -358,7 +352,6 @@
                                     <extension>true</extension>
                                     <extensionArgs>
                                         <extensionArg>-Xvalue-constructor</extensionArg>
-                                        <extensionArg>-Xfluent-api</extensionArg>
                                         <extensionArg>-Xbg</extensionArg>
                                     </extensionArgs>
                                 </xsdOption>
@@ -389,14 +382,21 @@
                             <version>${version.lombok-mapstruct-binding}</version>
                         </path>
                     </annotationProcessorPaths>
-                    <compilerArgs>
-                        <compilerArg>-Amapstruct.suppressGeneratorTimestamp=true</compilerArg>
-                        <compilerArg>-Amapstruct.suppressGeneratorVersionInfoComment=true</compilerArg>
-                        <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
-                        <compilerArg>-Amapstruct.verbose=true</compilerArg>
-                        <compilerArg>-Amapstruct.defaultInjectionStrategy=constructor</compilerArg>
-                    </compilerArgs>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>default-compile</id>
+                        <configuration>
+                            <compilerArgs>
+                                <compilerArg>-Amapstruct.suppressGeneratorTimestamp=true</compilerArg>
+                                <compilerArg>-Amapstruct.suppressGeneratorVersionInfoComment=true</compilerArg>
+                                <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
+                                <compilerArg>-Amapstruct.verbose=true</compilerArg>
+                                <compilerArg>-Amapstruct.defaultInjectionStrategy=constructor</compilerArg>
+                            </compilerArgs>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

@@ -20,6 +20,7 @@ import java.util.List;
 public interface OrderPersistenceMapper {
 
     @Mapping(target = "lines", ignore = true)
+    @Mapping(target = "line", ignore = true) // Lombok @Singular adder on OrderJpaEntity.lines
     OrderJpaEntity toEntityWithoutLines(Order order);
 
     default OrderJpaEntity toData(Order order) {

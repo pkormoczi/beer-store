@@ -5,6 +5,7 @@ import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
 import dev.ronin.demo.beerstore.shared.api.model.AddressModel;
 import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ public interface CustomerMapper {
      * Used by contract-test fixtures to build a {@link CustomerView} straight from a
      * {@code CustomerModel} JSON fixture, going through the production mapper.
      */
+    @Mapping(target = "status", ignore = true) // not present on the wire CustomerModel
     CustomerView toView(final CustomerModel model);
 
     dev.ronin.demo.beerstore.shared.contract.customerdata.Customer toWsModel(final CustomerView customer);
