@@ -16,8 +16,8 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [x] Database migrations with Liquibase
  - [x] MapStruct as adapter
  - [ ] Transaction management refinement
- - [ ] Events, with Spring application events
- - [ ] Spring Modulith (module boundaries, event publication, generated module docs)
+ - [x] Events, with Spring application events
+ - [x] Spring Modulith (module boundaries, event publication, generated module docs)
  - [ ] Virtual threads (`spring.threads.virtual.enabled=true`, with a before/after load comparison)
 
 ### API layer
