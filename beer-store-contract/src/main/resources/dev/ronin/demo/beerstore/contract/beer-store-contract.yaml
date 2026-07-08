@@ -213,9 +213,10 @@ paths:
       summary: Browse and search the beer catalog
       description: >-
         Returns the beers available in the catalog, optionally filtered by name,
-        style, alcohol-by-volume range and price range, and sorted by a chosen
-        field and direction. All query parameters are optional; when none are
-        supplied the full catalog is returned in the default sort order.
+        style, alcohol-by-volume range, price range and availability, and sorted
+        by a chosen field and direction. All query parameters are optional; when
+        none are supplied the full catalog is returned in the default sort order,
+        regardless of availability.
       parameters:
         - name: name
           in: query
@@ -261,6 +262,16 @@ paths:
           schema:
             type: number
             minimum: 0
+        - name: availability
+          in: query
+          required: false
+          description: Restrict the result to beers in any of the given availability states.
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/BeerAvailability'
         - name: sortBy
           in: query
           required: false
@@ -438,11 +449,11 @@ components:
           type: number
           minimum: 0
           description: The price of a single unit of the beer.
-        status:
+        availability:
           readOnly: true
-          description: The availability status of the beer in the catalog.
+          description: The warehouse availability of the beer in the catalog.
           allOf:
-            - $ref: '#/components/schemas/BeerStatus'
+            - $ref: '#/components/schemas/BeerAvailability'
     BeerStyle:
       type: string
       description: The recognised beer styles in the catalog.
@@ -453,12 +464,15 @@ components:
         - ALE
         - SESSION
         - SAISON
-    BeerStatus:
+    BeerAvailability:
       type: string
-      description: Whether a beer is currently available in the catalog.
+      description: The warehouse availability of a beer in the catalog.
       enum:
-        - ACTIVE
-        - INACTIVE
+        - IN_STOCK
+        - LOW_STOCK
+        - OUT_OF_STOCK
+        - DISCONTINUED
+        - COMING_SOON
     BeerSortField:
       type: string
       description: The field the catalog can be sorted by.
@@ -468,6 +482,7 @@ components:
         - STYLE
         - ABV
         - PRICE
+        - AVAILABILITY
     SortDirection:
       type: string
       description: The direction a sort field is ordered in.
