@@ -3,6 +3,7 @@ package dev.ronin.demo.beerstore.product.application.service;
 import dev.ronin.demo.beerstore.product.api.BeerManagement;
 import dev.ronin.demo.beerstore.product.api.command.CreateBeer;
 import dev.ronin.demo.beerstore.product.api.exception.BeerNotFoundException;
+import dev.ronin.demo.beerstore.product.api.query.BrowseCatalog;
 import dev.ronin.demo.beerstore.product.api.query.FindBeers;
 import dev.ronin.demo.beerstore.product.api.query.GetBeer;
 import dev.ronin.demo.beerstore.product.api.view.BeerView;
@@ -30,8 +31,8 @@ public class Beers implements BeerManagement {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BeerView> listBeers() {
-        return beerRepository.findAll().stream().map(Beers::toView).toList();
+    public List<BeerView> browse(BrowseCatalog query) {
+        return beerRepository.findMatching(query).stream().map(Beers::toView).toList();
     }
 
     @Override
@@ -44,12 +45,12 @@ public class Beers implements BeerManagement {
     @Override
     @Transactional
     public BeerView createBeer(CreateBeer command) {
-        Beer saved = beerRepository.save(
-                Beer.create(command.name(), command.beerStyle(), command.abv(), command.price()));
+        Beer saved = beerRepository.save(Beer.create(command.name(), command.beerStyle(), command.abv(),
+                command.price(), command.availability()));
         return toView(saved);
     }
 
     private static BeerView toView(Beer beer) {
-        return new BeerView(beer.id(), beer.name(), beer.beerStyle(), beer.abv(), beer.price());
+        return new BeerView(beer.id(), beer.name(), beer.beerStyle(), beer.abv(), beer.price(), beer.availability());
     }
 }

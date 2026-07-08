@@ -1,5 +1,6 @@
 package dev.ronin.demo.beerstore.product.adapter.out.persistence.jpa.entity;
 
+import dev.ronin.demo.beerstore.product.api.type.BeerAvailability;
 import dev.ronin.demo.beerstore.product.api.type.BeerStyle;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,4 +27,7 @@ public class BeerJpaEntity {
     private double abv;
 
     private BigDecimal priceAmount;
+
+    @Enumerated(EnumType.STRING)
+    private BeerAvailability availability;
 }

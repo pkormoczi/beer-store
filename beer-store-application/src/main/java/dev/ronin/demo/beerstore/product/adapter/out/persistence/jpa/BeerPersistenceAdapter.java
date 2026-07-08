@@ -1,5 +1,6 @@
 package dev.ronin.demo.beerstore.product.adapter.out.persistence.jpa;
 
+import dev.ronin.demo.beerstore.product.api.query.BrowseCatalog;
 import dev.ronin.demo.beerstore.product.application.port.out.BeerRepository;
 import dev.ronin.demo.beerstore.product.domain.model.Beer;
 import org.springframework.stereotype.Repository;
@@ -24,8 +25,9 @@ public class BeerPersistenceAdapter implements BeerRepository {
     }
 
     @Override
-    public List<Beer> findAll() {
-        return jpaRepository.findAll().stream().map(mapper::toDomain).toList();
+    public List<Beer> findMatching(BrowseCatalog criteria) {
+        return jpaRepository.findAll(BeerSpecifications.matching(criteria), BeerSpecifications.sortOf(criteria.sortBy(), criteria.sortDirection()))
+                .stream().map(mapper::toDomain).toList();
     }
 
     @Override

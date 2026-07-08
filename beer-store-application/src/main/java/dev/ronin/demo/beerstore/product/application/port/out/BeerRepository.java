@@ -1,5 +1,6 @@
 package dev.ronin.demo.beerstore.product.application.port.out;
 
+import dev.ronin.demo.beerstore.product.api.query.BrowseCatalog;
 import dev.ronin.demo.beerstore.product.domain.model.Beer;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +12,7 @@ public interface BeerRepository {
 
     List<Beer> findAllById(List<Long> ids);
 
-    List<Beer> findAll();
+    List<Beer> findMatching(BrowseCatalog criteria);
 
     Optional<Beer> findById(Long id);
 

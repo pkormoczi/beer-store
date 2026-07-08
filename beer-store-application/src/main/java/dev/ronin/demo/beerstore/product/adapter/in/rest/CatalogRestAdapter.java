@@ -1,17 +1,22 @@
 package dev.ronin.demo.beerstore.product.adapter.in.rest;
 
 import dev.ronin.demo.beerstore.product.api.BeerManagement;
+import dev.ronin.demo.beerstore.product.api.query.BrowseCatalog;
 import dev.ronin.demo.beerstore.product.api.query.GetBeer;
+import dev.ronin.demo.beerstore.shared.api.model.BeerAvailabilityDto;
 import dev.ronin.demo.beerstore.shared.api.model.BeerDto;
+import dev.ronin.demo.beerstore.shared.api.model.BeerSortFieldDto;
+import dev.ronin.demo.beerstore.shared.api.model.BeerStyleDto;
+import dev.ronin.demo.beerstore.shared.api.model.SortDirectionDto;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
  * Bridges the generated {@link dev.ronin.demo.beerstore.shared.api.CatalogApi} wire contract to
- * {@link BeerManagement}. The contract already declares filter/sort query parameters
- * (name/style/minAbv/maxAbv/minPrice/maxPrice/sortBy/sortDirection) for a future round - this
- * first, minimal-skeleton round only lists every beer / fetches one by id, and ignores them.
+ * {@link BeerManagement}: translates the wire-format filter/sort DTOs to domain enums via
+ * {@link CatalogMapper} and assembles a {@link BrowseCatalog} query.
  */
 @Service
 public class CatalogRestAdapter {
@@ -24,8 +29,12 @@ public class CatalogRestAdapter {
         this.catalogMapper = catalogMapper;
     }
 
-    public List<BeerDto> browse() {
-        return catalogMapper.toDtoList(beerManagement.listBeers());
+    public List<BeerDto> browse(String name, BeerStyleDto style, Double minAbv, Double maxAbv, BigDecimal minPrice,
+            BigDecimal maxPrice, List<BeerAvailabilityDto> availability, BeerSortFieldDto sortBy, SortDirectionDto sortDirection) {
+        BrowseCatalog query = new BrowseCatalog(name, catalogMapper.toBeerStyle(style), minAbv, maxAbv, minPrice,
+                maxPrice, catalogMapper.toAvailabilities(availability), catalogMapper.toSortField(sortBy),
+                catalogMapper.toSortDirection(sortDirection));
+        return catalogMapper.toDtoList(beerManagement.browse(query));
     }
 
     public BeerDto beerWithId(Long id) {

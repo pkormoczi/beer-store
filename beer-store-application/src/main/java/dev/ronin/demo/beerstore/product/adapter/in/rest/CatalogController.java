@@ -1,6 +1,7 @@
 package dev.ronin.demo.beerstore.product.adapter.in.rest;
 
 import dev.ronin.demo.beerstore.shared.api.CatalogApi;
+import dev.ronin.demo.beerstore.shared.api.model.BeerAvailabilityDto;
 import dev.ronin.demo.beerstore.shared.api.model.BeerDto;
 import dev.ronin.demo.beerstore.shared.api.model.BeerSortFieldDto;
 import dev.ronin.demo.beerstore.shared.api.model.BeerStyleDto;
@@ -22,8 +23,10 @@ public class CatalogController implements CatalogApi {
 
     @Override
     public ResponseEntity<List<BeerDto>> browseBeers(String name, BeerStyleDto style, Double minAbv, Double maxAbv,
-            BigDecimal minPrice, BigDecimal maxPrice, BeerSortFieldDto sortBy, SortDirectionDto sortDirection) {
-        return ResponseEntity.ok(catalogRestAdapter.browse());
+            BigDecimal minPrice, BigDecimal maxPrice, List<BeerAvailabilityDto> availability, BeerSortFieldDto sortBy,
+            SortDirectionDto sortDirection) {
+        return ResponseEntity.ok(catalogRestAdapter.browse(name, style, minAbv, maxAbv, minPrice, maxPrice,
+                availability, sortBy, sortDirection));
     }
 
     @Override

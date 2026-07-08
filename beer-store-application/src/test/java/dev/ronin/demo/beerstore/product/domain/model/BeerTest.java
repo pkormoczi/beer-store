@@ -1,5 +1,6 @@
 package dev.ronin.demo.beerstore.product.domain.model;
 
+import dev.ronin.demo.beerstore.product.api.type.BeerAvailability;
 import dev.ronin.demo.beerstore.product.api.type.BeerStyle;
 import dev.ronin.demo.beerstore.shared.kernel.Money;
 import org.junit.jupiter.api.DisplayName;
@@ -18,13 +19,29 @@ class BeerTest {
     @Test
     @DisplayName("A newly created beer has no id and the given attributes")
     void createBuildsUnsavedBeer() {
-        Beer beer = Beer.create("Csoda IPA", BeerStyle.IPA, ABV, PRICE);
+        Beer beer = Beer.create("Csoda IPA", BeerStyle.IPA, ABV, PRICE, BeerAvailability.LOW_STOCK);
 
         then(beer.id()).isNull();
         then(beer.name()).isEqualTo("Csoda IPA");
         then(beer.beerStyle()).isEqualTo(BeerStyle.IPA);
         then(beer.abv()).isEqualTo(ABV);
         then(beer.price()).isEqualTo(PRICE);
+        then(beer.availability()).isEqualTo(BeerAvailability.LOW_STOCK);
+    }
+
+    @Test
+    @DisplayName("The convenience factory defaults availability to IN_STOCK")
+    void createWithoutAvailabilityDefaultsToInStock() {
+        Beer beer = Beer.create("Csoda IPA", BeerStyle.IPA, ABV, PRICE);
+
+        then(beer.availability()).isEqualTo(BeerAvailability.IN_STOCK);
+    }
+
+    @Test
+    @DisplayName("A null availability is rejected")
+    void nullAvailabilityIsRejected() {
+        assertThatThrownBy(() -> Beer.create("Csoda IPA", BeerStyle.IPA, ABV, PRICE, null))
+                .isInstanceOf(NullPointerException.class);
     }
 
     @Test

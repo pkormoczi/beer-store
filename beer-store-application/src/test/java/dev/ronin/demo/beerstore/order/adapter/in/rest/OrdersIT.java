@@ -3,6 +3,7 @@ package dev.ronin.demo.beerstore.order.adapter.in.rest;
 import dev.ronin.demo.beerstore.base.IntegrationTest;
 import dev.ronin.demo.beerstore.product.api.BeerManagement;
 import dev.ronin.demo.beerstore.product.api.command.CreateBeer;
+import dev.ronin.demo.beerstore.product.api.type.BeerAvailability;
 import dev.ronin.demo.beerstore.product.api.type.BeerStyle;
 import dev.ronin.demo.beerstore.product.api.view.BeerView;
 import dev.ronin.demo.beerstore.customer.api.CustomerManagement;
@@ -38,7 +39,7 @@ public class OrdersIT extends IntegrationTest {
         CustomerView savedCustomer = customerManagement.registerCustomer(new RegisterCustomer("First", "Last",
                 new Address("Hungary", "1095", "Budapest", "Teszt utca 1")));
         BeerView savedBeer = beerManagement.createBeer(
-                new CreateBeer("Csoda IPA", BeerStyle.IPA, 5.5, new Money(new BigDecimal("2.50"))));
+                new CreateBeer("Csoda IPA", BeerStyle.IPA, 5.5, new Money(new BigDecimal("2.50")), BeerAvailability.IN_STOCK));
         OrderDto given = givenOrder(savedCustomer.id(), savedBeer.id());
         //When
         ResponseEntity<Long> result = orderController.createOrder(given);
