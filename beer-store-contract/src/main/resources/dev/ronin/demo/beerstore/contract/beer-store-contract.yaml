@@ -6,6 +6,9 @@ info:
 servers:
   - url: 'http://localhost:8080'
     description: Generated server url
+tags:
+  - name: catalog
+    description: Browse and search the beer catalog that is available to customers.
 paths:
   /orders:
     get:
@@ -202,6 +205,117 @@ paths:
       responses:
         '204':
           description: NO CONTENT
+  /catalog:
+    get:
+      tags:
+        - catalog
+      operationId: browseBeers
+      summary: Browse and search the beer catalog
+      description: >-
+        Returns the beers available in the catalog, optionally filtered by name,
+        style, alcohol-by-volume range and price range, and sorted by a chosen
+        field and direction. All query parameters are optional; when none are
+        supplied the full catalog is returned in the default sort order.
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: Partial, case-insensitive match against the beer name.
+          schema:
+            type: string
+        - name: style
+          in: query
+          required: false
+          description: Restrict the result to a single beer style.
+          schema:
+            $ref: '#/components/schemas/BeerStyle'
+        - name: minAbv
+          in: query
+          required: false
+          description: Only include beers whose alcohol-by-volume is at least this value (percent).
+          schema:
+            type: number
+            format: double
+            minimum: 0
+            maximum: 100
+        - name: maxAbv
+          in: query
+          required: false
+          description: Only include beers whose alcohol-by-volume is at most this value (percent).
+          schema:
+            type: number
+            format: double
+            minimum: 0
+            maximum: 100
+        - name: minPrice
+          in: query
+          required: false
+          description: Only include beers priced at or above this amount.
+          schema:
+            type: number
+            minimum: 0
+        - name: maxPrice
+          in: query
+          required: false
+          description: Only include beers priced at or below this amount.
+          schema:
+            type: number
+            minimum: 0
+        - name: sortBy
+          in: query
+          required: false
+          description: The field the catalog is sorted by.
+          schema:
+            $ref: '#/components/schemas/BeerSortField'
+        - name: sortDirection
+          in: query
+          required: false
+          description: The direction the chosen sort field is ordered in.
+          schema:
+            $ref: '#/components/schemas/SortDirection'
+      responses:
+        '200':
+          description: The matching beers, in the requested order.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Beer'
+        '400':
+          description: One or more query parameters were invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+  '/catalog/{id}':
+    get:
+      tags:
+        - catalog
+      operationId: getBeerById
+      summary: Fetch a single beer from the catalog
+      description: Returns the catalog entry for the beer with the given identifier.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The unique identifier of the beer to fetch.
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The requested beer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beer'
+        '404':
+          description: No beer exists with the given identifier.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
   /:
     get:
       tags:
@@ -294,3 +408,85 @@ components:
           type: string
         address:
           $ref: '#/components/schemas/Address'
+    Beer:
+      required:
+        - abv
+        - beerStyle
+        - name
+        - price
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          readOnly: true
+          description: The unique identifier of the beer, assigned by the server.
+        name:
+          type: string
+          description: The display name of the beer.
+        beerStyle:
+          description: The style the beer belongs to.
+          allOf:
+            - $ref: '#/components/schemas/BeerStyle'
+        abv:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 100
+          description: The alcohol-by-volume of the beer, expressed as a percentage.
+        price:
+          type: number
+          minimum: 0
+          description: The price of a single unit of the beer.
+        status:
+          readOnly: true
+          description: The availability status of the beer in the catalog.
+          allOf:
+            - $ref: '#/components/schemas/BeerStatus'
+    BeerStyle:
+      type: string
+      description: The recognised beer styles in the catalog.
+      enum:
+        - IPA
+        - APA
+        - LAGER
+        - ALE
+        - SESSION
+        - SAISON
+    BeerStatus:
+      type: string
+      description: Whether a beer is currently available in the catalog.
+      enum:
+        - ACTIVE
+        - INACTIVE
+    BeerSortField:
+      type: string
+      description: The field the catalog can be sorted by.
+      default: NAME
+      enum:
+        - NAME
+        - STYLE
+        - ABV
+        - PRICE
+    SortDirection:
+      type: string
+      description: The direction a sort field is ordered in.
+      default: ASC
+      enum:
+        - ASC
+        - DESC
+    ErrorDetails:
+      type: object
+      description: A structured description of an error returned by the API.
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The moment the error was produced.
+        message:
+          type: string
+          description: A human-readable summary of the error.
+        details:
+          type: string
+          description: Additional context about the error.
