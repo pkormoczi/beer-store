@@ -14,12 +14,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrdersAdapter {
+public class OrderRestAdapter {
 
     private final OrderManagement orderManagement;
     private final OrderMapper orderMapper;
 
-    public OrdersAdapter(OrderManagement orderManagement, OrderMapper orderMapper) {
+    public OrderRestAdapter(OrderManagement orderManagement, OrderMapper orderMapper) {
         this.orderManagement = orderManagement;
         this.orderMapper = orderMapper;
     }

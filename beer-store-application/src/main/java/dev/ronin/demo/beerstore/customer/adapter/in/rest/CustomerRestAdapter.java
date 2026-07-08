@@ -15,12 +15,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CustomersAdapter {
+public class CustomerRestAdapter {
 
     private final CustomerMapper customerMapper;
     private final CustomerManagement customerManagement;
 
-    public CustomersAdapter(CustomerMapper customerMapper, CustomerManagement customerManagement) {
+    public CustomerRestAdapter(CustomerMapper customerMapper, CustomerManagement customerManagement) {
         this.customerMapper = customerMapper;
         this.customerManagement = customerManagement;
     }

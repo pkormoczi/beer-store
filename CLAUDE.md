@@ -96,7 +96,7 @@ Package layout under `dev.ronin.demo.beerstore` is **module-first**, not layer-f
 | `domain/event` | — | — | OrderPlaced (internal only, no cross-module listener — see **ADR-12**) |
 | `application/service` | Customers | Beers | Orders, OrderPlacedEventListener |
 | `application/port/out` | CustomerRepository | BeerRepository | OrderRepository, CustomerLookup, BeerLookup, BeerSnapshot |
-| `adapter/in` | rest: CustomerController, CustomersAdapter, CustomerMapper, CustomerRestExceptionHandler; soap: CustomerWs | *(none yet — see **ADR-16**)* | rest: OrderController, OrdersAdapter, OrderMapper, OrderRestExceptionHandler |
+| `adapter/in` | rest: CustomerController, CustomerRestAdapter, CustomerMapper, CustomerRestExceptionHandler; soap: CustomerWs | *(none yet — see **ADR-16**)* | rest: OrderController, OrderRestAdapter, OrderMapper, OrderRestExceptionHandler |
 | `adapter/out/persistence/jpa` (entities in `jpa/entity`) | CustomerJpaEntity, CustomerJpaRepository, CustomerPersistenceAdapter, CustomerPersistenceMapper | BeerJpaEntity, BeerJpaRepository, BeerPersistenceAdapter, BeerPersistenceMapper (`priceAmount: BigDecimal` ↔ `Money`) | OrderJpaEntity, OrderLineJpaEntity (`@OneToMany(mappedBy="order", cascade=ALL, orphanRemoval=true)`), OrderJpaRepository, OrderPersistenceAdapter, OrderPersistenceMapper |
 | `adapter/out/<other module>` | — | — | `adapter/out/customer/CustomerLookupAdapter`, `adapter/out/product/BeerLookupAdapter` |
 

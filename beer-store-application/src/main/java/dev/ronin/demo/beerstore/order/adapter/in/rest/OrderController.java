@@ -11,35 +11,35 @@ import java.util.List;
 @RestController
 public class OrderController implements OrderApi {
 
-    private final OrdersAdapter ordersAdapter;
+    private final OrderRestAdapter orderRestAdapter;
 
-    public OrderController(OrdersAdapter ordersAdapter) {
-        this.ordersAdapter = ordersAdapter;
+    public OrderController(OrderRestAdapter orderRestAdapter) {
+        this.orderRestAdapter = orderRestAdapter;
     }
 
     @Override
     public ResponseEntity<OrderModel> getOrderById(final Long id) {
-        return ResponseEntity.ok(ordersAdapter.findById(id));
+        return ResponseEntity.ok(orderRestAdapter.findById(id));
     }
 
     @Override
     public ResponseEntity<List<OrderModel>> getOrders() {
-        return ResponseEntity.ok(ordersAdapter.getOrders());
+        return ResponseEntity.ok(orderRestAdapter.getOrders());
     }
 
     @Override
     public ResponseEntity<Long> createOrder(OrderModel orderModel) {
-        return ResponseEntity.ok(ordersAdapter.addOrder(orderModel));
+        return ResponseEntity.ok(orderRestAdapter.addOrder(orderModel));
     }
 
     @Override
     public ResponseEntity<OrderModel> updateOrderStatus(Long id, OrderStatusUpdateRequestModel orderStatusUpdateRequestModel) {
-        return ResponseEntity.ok(ordersAdapter.updateOrderStatus(id, orderStatusUpdateRequestModel.getStatus()));
+        return ResponseEntity.ok(orderRestAdapter.updateOrderStatus(id, orderStatusUpdateRequestModel.getStatus()));
     }
 
     @Override
     public ResponseEntity<Void> cancelOrder(Long id) {
-        ordersAdapter.cancelOrder(id);
+        orderRestAdapter.cancelOrder(id);
         return ResponseEntity.noContent().build();
     }
 }

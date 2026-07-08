@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.customer.adapter.in.soap;
 
-import dev.ronin.demo.beerstore.customer.adapter.in.rest.CustomersAdapter;
+import dev.ronin.demo.beerstore.customer.adapter.in.rest.CustomerRestAdapter;
 import dev.ronin.demo.beerstore.shared.contract.customerdata.GetCustomerRequest;
 import dev.ronin.demo.beerstore.shared.contract.customerdata.GetCustomerResponse;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
@@ -13,15 +13,15 @@ public class CustomerWs {
 
     private static final String NAMESPACE_URI = "http://demo.ronin.dev/beerstore/contract/customer";
 
-    private final CustomersAdapter customersAdapter;
+    private final CustomerRestAdapter customerRestAdapter;
 
-    public CustomerWs(CustomersAdapter customersAdapter) {
-        this.customersAdapter = customersAdapter;
+    public CustomerWs(CustomerRestAdapter customerRestAdapter) {
+        this.customerRestAdapter = customerRestAdapter;
     }
 
     @PayloadRoot(namespace = NAMESPACE_URI, localPart = "getCustomerRequest")
     @ResponsePayload
     public GetCustomerResponse getCustomer(@RequestPayload GetCustomerRequest request) {
-        return new GetCustomerResponse(customersAdapter.customerWithNameForWs(request.getName()));
+        return new GetCustomerResponse(customerRestAdapter.customerWithNameForWs(request.getName()));
     }
 }
