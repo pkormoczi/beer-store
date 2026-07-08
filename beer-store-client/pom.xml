@@ -165,7 +165,7 @@
               <invokerPackage>${package.infrastructure}.client</invokerPackage>
               <library>webclient</library>
               <generatorName>java</generatorName>
-              <modelNameSuffix>Model</modelNameSuffix>
+              <modelNameSuffix>Dto</modelNameSuffix>
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>
               </configOptions>

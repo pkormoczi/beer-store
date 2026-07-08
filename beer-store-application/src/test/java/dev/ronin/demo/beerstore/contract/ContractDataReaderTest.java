@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.contract;
 
 import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
-import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
+import dev.ronin.demo.beerstore.shared.api.model.CustomerDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -25,15 +25,15 @@ class ContractDataReaderTest {
     @Test
     @DisplayName("Any contract fixture can be read generically into a given type")
     void readGenericFixture() {
-        CustomerModel customerModel = contractDataReader.read("customer/customer", CustomerModel.class);
+        CustomerDto customerDto = contractDataReader.read("customer/customer", CustomerDto.class);
 
-        assertThat(customerModel.getFirstName()).isEqualTo("TestFirst");
+        assertThat(customerDto.getFirstName()).isEqualTo("TestFirst");
     }
 
     @Test
     @DisplayName("Missing fixture fails loudly instead of resolving silently")
     void missingFixtureFailsLoudly() {
-        assertThatThrownBy(() -> contractDataReader.read("no-such-fixture", CustomerModel.class))
+        assertThatThrownBy(() -> contractDataReader.read("no-such-fixture", CustomerDto.class))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("no-such-fixture");
     }

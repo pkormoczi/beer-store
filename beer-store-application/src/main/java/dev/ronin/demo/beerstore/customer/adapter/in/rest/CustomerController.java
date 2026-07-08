@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.customer.adapter.in.rest;
 
 import dev.ronin.demo.beerstore.shared.api.CustomerApi;
-import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
+import dev.ronin.demo.beerstore.shared.api.model.CustomerDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,28 +20,28 @@ public class CustomerController implements CustomerApi {
     }
 
     @Override
-    public ResponseEntity<CustomerModel> createCustomer(CustomerModel customerModel) {
-        return status(CREATED).body(customerRestAdapter.newCustomer(customerModel));
+    public ResponseEntity<CustomerDto> createCustomer(CustomerDto customerDto) {
+        return status(CREATED).body(customerRestAdapter.newCustomer(customerDto));
     }
 
     @Override
-    public ResponseEntity<CustomerModel> getCustomerById(Long id) {
+    public ResponseEntity<CustomerDto> getCustomerById(Long id) {
         return ResponseEntity.ok(customerRestAdapter.customerWithId(id));
     }
 
     @Override
-    public ResponseEntity<CustomerModel> getCustomerByName(String name) {
+    public ResponseEntity<CustomerDto> getCustomerByName(String name) {
         return ResponseEntity.ok(customerRestAdapter.customerWithName(name));
     }
 
     @Override
-    public ResponseEntity<List<CustomerModel>> getCustomers() {
+    public ResponseEntity<List<CustomerDto>> getCustomers() {
         return ResponseEntity.ok(customerRestAdapter.customers());
     }
 
     @Override
-    public ResponseEntity<CustomerModel> updateCustomer(Long id, CustomerModel customerModel) {
-        return ResponseEntity.ok(customerRestAdapter.updateCustomer(id, customerModel));
+    public ResponseEntity<CustomerDto> updateCustomer(Long id, CustomerDto customerDto) {
+        return ResponseEntity.ok(customerRestAdapter.updateCustomer(id, customerDto));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.order.adapter.in.rest;
 
 import dev.ronin.demo.beerstore.order.api.view.OrderView;
-import dev.ronin.demo.beerstore.shared.api.model.OrderModel;
+import dev.ronin.demo.beerstore.shared.api.model.OrderDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,8 +11,8 @@ import java.util.List;
 public interface OrderMapper {
 
     @Mapping(target = "status", source = "source.orderStatus")
-    OrderModel data(OrderView source);
+    OrderDto data(OrderView source);
 
-    List<OrderModel> dataList(List<OrderView> views);
+    List<OrderDto> dataList(List<OrderView> views);
 
 }

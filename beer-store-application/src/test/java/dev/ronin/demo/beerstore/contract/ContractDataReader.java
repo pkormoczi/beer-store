@@ -3,7 +3,7 @@ package dev.ronin.demo.beerstore.contract;
 import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
 import dev.ronin.demo.beerstore.customer.adapter.in.rest.CustomerMapper;
 import dev.ronin.demo.beerstore.customer.adapter.in.rest.CustomerMapperImpl;
-import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
+import dev.ronin.demo.beerstore.shared.api.model.CustomerDto;
 import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -21,7 +21,7 @@ class ContractDataReader {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public CustomerView readCustomerData() {
-        return customerMapper.toView(read("customer/customer", CustomerModel.class));
+        return customerMapper.toView(read("customer/customer", CustomerDto.class));
     }
 
     /**

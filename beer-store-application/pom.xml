@@ -463,7 +463,7 @@
                             <modelPackage>${package.shared}.api.model</modelPackage>
                             <generatorName>spring</generatorName>
                             <generateSupportingFiles>false</generateSupportingFiles>
-                            <modelNameSuffix>Model</modelNameSuffix>
+                            <modelNameSuffix>Dto</modelNameSuffix>
                             <configOptions>
                                 <interfaceOnly>true</interfaceOnly>
                             </configOptions>

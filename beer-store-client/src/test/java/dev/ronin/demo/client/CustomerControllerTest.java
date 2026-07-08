@@ -1,7 +1,7 @@
 package dev.ronin.demo.client;
 
-import dev.ronin.demo.beerstore.client.infrastructure.api.model.AddressModel;
-import dev.ronin.demo.beerstore.client.infrastructure.api.model.CustomerModel;
+import dev.ronin.demo.beerstore.client.infrastructure.api.model.AddressDto;
+import dev.ronin.demo.beerstore.client.infrastructure.api.model.CustomerDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,33 +41,33 @@ class CustomerControllerTest {
 
     @Test
     void testGetExistingCustomer() {
-        final CustomerModel responseBody = testClient.get().uri("/customers/search?name=TestFirst")
+        final CustomerDto responseBody = testClient.get().uri("/customers/search?name=TestFirst")
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(CustomerModel.class).returnResult().getResponseBody();
+                .expectBody(CustomerDto.class).returnResult().getResponseBody();
 
         assertThat(responseBody.getFirstName()).isEqualTo("TestFirst");
     }
 
     @Test
     void testCreateCustomer() {
-        final CustomerModel responseBody = testClient.post().uri("/customers")
+        final CustomerDto responseBody = testClient.post().uri("/customers")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(newCustomer()), CustomerModel.class)
+                .body(Mono.just(newCustomer()), CustomerDto.class)
                 .exchange()
                 .expectStatus().isCreated()
-                .expectBody(CustomerModel.class).returnResult().getResponseBody();
+                .expectBody(CustomerDto.class).returnResult().getResponseBody();
 
         assertThat(responseBody.getId()).isNotNull();
     }
 
-    private CustomerModel newCustomer() {
-        CustomerModel customer = new CustomerModel();
+    private CustomerDto newCustomer() {
+        CustomerDto customer = new CustomerDto();
         customer.setFirstName("TestFirst");
         customer.setLastName("TestLast");
-        customer.setAddress(new AddressModel());
+        customer.setAddress(new AddressDto());
         customer.getAddress().setCountry("MockCountry");
         customer.getAddress().setCity("MockCity");
         customer.getAddress().setStreetAddress("MockAddress");

@@ -7,8 +7,8 @@ import dev.ronin.demo.beerstore.order.api.command.PlaceOrder;
 import dev.ronin.demo.beerstore.order.api.command.UpdateOrderStatus;
 import dev.ronin.demo.beerstore.order.api.query.GetOrder;
 import dev.ronin.demo.beerstore.order.api.type.OrderStatus;
-import dev.ronin.demo.beerstore.shared.api.model.OrderModel;
-import dev.ronin.demo.beerstore.shared.api.model.OrderStatusModel;
+import dev.ronin.demo.beerstore.shared.api.model.OrderDto;
+import dev.ronin.demo.beerstore.shared.api.model.OrderStatusDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,19 +24,19 @@ public class OrderRestAdapter {
         this.orderMapper = orderMapper;
     }
 
-    public OrderModel findById(Long id) {
+    public OrderDto findById(Long id) {
         return orderMapper.data(orderManagement.getOrder(new GetOrder(id)));
     }
 
-    public List<OrderModel> getOrders() {
+    public List<OrderDto> getOrders() {
         return orderMapper.dataList(orderManagement.listOrders());
     }
 
-    public Long addOrder(OrderModel order) {
+    public Long addOrder(OrderDto order) {
         return orderManagement.placeOrder(new PlaceOrder(order.getCustomerId(), order.getBeers()));
     }
 
-    public OrderModel updateOrderStatus(Long id, OrderStatusModel status) {
+    public OrderDto updateOrderStatus(Long id, OrderStatusDto status) {
         return orderMapper.data(orderManagement.updateOrderStatus(
                 new UpdateOrderStatus(id, OrderStatus.valueOf(status.name()))));
     }

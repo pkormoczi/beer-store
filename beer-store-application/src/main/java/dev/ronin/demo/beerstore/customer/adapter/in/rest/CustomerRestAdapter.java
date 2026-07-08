@@ -8,7 +8,7 @@ import dev.ronin.demo.beerstore.customer.api.exception.CustomerNotFoundException
 import dev.ronin.demo.beerstore.customer.api.query.FindCustomerByName;
 import dev.ronin.demo.beerstore.customer.api.query.GetCustomer;
 import dev.ronin.demo.beerstore.platform.security.Authorized;
-import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
+import dev.ronin.demo.beerstore.shared.api.model.CustomerDto;
 import dev.ronin.demo.beerstore.shared.contract.customerdata.Customer;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +25,8 @@ public class CustomerRestAdapter {
         this.customerManagement = customerManagement;
     }
 
-    public CustomerModel customerWithName(String name) {
-        return customerMapper.toModel(customerManagement.findCustomerByName(new FindCustomerByName(name))
+    public CustomerDto customerWithName(String name) {
+        return customerMapper.toDto(customerManagement.findCustomerByName(new FindCustomerByName(name))
                 .orElseThrow(() -> CustomerNotFoundException.byName(name)));
     }
 
@@ -35,24 +35,24 @@ public class CustomerRestAdapter {
                 .orElseThrow(() -> CustomerNotFoundException.byName(name)));
     }
 
-    public List<CustomerModel> customers() {
+    public List<CustomerDto> customers() {
         return customerMapper.data(customerManagement.listCustomers());
     }
 
-    public CustomerModel customerWithId(Long id) {
-        return customerMapper.toModel(customerManagement.getCustomer(new GetCustomer(id)));
+    public CustomerDto customerWithId(Long id) {
+        return customerMapper.toDto(customerManagement.getCustomer(new GetCustomer(id)));
     }
 
-    public CustomerModel newCustomer(CustomerModel customerModel) {
-        return customerMapper.toModel(customerManagement.registerCustomer(new RegisterCustomer(
-                customerModel.getFirstName(), customerModel.getLastName(),
-                customerMapper.toAddress(customerModel.getAddress()))));
+    public CustomerDto newCustomer(CustomerDto customerDto) {
+        return customerMapper.toDto(customerManagement.registerCustomer(new RegisterCustomer(
+                customerDto.getFirstName(), customerDto.getLastName(),
+                customerMapper.toAddress(customerDto.getAddress()))));
     }
 
-    public CustomerModel updateCustomer(Long id, CustomerModel customerModel) {
-        return customerMapper.toModel(customerManagement.updateCustomer(new UpdateCustomer(id,
-                customerModel.getFirstName(), customerModel.getLastName(),
-                customerMapper.toAddress(customerModel.getAddress()))));
+    public CustomerDto updateCustomer(Long id, CustomerDto customerDto) {
+        return customerMapper.toDto(customerManagement.updateCustomer(new UpdateCustomer(id,
+                customerDto.getFirstName(), customerDto.getLastName(),
+                customerMapper.toAddress(customerDto.getAddress()))));
     }
 
     @Authorized("ADMIN")

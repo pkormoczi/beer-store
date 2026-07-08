@@ -9,7 +9,7 @@ import dev.ronin.demo.beerstore.customer.api.CustomerManagement;
 import dev.ronin.demo.beerstore.customer.api.command.RegisterCustomer;
 import dev.ronin.demo.beerstore.customer.api.type.Address;
 import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
-import dev.ronin.demo.beerstore.shared.api.model.OrderModel;
+import dev.ronin.demo.beerstore.shared.api.model.OrderDto;
 import dev.ronin.demo.beerstore.shared.kernel.Money;
 import org.assertj.core.api.BDDAssertions;
 import org.junit.jupiter.api.DisplayName;
@@ -39,18 +39,18 @@ public class OrdersIT extends IntegrationTest {
                 new Address("Hungary", "1095", "Budapest", "Teszt utca 1")));
         BeerView savedBeer = beerManagement.createBeer(
                 new CreateBeer("Csoda IPA", BeerStyle.IPA, new Money(new BigDecimal("2.50"))));
-        OrderModel given = givenOrder(savedCustomer.id(), savedBeer.id());
+        OrderDto given = givenOrder(savedCustomer.id(), savedBeer.id());
         //When
         ResponseEntity<Long> result = orderController.createOrder(given);
         //Then
         BDDAssertions.then(result.getBody()).isNotNull();
     }
 
-    private OrderModel givenOrder(Long customerId, Long beerId) {
-        OrderModel model = new OrderModel();
-        model.setCustomerId(customerId);
-        model.setBeers(Collections.singletonList(beerId));
-        return model;
+    private OrderDto givenOrder(Long customerId, Long beerId) {
+        OrderDto dto = new OrderDto();
+        dto.setCustomerId(customerId);
+        dto.setBeers(Collections.singletonList(beerId));
+        return dto;
     }
 
 }
