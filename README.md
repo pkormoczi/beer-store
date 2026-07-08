@@ -1,6 +1,9 @@
 ## Beer Store
 
 [![CI](https://github.com/pkormoczi/beer-store/actions/workflows/ci.yml/badge.svg)](https://github.com/pkormoczi/beer-store/actions/workflows/ci.yml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pkormoczi_beer-store&metric=alert_status)](https://sonarcloud.io/project/overview?id=pkormoczi_beer-store)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=pkormoczi_beer-store&metric=coverage)](https://sonarcloud.io/project/overview?id=pkormoczi_beer-store)
+[![Docker Image Size](https://img.shields.io/docker/image-size/pkormoczi/beer-store/latest)](https://hub.docker.com/r/pkormoczi/beer-store)
 
 Beer Store is a simple proof of concept application focusing on the following features:
 
@@ -62,7 +65,7 @@ The `.github/workflows/ci.yml` workflow runs on every push to `master` and on pu
 1. Build `beer-store-contract` first (installed to the local repo, since dependent modules resolve its `-stubs` classifier from there), then the full reactor.
 2. Run unit (Surefire) and integration (Failsafe) tests in one pass, with Jacoco coverage covering both. Test and coverage reports are uploaded as workflow artifacts.
 3. Generate an [Allure](https://allurereport.org/) test report (request/response attachments on the RestAssured-based contract tests via `allure-rest-assured`).
-4. Run SonarCloud analysis (on `master` pushes and on same-repo pull requests).
+4. Run [SonarCloud](https://sonarcloud.io/) static analysis (on `master` pushes and on same-repo pull requests) — coverage, code smells, and the quality gate. Dashboard: **https://sonarcloud.io/project/overview?id=pkormoczi_beer-store**.
 5. On `master` pushes only:
   - Build a layered OCI image with Cloud Native Buildpacks (`spring-boot:build-image`, no Dockerfile).
   - Scan the image with [Trivy](https://trivy.dev/) (CRITICAL/HIGH, report-only — a scanner hiccup or a known base-image CVE doesn't block the pipeline).
