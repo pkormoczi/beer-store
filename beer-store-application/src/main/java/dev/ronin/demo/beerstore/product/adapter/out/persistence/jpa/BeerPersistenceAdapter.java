@@ -5,6 +5,7 @@ import dev.ronin.demo.beerstore.product.domain.model.Beer;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class BeerPersistenceAdapter implements BeerRepository {
@@ -20,6 +21,16 @@ public class BeerPersistenceAdapter implements BeerRepository {
     @Override
     public List<Beer> findAllById(List<Long> ids) {
         return jpaRepository.findAllById(ids).stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public List<Beer> findAll() {
+        return jpaRepository.findAll().stream().map(mapper::toDomain).toList();
+    }
+
+    @Override
+    public Optional<Beer> findById(Long id) {
+        return jpaRepository.findById(id).map(mapper::toDomain);
     }
 
     @Override

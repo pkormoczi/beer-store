@@ -38,7 +38,7 @@ public class OrdersIT extends IntegrationTest {
         CustomerView savedCustomer = customerManagement.registerCustomer(new RegisterCustomer("First", "Last",
                 new Address("Hungary", "1095", "Budapest", "Teszt utca 1")));
         BeerView savedBeer = beerManagement.createBeer(
-                new CreateBeer("Csoda IPA", BeerStyle.IPA, new Money(new BigDecimal("2.50"))));
+                new CreateBeer("Csoda IPA", BeerStyle.IPA, 5.5, new Money(new BigDecimal("2.50"))));
         OrderDto given = givenOrder(savedCustomer.id(), savedBeer.id());
         //When
         ResponseEntity<Long> result = orderController.createOrder(given);
