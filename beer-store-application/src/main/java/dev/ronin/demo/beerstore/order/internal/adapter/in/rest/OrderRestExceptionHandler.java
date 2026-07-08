@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.order.internal.adapter.in.rest;
 
-import dev.ronin.demo.beerstore.order.api.IllegalOrderStateException;
-import dev.ronin.demo.beerstore.order.api.OrderNotFoundException;
-import dev.ronin.demo.beerstore.order.api.UnknownBeerException;
+import dev.ronin.demo.beerstore.order.api.exception.IllegalOrderStateException;
+import dev.ronin.demo.beerstore.order.api.exception.OrderNotFoundException;
+import dev.ronin.demo.beerstore.order.api.exception.UnknownBeerException;
 import dev.ronin.demo.beerstore.platform.rest.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

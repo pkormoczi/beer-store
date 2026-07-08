@@ -27,22 +27,22 @@ class AdapterArchitectureTest {
     /**
      * Cross-module anti-corruption adapters (e.g. order's CustomerLookupAdapter/
      * BeerLookupAdapter), each translating a module-owned outbound *Lookup port to another
-     * module's *UseCase - a different kind of adapter than the driving *Adapter classes: plain
-     * @Component, living in internal.adapter.out.&lt;other module&gt;, not rest/.
+     * module's *Management port - a different kind of adapter than the driving *Adapter classes:
+     * plain @Component, living in internal.adapter.out.&lt;other module&gt;, not rest/.
      */
     private static final String LOOKUP_ADAPTER_POSTFIX = "LookupAdapter";
     private static final String MAPPER_POSTFIX = "Mapper";
 
     /**
      * The concrete aggregate-root @Service classes (e.g. Customers/Orders) are a different kind
-     * of @Service than the driving *Adapter classes: they implement a *UseCase port instead of
+     * of @Service than the driving *Adapter classes: they implement a *Management port instead of
      * being named *Adapter, so they're excluded from the naming rule below.
      */
     private static final DescribedPredicate<com.tngtech.archunit.core.domain.JavaClass> AGGREGATE_ROOT_SERVICE =
-            DescribedPredicate.describe("a concrete @Service implementing a *UseCase port",
+            DescribedPredicate.describe("a concrete @Service implementing a *Management port",
                     javaClass -> !javaClass.isInterface()
                             && javaClass.isAnnotatedWith(Service.class)
-                            && javaClass.getAllRawInterfaces().stream().anyMatch(i -> i.getSimpleName().endsWith("UseCase")));
+                            && javaClass.getAllRawInterfaces().stream().anyMatch(i -> i.getSimpleName().endsWith("Management")));
 
     @ArchTest
     public static final ArchRule controllersShouldBeNamedController =

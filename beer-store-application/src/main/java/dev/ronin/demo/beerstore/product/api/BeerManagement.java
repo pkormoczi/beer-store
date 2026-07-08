@@ -1,0 +1,20 @@
+package dev.ronin.demo.beerstore.product.api;
+
+import java.util.List;
+
+import dev.ronin.demo.beerstore.product.api.command.CreateBeer;
+import dev.ronin.demo.beerstore.product.api.query.FindBeers;
+import dev.ronin.demo.beerstore.product.api.view.BeerView;
+
+/**
+ * Inbound (driving) port for the product module, and its exposed API. Works exclusively with
+ * command/query/view DTOs; the translation to/from the internal
+ * {@link dev.ronin.demo.beerstore.product.internal.domain.model.Beer} happens inside
+ * {@link dev.ronin.demo.beerstore.product.internal.application.service.Beers}.
+ */
+public interface BeerManagement {
+
+    List<BeerView> findAllById(FindBeers query);
+
+    BeerView createBeer(CreateBeer command);
+}

@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.order.internal.application.service;
 
-import dev.ronin.demo.beerstore.order.api.OrderStatus;
-import dev.ronin.demo.beerstore.order.api.PlaceOrderCommand;
-import dev.ronin.demo.beerstore.order.api.UnknownBeerException;
+import dev.ronin.demo.beerstore.order.api.command.PlaceOrder;
+import dev.ronin.demo.beerstore.order.api.exception.UnknownBeerException;
+import dev.ronin.demo.beerstore.order.api.type.OrderStatus;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.BeerLookup;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.BeerSnapshot;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.CustomerLookup;
@@ -52,7 +52,7 @@ class OrdersTest {
         given(orderRepository.save(Mockito.any())).willReturn(expected);
         Orders orders = new Orders(orderRepository, beerLookup, customerLookup, eventPublisher);
 
-        Long actual = orders.placeOrder(new PlaceOrderCommand(1L, Collections.singletonList(1L)));
+        Long actual = orders.placeOrder(new PlaceOrder(1L, Collections.singletonList(1L)));
 
         BDDMockito.then(customerLookup).should().assertCustomerExists(1L);
         BDDMockito.then(orderRepository).should().save(orderArgumentCaptor.capture());
@@ -67,7 +67,7 @@ class OrdersTest {
         Orders orders = new Orders(orderRepository, beerLookup, customerLookup, eventPublisher);
 
         org.assertj.core.api.Assertions.assertThatThrownBy(
-                        () -> orders.placeOrder(new PlaceOrderCommand(1L, Collections.singletonList(99L))))
+                        () -> orders.placeOrder(new PlaceOrder(1L, Collections.singletonList(99L))))
                 .isInstanceOf(UnknownBeerException.class);
     }
 }

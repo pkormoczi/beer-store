@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.order.internal.adapter.out.product;
 
-import dev.ronin.demo.beerstore.product.api.BeerView;
-import dev.ronin.demo.beerstore.product.api.FindBeersQuery;
-import dev.ronin.demo.beerstore.product.api.ManageBeersUseCase;
+import dev.ronin.demo.beerstore.product.api.BeerManagement;
+import dev.ronin.demo.beerstore.product.api.query.FindBeers;
+import dev.ronin.demo.beerstore.product.api.view.BeerView;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.BeerLookup;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.BeerSnapshot;
 import org.springframework.stereotype.Component;
@@ -12,15 +12,15 @@ import java.util.List;
 @Component
 class BeerLookupAdapter implements BeerLookup {
 
-    private final ManageBeersUseCase manageBeersUseCase;
+    private final BeerManagement beerManagement;
 
-    BeerLookupAdapter(ManageBeersUseCase manageBeersUseCase) {
-        this.manageBeersUseCase = manageBeersUseCase;
+    BeerLookupAdapter(BeerManagement beerManagement) {
+        this.beerManagement = beerManagement;
     }
 
     @Override
     public List<BeerSnapshot> findExisting(List<Long> beerIds) {
-        return manageBeersUseCase.findAllById(new FindBeersQuery(beerIds)).stream()
+        return beerManagement.findAllById(new FindBeers(beerIds)).stream()
                 .map(BeerLookupAdapter::toSnapshot)
                 .toList();
     }

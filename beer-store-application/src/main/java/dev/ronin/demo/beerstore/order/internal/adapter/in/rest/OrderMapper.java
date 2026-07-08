@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.order.internal.adapter.in.rest;
 
-import dev.ronin.demo.beerstore.order.api.OrderView;
+import dev.ronin.demo.beerstore.order.api.view.OrderView;
 import dev.ronin.demo.beerstore.shared.api.model.OrderModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

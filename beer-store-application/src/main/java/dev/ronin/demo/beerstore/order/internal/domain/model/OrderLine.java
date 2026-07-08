@@ -8,7 +8,7 @@ import java.util.Objects;
  * A single line of an order: a beer id plus a name/price snapshot taken at the moment the order
  * was placed, and the quantity ordered. The snapshot is deliberate - if the beer's name or price
  * changes later, an already-placed order must not change retroactively, since it's a historical
- * document (see {@code Order}). Never holds a live {@code product.api.BeerView} reference.
+ * document (see {@code Order}). Never holds a live {@code product.api.view.BeerView} reference.
  */
 public record OrderLine(Long beerId, String beerNameSnapshot, Money unitPriceSnapshot, int quantity) {
 

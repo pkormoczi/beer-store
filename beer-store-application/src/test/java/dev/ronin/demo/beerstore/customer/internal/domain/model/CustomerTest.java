@@ -1,8 +1,8 @@
 package dev.ronin.demo.beerstore.customer.internal.domain.model;
 
-import dev.ronin.demo.beerstore.customer.api.Address;
-import dev.ronin.demo.beerstore.customer.api.CustomerStatus;
-import dev.ronin.demo.beerstore.customer.api.IllegalCustomerStateException;
+import dev.ronin.demo.beerstore.customer.api.exception.IllegalCustomerStateException;
+import dev.ronin.demo.beerstore.customer.api.type.Address;
+import dev.ronin.demo.beerstore.customer.api.type.CustomerStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

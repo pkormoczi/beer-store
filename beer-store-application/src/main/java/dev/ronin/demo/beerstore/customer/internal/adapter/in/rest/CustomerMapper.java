@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.customer.internal.adapter.in.rest;
 
-import dev.ronin.demo.beerstore.customer.api.Address;
-import dev.ronin.demo.beerstore.customer.api.CustomerView;
+import dev.ronin.demo.beerstore.customer.api.type.Address;
+import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
 import dev.ronin.demo.beerstore.shared.api.model.AddressModel;
 import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
 import org.mapstruct.Mapper;

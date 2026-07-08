@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.product.internal.domain.model;
 
-import dev.ronin.demo.beerstore.product.api.BeerStyle;
+import dev.ronin.demo.beerstore.product.api.type.BeerStyle;
 import dev.ronin.demo.beerstore.shared.kernel.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

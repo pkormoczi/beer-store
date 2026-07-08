@@ -1,15 +1,15 @@
 package dev.ronin.demo.beerstore.customer.internal.application.service;
 
-import dev.ronin.demo.beerstore.customer.api.ActivateCustomerCommand;
-import dev.ronin.demo.beerstore.customer.api.CustomerNotFoundException;
-import dev.ronin.demo.beerstore.customer.api.CustomerView;
-import dev.ronin.demo.beerstore.customer.api.DeleteCustomerCommand;
-import dev.ronin.demo.beerstore.customer.api.FindCustomerByNameQuery;
-import dev.ronin.demo.beerstore.customer.api.GetCustomerQuery;
-import dev.ronin.demo.beerstore.customer.api.ManageCustomersUseCase;
-import dev.ronin.demo.beerstore.customer.api.RegisterCustomerCommand;
-import dev.ronin.demo.beerstore.customer.api.SuspendCustomerCommand;
-import dev.ronin.demo.beerstore.customer.api.UpdateCustomerCommand;
+import dev.ronin.demo.beerstore.customer.api.CustomerManagement;
+import dev.ronin.demo.beerstore.customer.api.command.ActivateCustomer;
+import dev.ronin.demo.beerstore.customer.api.command.DeleteCustomer;
+import dev.ronin.demo.beerstore.customer.api.command.RegisterCustomer;
+import dev.ronin.demo.beerstore.customer.api.command.SuspendCustomer;
+import dev.ronin.demo.beerstore.customer.api.command.UpdateCustomer;
+import dev.ronin.demo.beerstore.customer.api.exception.CustomerNotFoundException;
+import dev.ronin.demo.beerstore.customer.api.query.FindCustomerByName;
+import dev.ronin.demo.beerstore.customer.api.query.GetCustomer;
+import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
 import dev.ronin.demo.beerstore.customer.internal.application.port.out.CustomerRepository;
 import dev.ronin.demo.beerstore.customer.internal.domain.model.Customer;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class Customers implements ManageCustomersUseCase {
+public class Customers implements CustomerManagement {
 
     private final CustomerRepository customerRepository;
 
@@ -29,7 +29,7 @@ public class Customers implements ManageCustomersUseCase {
 
     @Override
     @Transactional
-    public CustomerView registerCustomer(RegisterCustomerCommand command) {
+    public CustomerView registerCustomer(RegisterCustomer command) {
         Customer saved = customerRepository.save(
                 Customer.register(command.firstName(), command.lastName(), command.address()));
         return toView(saved);
@@ -37,13 +37,13 @@ public class Customers implements ManageCustomersUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public CustomerView getCustomer(GetCustomerQuery query) {
+    public CustomerView getCustomer(GetCustomer query) {
         return toView(findOrThrow(query.id()));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<CustomerView> findCustomerByName(FindCustomerByNameQuery query) {
+    public Optional<CustomerView> findCustomerByName(FindCustomerByName query) {
         return customerRepository.findByNameContaining(query.name()).map(Customers::toView);
     }
 
@@ -55,7 +55,7 @@ public class Customers implements ManageCustomersUseCase {
 
     @Override
     @Transactional
-    public CustomerView updateCustomer(UpdateCustomerCommand command) {
+    public CustomerView updateCustomer(UpdateCustomer command) {
         Customer updated = findOrThrow(command.id())
                 .updateProfile(command.firstName(), command.lastName(), command.address());
         return toView(customerRepository.save(updated));
@@ -63,21 +63,21 @@ public class Customers implements ManageCustomersUseCase {
 
     @Override
     @Transactional
-    public void deleteCustomer(DeleteCustomerCommand command) {
+    public void deleteCustomer(DeleteCustomer command) {
         findOrThrow(command.id());
         customerRepository.deleteById(command.id());
     }
 
     @Override
     @Transactional
-    public CustomerView suspendCustomer(SuspendCustomerCommand command) {
+    public CustomerView suspendCustomer(SuspendCustomer command) {
         Customer suspended = findOrThrow(command.id()).suspend();
         return toView(customerRepository.save(suspended));
     }
 
     @Override
     @Transactional
-    public CustomerView activateCustomer(ActivateCustomerCommand command) {
+    public CustomerView activateCustomer(ActivateCustomer command) {
         Customer activated = findOrThrow(command.id()).activate();
         return toView(customerRepository.save(activated));
     }

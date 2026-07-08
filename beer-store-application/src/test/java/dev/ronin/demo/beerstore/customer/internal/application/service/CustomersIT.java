@@ -1,12 +1,12 @@
 package dev.ronin.demo.beerstore.customer.internal.application.service;
 
 import dev.ronin.demo.beerstore.base.IntegrationTest;
-import dev.ronin.demo.beerstore.customer.api.Address;
-import dev.ronin.demo.beerstore.customer.api.CustomerNotFoundException;
-import dev.ronin.demo.beerstore.customer.api.DeleteCustomerCommand;
-import dev.ronin.demo.beerstore.customer.api.GetCustomerQuery;
-import dev.ronin.demo.beerstore.customer.api.RegisterCustomerCommand;
-import dev.ronin.demo.beerstore.customer.api.UpdateCustomerCommand;
+import dev.ronin.demo.beerstore.customer.api.command.DeleteCustomer;
+import dev.ronin.demo.beerstore.customer.api.command.RegisterCustomer;
+import dev.ronin.demo.beerstore.customer.api.command.UpdateCustomer;
+import dev.ronin.demo.beerstore.customer.api.exception.CustomerNotFoundException;
+import dev.ronin.demo.beerstore.customer.api.query.GetCustomer;
+import dev.ronin.demo.beerstore.customer.api.type.Address;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ public class CustomersIT extends IntegrationTest {
     void customerShouldBeUpdated() {
         //Given
         Address address = new Address("Hungary", "1095", "Budapest", "Teszt utca 1");
-        Long id = customers.registerCustomer(new RegisterCustomerCommand("TestFirst", "TestLast", address)).id();
+        Long id = customers.registerCustomer(new RegisterCustomer("TestFirst", "TestLast", address)).id();
         //When
-        customers.updateCustomer(new UpdateCustomerCommand(id, "Updated", "UpdatedLast", address));
+        customers.updateCustomer(new UpdateCustomer(id, "Updated", "UpdatedLast", address));
         //Then
-        assertThat(customers.getCustomer(new GetCustomerQuery(id)).firstName()).isEqualTo("Updated");
+        assertThat(customers.getCustomer(new GetCustomer(id)).firstName()).isEqualTo("Updated");
     }
 
     @Test
@@ -36,11 +36,11 @@ public class CustomersIT extends IntegrationTest {
     void customerShouldBeDeleted() {
         //Given
         Address address = new Address("Hungary", "1095", "Budapest", "Teszt utca 2");
-        Long id = customers.registerCustomer(new RegisterCustomerCommand("ToDelete", "Customer", address)).id();
+        Long id = customers.registerCustomer(new RegisterCustomer("ToDelete", "Customer", address)).id();
         //When
-        customers.deleteCustomer(new DeleteCustomerCommand(id));
+        customers.deleteCustomer(new DeleteCustomer(id));
         //Then
-        assertThatThrownBy(() -> customers.getCustomer(new GetCustomerQuery(id)))
+        assertThatThrownBy(() -> customers.getCustomer(new GetCustomer(id)))
                 .isInstanceOf(CustomerNotFoundException.class);
     }
 }

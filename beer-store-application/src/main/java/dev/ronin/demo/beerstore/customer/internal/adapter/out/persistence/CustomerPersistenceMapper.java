@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.customer.internal.adapter.out.persistence;
 
-import dev.ronin.demo.beerstore.customer.api.Address;
+import dev.ronin.demo.beerstore.customer.api.type.Address;
 import dev.ronin.demo.beerstore.customer.internal.domain.model.Customer;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

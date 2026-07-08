@@ -1,12 +1,12 @@
 package dev.ronin.demo.beerstore.order.internal.adapter.in.rest;
 
 import dev.ronin.demo.beerstore.platform.security.Authorized;
-import dev.ronin.demo.beerstore.order.api.CancelOrderCommand;
-import dev.ronin.demo.beerstore.order.api.GetOrderQuery;
-import dev.ronin.demo.beerstore.order.api.ManageOrdersUseCase;
-import dev.ronin.demo.beerstore.order.api.OrderStatus;
-import dev.ronin.demo.beerstore.order.api.PlaceOrderCommand;
-import dev.ronin.demo.beerstore.order.api.UpdateOrderStatusCommand;
+import dev.ronin.demo.beerstore.order.api.OrderManagement;
+import dev.ronin.demo.beerstore.order.api.command.CancelOrder;
+import dev.ronin.demo.beerstore.order.api.command.PlaceOrder;
+import dev.ronin.demo.beerstore.order.api.command.UpdateOrderStatus;
+import dev.ronin.demo.beerstore.order.api.query.GetOrder;
+import dev.ronin.demo.beerstore.order.api.type.OrderStatus;
 import dev.ronin.demo.beerstore.shared.api.model.OrderModel;
 import dev.ronin.demo.beerstore.shared.api.model.OrderStatusModel;
 import org.springframework.stereotype.Service;
@@ -16,33 +16,33 @@ import java.util.List;
 @Service
 public class OrdersAdapter {
 
-    private final ManageOrdersUseCase manageOrdersUseCase;
+    private final OrderManagement orderManagement;
     private final OrderMapper orderMapper;
 
-    public OrdersAdapter(ManageOrdersUseCase manageOrdersUseCase, OrderMapper orderMapper) {
-        this.manageOrdersUseCase = manageOrdersUseCase;
+    public OrdersAdapter(OrderManagement orderManagement, OrderMapper orderMapper) {
+        this.orderManagement = orderManagement;
         this.orderMapper = orderMapper;
     }
 
     public OrderModel findById(Long id) {
-        return orderMapper.data(manageOrdersUseCase.getOrder(new GetOrderQuery(id)));
+        return orderMapper.data(orderManagement.getOrder(new GetOrder(id)));
     }
 
     public List<OrderModel> getOrders() {
-        return orderMapper.dataList(manageOrdersUseCase.listOrders());
+        return orderMapper.dataList(orderManagement.listOrders());
     }
 
     public Long addOrder(OrderModel order) {
-        return manageOrdersUseCase.placeOrder(new PlaceOrderCommand(order.getCustomerId(), order.getBeers()));
+        return orderManagement.placeOrder(new PlaceOrder(order.getCustomerId(), order.getBeers()));
     }
 
     public OrderModel updateOrderStatus(Long id, OrderStatusModel status) {
-        return orderMapper.data(manageOrdersUseCase.updateOrderStatus(
-                new UpdateOrderStatusCommand(id, OrderStatus.valueOf(status.name()))));
+        return orderMapper.data(orderManagement.updateOrderStatus(
+                new UpdateOrderStatus(id, OrderStatus.valueOf(status.name()))));
     }
 
     @Authorized("ADMIN")
     public void cancelOrder(Long id) {
-        manageOrdersUseCase.cancelOrder(new CancelOrderCommand(id));
+        orderManagement.cancelOrder(new CancelOrder(id));
     }
 }

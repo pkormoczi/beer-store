@@ -1,7 +1,7 @@
 package dev.ronin.demo.beerstore.order.internal.domain.model;
 
-import dev.ronin.demo.beerstore.order.api.IllegalOrderStateException;
-import dev.ronin.demo.beerstore.order.api.OrderStatus;
+import dev.ronin.demo.beerstore.order.api.exception.IllegalOrderStateException;
+import dev.ronin.demo.beerstore.order.api.type.OrderStatus;
 import dev.ronin.demo.beerstore.shared.kernel.Money;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

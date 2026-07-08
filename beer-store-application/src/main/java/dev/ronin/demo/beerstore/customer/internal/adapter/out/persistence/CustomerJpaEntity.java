@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.customer.internal.adapter.out.persistence;
 
-import dev.ronin.demo.beerstore.customer.api.CustomerStatus;
+import dev.ronin.demo.beerstore.customer.api.type.CustomerStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

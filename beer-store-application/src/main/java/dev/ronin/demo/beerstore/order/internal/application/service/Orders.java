@@ -1,13 +1,13 @@
 package dev.ronin.demo.beerstore.order.internal.application.service;
 
-import dev.ronin.demo.beerstore.order.api.CancelOrderCommand;
-import dev.ronin.demo.beerstore.order.api.GetOrderQuery;
-import dev.ronin.demo.beerstore.order.api.ManageOrdersUseCase;
-import dev.ronin.demo.beerstore.order.api.OrderNotFoundException;
-import dev.ronin.demo.beerstore.order.api.OrderView;
-import dev.ronin.demo.beerstore.order.api.PlaceOrderCommand;
-import dev.ronin.demo.beerstore.order.api.UnknownBeerException;
-import dev.ronin.demo.beerstore.order.api.UpdateOrderStatusCommand;
+import dev.ronin.demo.beerstore.order.api.OrderManagement;
+import dev.ronin.demo.beerstore.order.api.command.CancelOrder;
+import dev.ronin.demo.beerstore.order.api.command.PlaceOrder;
+import dev.ronin.demo.beerstore.order.api.command.UpdateOrderStatus;
+import dev.ronin.demo.beerstore.order.api.exception.OrderNotFoundException;
+import dev.ronin.demo.beerstore.order.api.exception.UnknownBeerException;
+import dev.ronin.demo.beerstore.order.api.query.GetOrder;
+import dev.ronin.demo.beerstore.order.api.view.OrderView;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.BeerLookup;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.BeerSnapshot;
 import dev.ronin.demo.beerstore.order.internal.application.port.out.CustomerLookup;
@@ -25,7 +25,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class Orders implements ManageOrdersUseCase {
+public class Orders implements OrderManagement {
 
     private final OrderRepository orderRepository;
     private final BeerLookup beerLookup;
@@ -42,7 +42,7 @@ public class Orders implements ManageOrdersUseCase {
 
     @Override
     @Transactional
-    public Long placeOrder(PlaceOrderCommand command) {
+    public Long placeOrder(PlaceOrder command) {
         customerLookup.assertCustomerExists(command.customerId());
 
         Map<Long, Long> quantitiesByBeerId = command.beerIds().stream()
@@ -72,20 +72,20 @@ public class Orders implements ManageOrdersUseCase {
 
     @Override
     @Transactional(readOnly = true)
-    public OrderView getOrder(GetOrderQuery query) {
+    public OrderView getOrder(GetOrder query) {
         return toView(findOrThrow(query.id()));
     }
 
     @Override
     @Transactional
-    public OrderView updateOrderStatus(UpdateOrderStatusCommand command) {
+    public OrderView updateOrderStatus(UpdateOrderStatus command) {
         Order updated = findOrThrow(command.id()).transitionTo(command.newStatus());
         return toView(orderRepository.save(updated));
     }
 
     @Override
     @Transactional
-    public void cancelOrder(CancelOrderCommand command) {
+    public void cancelOrder(CancelOrder command) {
         Order cancelled = findOrThrow(command.id()).cancel();
         orderRepository.save(cancelled);
     }

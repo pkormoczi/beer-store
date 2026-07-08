@@ -68,16 +68,16 @@ class DomainArchitectureTest {
 
     @ArchTest
     public static final ArchRule domainAndApplicationShouldNotDependOnPersistenceTechnology =
-            noClasses().that().resideInAPackage("dev.ronin.demo.beerstore.customer.api")
-                    .or().resideInAPackage("dev.ronin.demo.beerstore.order.api")
-                    .or().resideInAPackage("dev.ronin.demo.beerstore.product.api")
+            noClasses().that().resideInAPackage("dev.ronin.demo.beerstore.customer.api..")
+                    .or().resideInAPackage("dev.ronin.demo.beerstore.order.api..")
+                    .or().resideInAPackage("dev.ronin.demo.beerstore.product.api..")
                     .or().resideInAPackage(APPLICATION_PACKAGE)
                     .or().resideInAPackage("..domain..")
                     .should().dependOnClassesThat().resideInAnyPackage("org.springframework.data..", "jakarta.persistence..")
                     .because("the domain model and application services should only know their own repository "
                             + "ports, not the persistence technology - only the persistence subpackage may depend on JPA/Spring Data");
 
-    private static final String USE_CASE_POSTFIX = "UseCase";
+    private static final String MANAGEMENT_POSTFIX = "Management";
 
     private static final DescribedPredicate<JavaClass> INBOUND_PORT_INTERFACE =
             DescribedPredicate.describe("an interface implemented by a @Service aggregate root",
@@ -85,14 +85,15 @@ class DomainArchitectureTest {
                             && javaClass.getSubclasses().stream().anyMatch(sub -> sub.isAnnotatedWith(Service.class)));
 
     @ArchTest
-    public static final ArchRule useCasesShouldBeNamedUseCase =
+    public static final ArchRule inboundPortsShouldBeNamedManagement =
             classes().that(INBOUND_PORT_INTERFACE)
-                    .should().haveSimpleNameEndingWith(USE_CASE_POSTFIX)
-                    .because("inbound (driving) ports mirror the outbound *Repository ports and should be named consistently");
+                    .should().haveSimpleNameEndingWith(MANAGEMENT_POSTFIX)
+                    .because("inbound (driving) ports are named after the capability they expose, "
+                            + "consistently across modules");
 
     @ArchTest
-    public static final ArchRule useCasesShouldBeInterfacesResidingInApiPackage =
-            classes().that().haveSimpleNameEndingWith(USE_CASE_POSTFIX)
+    public static final ArchRule managementPortsShouldBeInterfacesResidingInApiPackage =
+            classes().that().haveSimpleNameEndingWith(MANAGEMENT_POSTFIX)
                     .should().resideInAnyPackage("dev.ronin.demo.beerstore.customer.api", "dev.ronin.demo.beerstore.order.api",
                             "dev.ronin.demo.beerstore.product.api")
                     .andShould().beInterfaces();

@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.customer.internal.adapter.in.rest;
 
-import dev.ronin.demo.beerstore.customer.api.CustomerNotFoundException;
+import dev.ronin.demo.beerstore.customer.api.exception.CustomerNotFoundException;
 import dev.ronin.demo.beerstore.platform.rest.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

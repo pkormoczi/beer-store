@@ -1,14 +1,14 @@
 package dev.ronin.demo.beerstore.order.internal.adapter.in.rest;
 
 import dev.ronin.demo.beerstore.base.IntegrationTest;
-import dev.ronin.demo.beerstore.product.api.BeerStyle;
-import dev.ronin.demo.beerstore.product.api.BeerView;
-import dev.ronin.demo.beerstore.product.api.CreateBeerCommand;
-import dev.ronin.demo.beerstore.product.api.ManageBeersUseCase;
-import dev.ronin.demo.beerstore.customer.api.Address;
-import dev.ronin.demo.beerstore.customer.api.CustomerView;
-import dev.ronin.demo.beerstore.customer.api.ManageCustomersUseCase;
-import dev.ronin.demo.beerstore.customer.api.RegisterCustomerCommand;
+import dev.ronin.demo.beerstore.product.api.BeerManagement;
+import dev.ronin.demo.beerstore.product.api.command.CreateBeer;
+import dev.ronin.demo.beerstore.product.api.type.BeerStyle;
+import dev.ronin.demo.beerstore.product.api.view.BeerView;
+import dev.ronin.demo.beerstore.customer.api.CustomerManagement;
+import dev.ronin.demo.beerstore.customer.api.command.RegisterCustomer;
+import dev.ronin.demo.beerstore.customer.api.type.Address;
+import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
 import dev.ronin.demo.beerstore.shared.api.model.OrderModel;
 import dev.ronin.demo.beerstore.shared.kernel.Money;
 import org.assertj.core.api.BDDAssertions;
@@ -26,19 +26,19 @@ public class OrdersIT extends IntegrationTest {
     OrderController orderController;
 
     @Autowired
-    ManageCustomersUseCase manageCustomersUseCase;
+    CustomerManagement customerManagement;
 
     @Autowired
-    ManageBeersUseCase manageBeersUseCase;
+    BeerManagement beerManagement;
 
     @Test
     @DisplayName("Create new order")
     void createNewOrder() {
         //Given
-        CustomerView savedCustomer = manageCustomersUseCase.registerCustomer(new RegisterCustomerCommand("First", "Last",
+        CustomerView savedCustomer = customerManagement.registerCustomer(new RegisterCustomer("First", "Last",
                 new Address("Hungary", "1095", "Budapest", "Teszt utca 1")));
-        BeerView savedBeer = manageBeersUseCase.createBeer(
-                new CreateBeerCommand("Csoda IPA", BeerStyle.IPA, new Money(new BigDecimal("2.50"))));
+        BeerView savedBeer = beerManagement.createBeer(
+                new CreateBeer("Csoda IPA", BeerStyle.IPA, new Money(new BigDecimal("2.50"))));
         OrderModel given = givenOrder(savedCustomer.id(), savedBeer.id());
         //When
         ResponseEntity<Long> result = orderController.createOrder(given);

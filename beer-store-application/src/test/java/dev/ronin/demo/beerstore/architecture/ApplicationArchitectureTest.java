@@ -24,18 +24,18 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 @SuppressWarnings("squid:S2187")
 public class ApplicationArchitectureTest {
 
-    private static final DescribedPredicate<JavaClass> CONCRETE_AGGREGATE_SERVICE_WITH_USE_CASE_PORT =
-            DescribedPredicate.describe("a concrete @Service aggregate that implements a *UseCase port",
+    private static final DescribedPredicate<JavaClass> CONCRETE_AGGREGATE_SERVICE_WITH_MANAGEMENT_PORT =
+            DescribedPredicate.describe("a concrete @Service aggregate that implements a *Management port",
                     javaClass -> !javaClass.isInterface()
                             && javaClass.isAnnotatedWith(Service.class)
                             && javaClass.getAllRawInterfaces().stream()
-                                    .anyMatch(i -> i.getSimpleName().endsWith("UseCase")));
+                                    .anyMatch(i -> i.getSimpleName().endsWith("Management")));
 
     @ArchTest
-    public static final ArchRule webAdaptersShouldDependOnUseCasePortsNotConcreteAggregateServices =
+    public static final ArchRule webAdaptersShouldDependOnManagementPortsNotConcreteAggregateServices =
             noClasses().that().resideInAPackage("..web..")
-                    .should().dependOnClassesThat(CONCRETE_AGGREGATE_SERVICE_WITH_USE_CASE_PORT)
-                    .because("the driving side of each module should depend on the *UseCase port, "
+                    .should().dependOnClassesThat(CONCRETE_AGGREGATE_SERVICE_WITH_MANAGEMENT_PORT)
+                    .because("the driving side of each module should depend on the *Management port, "
                             + "mirroring how the persistence adapters depend only on the *Repository port");
 
 }

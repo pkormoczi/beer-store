@@ -148,8 +148,8 @@ for cross-reference. Several trace back to a more detailed target design explore
 
 **ADR-01 · Synchronous in-process facade calls, with an anti-corruption port on the caller** ✅
 - **Problem:** `order` depends on both `customer` and `product`. How should it call them?
-- **Decision:** `order` calls the other modules' public facades (`ManageCustomersUseCase`,
-  `ManageBeersUseCase`) synchronously, in-process — but never directly: it goes through outbound
+- **Decision:** `order` calls the other modules' public facades (`CustomerManagement`,
+  `BeerManagement`) synchronously, in-process — but never directly: it goes through outbound
   ports it owns itself (`CustomerLookup`, `BeerLookup` in `order/internal/application/port/out/`),
   each implemented by a package-private adapter (`CustomerLookupAdapter`, `BeerLookupAdapter`)
   that calls the facade and translates the result into `order`'s own types (`BeerView` →
@@ -167,8 +167,8 @@ for cross-reference. Several trace back to a more detailed target design explore
 
 **ADR-02 · One public facade per module** ✅
 - **Problem:** how many entry points should each module expose?
-- **Decision:** exactly one — `ManageCustomersUseCase`, `ManageBeersUseCase`, `ManageOrdersUseCase`
-  — each the module's sole `api`-level use-case interface.
+- **Decision:** exactly one — `CustomerManagement`, `BeerManagement`, `OrderManagement`
+  — each the module's sole `api`-level facade interface.
 - **Why:** avoids speculative interface-per-use-case splitting before there's a real reason to.
 - **Cost:** a facade can grow large as a module's use cases accumulate.
 - **Evolve later:** split into targeted interfaces only once a facade actually grows too large or
@@ -206,8 +206,8 @@ for cross-reference. Several trace back to a more detailed target design explore
   live?
 - **Decision:** `Customer`/`Beer`/`Order` are self-validating immutable records with intention-
   revealing factory/behavior methods (`Customer.register/.suspend/.activate`, `Beer.create`,
-  `Order.place/.transitionTo/.cancel`); the `*Service` classes implementing each module's `*UseCase`
-  are thin orchestrators with almost no business logic of their own.
+  `Order.place/.transitionTo/.cancel`); the `*Service` classes implementing each module's
+  `*Management` facade are thin orchestrators with almost no business logic of their own.
 - **Why:** invariants that live in the aggregate can never be forgotten by a caller; it also makes
   `Customers`/`Beers`/`Orders` easy to read as pure orchestration.
 - **Cost:** any invariant has to be expressible in a compact constructor or a behavior method — no
@@ -225,7 +225,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 - **Cost:** a real behavioral gap — a suspended customer can currently place an order successfully
   today.
 - **Evolve later:** the eligibility decision belongs to `customer`, not `order` (plan §9.2) — add a
-  `customer.api` query such as `checkOrderingEligibility(...)` returning an eligibility flag plus a
+  `customer.api.query` type such as `CheckOrderingEligibility` returning an eligibility flag plus a
   stable reason enum (not free text), and call it from `Orders.placeOrder` instead of
   `assertCustomerExists`.
 
@@ -333,7 +333,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 
 **ADR-14 · No idempotent order placement** 🔜
 - **Problem:** a client retry (e.g. after a timeout) can currently create a duplicate order.
-- **Decision (current):** `PlaceOrderCommand` has no idempotency key; nothing deduplicates retried
+- **Decision (current):** `PlaceOrder` has no idempotency key; nothing deduplicates retried
   requests.
 - **Why (as-is):** the base flow (ADR-13) had to exist first; idempotency is naturally the next
   increment on top of it, not a parallel concern.
@@ -359,10 +359,10 @@ for cross-reference. Several trace back to a more detailed target design explore
 
 **ADR-16 · `product` has no inbound REST adapter** 🔜
 - **Problem:** beers can only be created programmatically (e.g. by tests) via
-  `ManageBeersUseCase.createBeer(...)` — there's no `/beers` endpoint.
+  `BeerManagement.createBeer(...)` — there's no `/beers` endpoint.
 - **Decision (current):** `product` has no `internal/adapter/in` package at all.
 - **Why (as-is):** no consumer has needed one yet; the same posture applies to `customer`'s already-
-  implemented but unwired `suspendCustomer`/`activateCustomer` use cases.
+  implemented but unwired `suspendCustomer`/`activateCustomer` methods.
 - **Cost:** the `product` module can't be exercised from outside the JVM at all today.
 - **Evolve later:** add REST endpoints once there's a real need to; remember the contract-first
   flow — start in `beer-store-contract`, `mvn clean install` there, then implement the generated

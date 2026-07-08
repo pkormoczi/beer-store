@@ -1,6 +1,6 @@
 package dev.ronin.demo.beerstore.contract;
 
-import dev.ronin.demo.beerstore.customer.api.CustomerView;
+import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
 import dev.ronin.demo.beerstore.shared.api.model.CustomerModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
