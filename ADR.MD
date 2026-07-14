@@ -285,6 +285,33 @@ for cross-reference. Several trace back to a more detailed target design explore
   whether it bootstraps `customer`/`product` directly or replaces them with test doubles at the
   facade.
 
+**ADR-22 · Honeycomb testing strategy — module tests as the dominant band** ✅
+- **Problem:** two competing strategy drafts coexisted and no single operative rulebook said where
+  a new behavior gets tested; historically test weight sat in full-context `*IT` classes plus a
+  mock-heavy service unit test, with duplicate coverage between levels.
+- **Decision:** `TESTING_STRATEGY.md` (repo root) is the single source of truth, prescriptive and
+  effective immediately (existing tests carry no legacy protection). Shape: honeycomb, not pyramid —
+  thin domain-unit band (aggregate invariants only), a **dominant middle band of
+  `@ApplicationModuleTest` module tests** (own persistence real via Testcontainers Postgres,
+  neighbor modules doubled at the module's own ACL ports, event reactions via the Modulith
+  `Scenario` API), full `@SpringBootTest` only in a designated saga/e2e package plus a small
+  security package running the real `WebSecurityConfig`. Spring Cloud Contract guards every
+  published REST seam (one happy + one error case per module; EXPLICIT mode is the default, MOCKMVC
+  kept only on `customer` as a showcase). Hard build mapping: surefire = no Spring context; every
+  Spring-context test (contract suites included) is `*IT` under failsafe on Postgres — no H2 under
+  `src/test`. Mandatory Allure taxonomy (`@Epic`/`@Feature`/`@Story`/`@Severity`/level `@Tag`);
+  coverage stays a single merged 80% SonarCloud gate, never a per-test target.
+- **Why:** test where the logic lives, with no duplicate coverage: module tests localize failures to
+  a boundary, exercise the real event registry and the production database engine, and make the
+  mock-heavy service unit test obsolete — this also settles the direction for **ADR-19**'s gap.
+- **Cost:** more concepts than "unit vs integration" (module vs saga vs contract vs security
+  levels); moving the generated contract suites to failsafe + Testcontainers is build-plugin work;
+  existing tests must be rewritten at the right level or deleted as they're touched.
+- **Evolve later:** deferred, trigger-based items live in `TESTING_STRATEGY.md` §11 (idempotent
+  consumers, compensation-path saga ITs, broker-based message contracts on service extraction,
+  WireMock at outbound adapters, SOAP `CustomerWs` coverage, Allure trend/history). **ADR-19** stays
+  🔜 until the first `@ApplicationModuleTest` actually lands.
+
 ### H. Deployment & infrastructure
 
 **ADR-20 · No Kubernetes manifests; actuator shares the application's port** 🔜
