@@ -1,7 +1,7 @@
 # Testing strategy
 
 Operative rules for every test written in this repository. `CLAUDE.md` describes what exists;
-`ADR.MD` records why (**ADR-22** is this strategy's decision record); this file prescribes **where a
+`docs/ADR.MD` records why (**ADR-22** is this strategy's decision record); this file prescribes **where a
 given behavior gets tested — and where it must not be**. Every rule below applies immediately to all
 new tests. Existing tests carry no legacy protection (§13): when one conflicts with a rule here, the
 test is the thing that changes — rewritten at the right level, or deleted.

@@ -289,7 +289,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 - **Problem:** two competing strategy drafts coexisted and no single operative rulebook said where
   a new behavior gets tested; historically test weight sat in full-context `*IT` classes plus a
   mock-heavy service unit test, with duplicate coverage between levels.
-- **Decision:** `TESTING_STRATEGY.md` (repo root) is the single source of truth, prescriptive and
+- **Decision:** `docs/TESTING_STRATEGY.md` is the single source of truth, prescriptive and
   effective immediately (existing tests carry no legacy protection). Shape: honeycomb, not pyramid —
   thin domain-unit band (aggregate invariants only), a **dominant middle band of
   `@ApplicationModuleTest` module tests** (own persistence real via Testcontainers Postgres,
@@ -307,7 +307,7 @@ for cross-reference. Several trace back to a more detailed target design explore
 - **Cost:** more concepts than "unit vs integration" (module vs saga vs contract vs security
   levels); moving the generated contract suites to failsafe + Testcontainers is build-plugin work;
   existing tests must be rewritten at the right level or deleted as they're touched.
-- **Evolve later:** deferred, trigger-based items live in `TESTING_STRATEGY.md` §11 (idempotent
+- **Evolve later:** deferred, trigger-based items live in `docs/TESTING_STRATEGY.md` §11 (idempotent
   consumers, compensation-path saga ITs, broker-based message contracts on service extraction,
   WireMock at outbound adapters, SOAP `CustomerWs` coverage, Allure trend/history). **ADR-19** stays
   🔜 until the first `@ApplicationModuleTest` actually lands.

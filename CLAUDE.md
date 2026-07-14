@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-For the *why* behind a design choice, see `ADR.md` (lightweight ADRs, tagged ✅ Implemented / 🔜 Gap).
+For the *why* behind a design choice, see `docs/ADR.MD` (lightweight ADRs, tagged ✅ Implemented / 🔜 Gap).
 This file is the operative reference: what exists, where it lives, and what rules keep it that way.
 
 ## Project
@@ -43,7 +43,7 @@ Endpoints when running locally (port 8080):
 Nothing in `beer-store-application`'s API surface is hand-written on the wire-format side:
 - `beer-store-contract.yaml` → REST server interfaces/models generated into `dev.ronin.demo.beerstore.shared.api[.model]` via the `openapi-generator-maven-plugin` (`generate-producer` execution, `apiPackage`/`modelPackage` driven by the `package.shared` property). Controllers implement these generated interfaces. (`shared/api[.model]` is a `target/generated-sources` output, not a hand-written `src/main/java` package — it only exists after a build.)
 - `Customer.xsd` → JAXB classes for the SOAP endpoint via `cxf-xjc-plugin`, generated into `dev.ronin.demo.beerstore.shared.contract.customerdata` (an explicit `packagename` xsdOption, since the XSD's own target namespace would otherwise drive the package name).
-- Spring Cloud Contract contracts (defined in `beer-store-contract/src/test/resources/contracts/`, one folder per resource — `customer/`, `catalog/`) generate two parallel `*IT` test suites in `beer-store-application` at `generate-test-sources` time (`nameSuffixForTests=IT`, so they run under failsafe on Testcontainers Postgres, not surefire): `contract.explicit` (EXPLICIT mode, extends `ContractTestBase`, uses RestAssured against a random port — covers both `customer` and `catalog` contracts) and `contract.mockmvc` (MOCKMVC mode, extends `ContractTestBaseMockMvc`, scoped to `customer` only via `includedContracts` since that base only wires the customer controller — kept purely as a showcase that both generation modes work, per `TESTING_STRATEGY.md` §6). Both bases seed test rows read via `ContractDataReader` from the contracts' own JSON fixtures before running (`ContractTestBase` additionally seeds beers for the catalog contract). The `generateTests` executions resolve the contract module's `-stubs` classifier via `contractsMode=LOCAL` — a top-level `spring-cloud-contract-maven-plugin` `<configuration>` element, a sibling of (not nested inside) `<contractDependency>` — since the default `CLASSPATH` mode became unreliable under Spring Cloud Contract 5.0.x's plugin-realm classloading.
+- Spring Cloud Contract contracts (defined in `beer-store-contract/src/test/resources/contracts/`, one folder per resource — `customer/`, `catalog/`) generate two parallel `*IT` test suites in `beer-store-application` at `generate-test-sources` time (`nameSuffixForTests=IT`, so they run under failsafe on Testcontainers Postgres, not surefire): `contract.explicit` (EXPLICIT mode, extends `ContractTestBase`, uses RestAssured against a random port — covers both `customer` and `catalog` contracts) and `contract.mockmvc` (MOCKMVC mode, extends `ContractTestBaseMockMvc`, scoped to `customer` only via `includedContracts` since that base only wires the customer controller — kept purely as a showcase that both generation modes work, per `docs/TESTING_STRATEGY.md` §6). Both bases seed test rows read via `ContractDataReader` from the contracts' own JSON fixtures before running (`ContractTestBase` additionally seeds beers for the catalog contract). The `generateTests` executions resolve the contract module's `-stubs` classifier via `contractsMode=LOCAL` — a top-level `spring-cloud-contract-maven-plugin` `<configuration>` element, a sibling of (not nested inside) `<contractDependency>` — since the default `CLASSPATH` mode became unreliable under Spring Cloud Contract 5.0.x's plugin-realm classloading.
 - `beer-store-client` generates a WebClient-based Java client from the *same* `beer-store-contract.yaml`, and verifies it against WireMock stubs published from the contract module's `-stubs` classifier.
 
 Because of this pipeline, changes to the API almost always start in `beer-store-contract`, followed by `mvn clean install` in that module before the dependent modules will pick up regenerated sources.
@@ -143,7 +143,7 @@ ArchUnit's `archRule.failOnEmptyShould` is left at its default (`true`): a rule 
 
 ### Testing strategy
 
-`TESTING_STRATEGY.md` (repo root) is the operative testing strategy — **read it before writing any
+`docs/TESTING_STRATEGY.md` is the operative testing strategy — **read it before writing any
 test.** It prescribes which level owns a behavior (honeycomb: thin domain-unit band, a dominant
 middle band of `@ApplicationModuleTest` module tests, full `@SpringBootTest` only in the designated
 saga/e2e and security packages, Spring Cloud Contract at the published REST seams), the hard build
