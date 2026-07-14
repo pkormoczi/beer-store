@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Amber Waves",
+    "beerStyle": "IPA",
+    "abv": 5.5,
+    "price": 2.50,
+    "availability": "IN_STOCK"
+  },
+  {
+    "id": 2,
+    "name": "Csoda IPA",
+    "beerStyle": "IPA",
+    "abv": 6.2,
+    "price": 3.75,
+    "availability": "IN_STOCK"
+  }
+]

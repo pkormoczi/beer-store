@@ -1,0 +1,34 @@
+---
+name: shouldReturnMatchingBeersWhenBrowsingCatalog
+description: |
+  Represents a successful scenario of browsing the catalog filtered by style and sorted by name
+  ```
+  given:
+      beers of style IPA sorted by name ascending
+  when:
+      browse the catalog filtered by style IPA
+  then:
+      return the matching beers, sorted by name ascending
+  ```
+request:
+  method: GET
+  url: /catalog
+  queryParameters:
+    "style": "IPA"
+    "sortBy": "NAME"
+    "sortDirection": "ASC"
+response:
+  status: 200
+  headers:
+    Content-Type: "application/json"
+  bodyFromFile: catalog.json
+  matchers:
+    body:
+      - path: $[0].id
+        type: by_regex
+        regexType: as_integer
+        predefined: number
+      - path: $[1].id
+        type: by_regex
+        regexType: as_integer
+        predefined: number
