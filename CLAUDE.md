@@ -141,6 +141,18 @@ Architecture test classes: `ModularityTests` (Modulith `verify()` + PlantUML doc
 
 ArchUnit's `archRule.failOnEmptyShould` is left at its default (`true`): a rule matching zero classes fails the build rather than silently passing, so a typo'd package/name pattern can't quietly stop checking anything. The one deliberate exception is `TestingRulesTest.springBootTestShouldBeNamedIT`, marked `.allowEmptyShould(true)` — today only the exempted `contract` base classes (see below) are directly `@SpringBootTest`-annotated outside `IntegrationTest` itself, so the rule has no current matches but stays in place to catch future misuse. Relatedly, `repositoriesShouldBeAnnotatedWithRepository` excludes `*JpaRepository` by name — the Spring Data repositories (`CustomerJpaRepository` etc.) also end in "Repository" but are intentionally not `@Repository`-annotated themselves.
 
+### Testing strategy
+
+`TESTING_STRATEGY.md` (repo root) is the operative testing strategy — **read it before writing any
+test.** It prescribes which level owns a behavior (honeycomb: thin domain-unit band, a dominant
+middle band of `@ApplicationModuleTest` module tests, full `@SpringBootTest` only in the designated
+saga/e2e and security packages, Spring Cloud Contract at the published REST seams), the hard build
+mapping (surefire = no Spring context; everything Spring-context is `*IT` under failsafe on
+Testcontainers Postgres; no H2 under `src/test`), the mock rules (only a module's own ACL port may
+be doubled), the mandatory Allure taxonomy, and the forbidden anti-patterns. **ADR-22** is the
+decision record. The conventions below are the mechanically enforced subset, not a substitute for
+that document.
+
 ### Testing conventions (enforced by `TestingRulesTest`)
 - `TestingRulesTest` is the one architecture test that deliberately analyzes the test tree itself (its `@AnalyzeClasses` omits `ImportOption.DoNotIncludeTests`, unlike every other class in `architecture/`).
 - Any class annotated `@SpringBootTest`/`@DataJpaTest`/`@WebMvcTest` (non-abstract) must be named `*IT` so it runs under failsafe, not surefire. Exempt: `contract`'s own `ContractTestBase`/`ContractTestBaseMockMvc` — hand-written, non-abstract `@SpringBootTest` base classes for the generated `contract.explicit`/`contract.mockmvc` suites, never run directly themselves.
