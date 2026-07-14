@@ -495,6 +495,9 @@
                     <contractsPath>contracts</contractsPath>
                     <incrementalContractTests>false</incrementalContractTests>
                     <testFramework>JUNIT5</testFramework>
+                    <!-- *IT (not the default *Test) so the generated suites run under failsafe against
+                         Testcontainers Postgres, per TESTING_STRATEGY.md §3 (no Spring context under surefire). -->
+                    <nameSuffixForTests>IT</nameSuffixForTests>
                 </configuration>
                 <executions>
                     <execution>
@@ -520,6 +523,11 @@
                             <testMode>MOCKMVC</testMode>
                             <baseClassForTests>dev.ronin.demo.beerstore.contract.ContractTestBaseMockMvc
                             </baseClassForTests>
+                            <!-- MOCKMVC is kept only as a showcase for the customer contracts (TESTING_STRATEGY.md
+                                 §6); ContractTestBaseMockMvc only wires the customer controller. -->
+                            <includedFiles>
+                                <includedFile>**/customer/**</includedFile>
+                            </includedFiles>
                         </configuration>
                     </execution>
                 </executions>

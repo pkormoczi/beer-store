@@ -3,7 +3,12 @@ package dev.ronin.demo.beerstore.contract;
 import dev.ronin.demo.beerstore.customer.api.view.CustomerView;
 import dev.ronin.demo.beerstore.customer.adapter.in.rest.CustomerMapper;
 import dev.ronin.demo.beerstore.customer.adapter.in.rest.CustomerMapperImpl;
+import dev.ronin.demo.beerstore.product.api.type.BeerAvailability;
+import dev.ronin.demo.beerstore.product.api.type.BeerStyle;
+import dev.ronin.demo.beerstore.product.api.view.BeerView;
+import dev.ronin.demo.beerstore.shared.api.model.BeerDto;
 import dev.ronin.demo.beerstore.shared.api.model.CustomerDto;
+import dev.ronin.demo.beerstore.shared.kernel.Money;
 import lombok.SneakyThrows;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -22,6 +27,22 @@ class ContractDataReader {
 
     public CustomerView readCustomerData() {
         return customerMapper.toView(read("customer/customer", CustomerDto.class));
+    }
+
+    /**
+     * Reads the catalog contract's fixture (a JSON array of {@link BeerDto}) and maps each entry
+     * to a {@link BeerView}. There is no production dto-&gt;view mapper to reuse here (unlike
+     * {@link #readCustomerData()}'s {@link CustomerMapper#toView}) - {@code /catalog} is read-only,
+     * so {@code CatalogMapper} only ever maps the other direction (domain -&gt; wire).
+     */
+    public List<BeerView> readCatalogData() {
+        return readList("catalog/catalog", BeerDto.class).stream().map(this::toView).toList();
+    }
+
+    private BeerView toView(BeerDto dto) {
+        return new BeerView(dto.getId(), dto.getName(), BeerStyle.valueOf(dto.getBeerStyle().getValue()),
+                dto.getAbv(), new Money(dto.getPrice()),
+                BeerAvailability.valueOf(dto.getAvailability().getValue()));
     }
 
     /**
