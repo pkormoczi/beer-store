@@ -337,6 +337,47 @@ for cross-reference. Several trace back to a more detailed target design explore
   `livenessProbe`/`readinessProbe` at `/actuator/health/liveness`/`/actuator/health/readiness` on
   that management port instead of 8080.
 
+**ADR-23 · Virtual threads enabled, with an explicit admission limit** ✅
+- **Problem:** on Java 25, is it worth switching the blocking servlet stack (Tomcat +
+  Spring MVC + `spring-data-jpa`) over to virtual threads?
+- **Decision:** yes — `spring.threads.virtual.enabled: true` in `application.yml` — but only
+  paired with an explicit, fixed-size Hikari pool (`maximum-pool-size`/`minimum-idle: 20`,
+  `connection-timeout: 5000`), a bound on the async task executor
+  (`spring.task.execution.simple.concurrency-limit: 32`), and an explicit Tomcat admission
+  limit (`server.tomcat.max-connections: 2000`, `accept-count: 100`).
+- **Why:** not for throughput — there is no outbound blocking I/O anywhere in
+  `beer-store-application` (no `RestTemplate`/`WebClient`/`HttpClient` call in hand-written
+  code; every request is a short local DB round trip), and the actual bottleneck is the
+  connection pool, not the request-handling thread pool: with `threads.max`/`hikari` both left
+  at their implicit defaults, Tomcat already offered ~200 threads against a pool of only 10
+  connections. Enabling virtual threads without also bounding the pool/executor would just move
+  that same contention onto an unbounded number of virtual threads instead of removing it. The
+  actual motivation is: it's risk-free on Java 25 (JEP 491 — `synchronized` no longer pins a
+  carrier thread; this codebase also has zero hand-written `synchronized`/`ThreadLocal`/custom
+  `Executor`/`@Async`/`@Scheduled` to begin with, and `spring.jpa.open-in-view: false` was
+  already set, releasing the connection at transaction-end rather than response-end), it drops
+  the platform-thread stack footprint of the old fixed pool, and it reinforces rather than
+  changes the synchronous, in-process style ADR-01 and ADR-13 already commit to — virtual
+  threads just make that same blocking style cheaper to run, they don't ask for a different
+  programming model.
+- **Cost:** turning on virtual threads gives up the bounded platform-thread pool's natural
+  back-pressure (a full pool used to make Tomcat itself queue/reject before the database ever
+  saw the excess); the `max-connections`/`concurrency-limit`/`connection-timeout` values above
+  replace that back-pressure explicitly, but they're showcase-sized, not load-tested optima.
+  The one existing async path, `OrderPlacedEventListener` (`@ApplicationModuleListener` →
+  `@Async` + `@Transactional(REQUIRES_NEW)`), now runs on a virtual-thread
+  `SimpleAsyncTaskExecutor` and — since it opens its own transaction — could otherwise starve
+  the same Hikari pool the inbound HTTP requests need, which is exactly what
+  `concurrency-limit: 32` bounds. `RequestResponseLoggingFilter`'s per-request
+  `ContentCachingRequestWrapper`/`ContentCachingResponseWrapper` buffering
+  (`platform/observability/`) also becomes a concurrency-proportional memory cost once
+  admission is no longer thread-pool-limited.
+- **Evolve later:** the README still carries an open, unchecked item for an actual
+  before/after load comparison (no k6/Gatling/JMeter harness exists in this repo yet) — until
+  that's built, "no throughput cost" here is an architectural argument, not a measured one.
+  Once product stock + optimistic locking land (ADR-07, ADR-10), the pool size and any retry
+  policy should be re-tuned together with this admission limit.
+
 ### I. Querying & search
 
 **ADR-21 · Catalog filtering/sorting via JPA `Specification`, confined to the persistence adapter** ✅
