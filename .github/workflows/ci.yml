@@ -64,6 +64,7 @@ jobs:
 
       - name: Generate Allure report
         if: always()
+        continue-on-error: true
         uses: simple-elf/allure-report-action@v1.14
         with:
           allure_results: beer-store-application/target/allure-results
