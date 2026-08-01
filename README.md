@@ -18,7 +18,8 @@ Beer Store is a simple proof of concept application focusing on the following fe
  - [ ] Transaction management refinement
  - [x] Events, with Spring application events
  - [x] Spring Modulith (module boundaries, event publication, generated module docs)
- - [ ] Virtual threads (`spring.threads.virtual.enabled=true`, with a before/after load comparison)
+ - [x] Virtual threads (`spring.threads.virtual.enabled=true`, bounded admission + fixed-size connection pool)
+ - [ ] Before/after load comparison of the virtual-thread switch (k6/Gatling harness)
 
 ### API layer
  - [x] SOAP Endpoints
